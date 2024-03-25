@@ -1,0 +1,23 @@
+.seasons-carousel-item {
+
+    width: 370px !important;
+    align-items: flex-end !important;
+
+    .season-note {
+        margin-top: 10px;
+        margin-right: 10px;
+    }
+
+    .seasons-anime-title-container {
+        padding: 0 !important;
+
+        .seasons-anime-title {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border-radius: 0 !important;
+        }
+    }
+}

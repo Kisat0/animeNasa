@@ -1,0 +1,104 @@
+header {
+  height: 80vh;
+  overflow: hidden;
+  position: relative;
+
+  & > div {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    padding-top: 64px;
+    align-items: center;
+    justify-content: center;
+
+    & > div {
+      display: flex;
+      flex-flow: column nowrap;
+      justify-content: center;
+      align-items: flex-start;
+      width: 35%;
+      min-width: 500px;
+      text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.71);
+
+      .anime-status {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: flex-start;
+        align-items: center;
+        font-size: 30px;
+
+        p {
+          text-transform: uppercase;
+          margin-right: 5px;
+          font-style: normal;
+          font-weight: 300;
+          line-height: normal;
+        }
+      }
+
+      h1 {
+        font-size: 70px;
+        font-style: normal;
+        font-weight: 800;
+        line-height: normal;
+      }
+
+      & > p {
+        font-style: normal;
+        font-weight: 800;
+        line-height: normal;
+        margin: 20px 0;
+      }
+    }
+  }
+  img:first-child {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    z-index: -1;
+    filter: blur(5px);
+  }
+
+  img:last-child {
+    border-radius: 20px;
+    width: 350px;
+    height: 450px;
+    object-fit: cover;
+    margin-left: 10%;
+  }
+
+  .header-buttons {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    width: 100%;
+
+    button {
+      border-radius: 20px;
+      border: none;
+      font-style: normal;
+      font-weight: 800;
+      line-height: normal;
+      letter-spacing: 0.3px;
+      font-family: "Inter";
+      text-transform: uppercase;
+      width: 250px;
+      height: 60px;
+      font-size: 20px;
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: center;
+      align-items: center;
+      color:white;
+     
+      svg{
+        margin-right: 10px;
+        padding:5px;
+      }
+    }
+  }
+}

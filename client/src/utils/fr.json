@@ -1,0 +1,16 @@
+{
+  "play": {
+    "Player": "Lecteur :",
+    "Next": "Episode Suivant",
+    "Previous": "Episode Précédent",
+    "Reported-button": "Signaler",
+    "Menu": "Menu Episode",
+    "SeeMore": "Voir plus"
+  },
+  "calendar":{
+
+  },
+  "summary":{
+    
+  }
+}
