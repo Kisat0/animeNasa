@@ -24,4 +24,9 @@ app.use(cors());
 app.use(express.json());
 
 const userRoutes = require("./routes/userRoutes");
+const animeRoutes = require("./routes/animeRoutes");
+const episodeRoutes = require("./routes/episodeRoutes");
+
 app.use("/users", userRoutes);
+app.use("/animes", animeRoutes);
+app.use("/episodes", episodeRoutes);
