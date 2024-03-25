@@ -30,3 +30,7 @@ app.use(express.json());
 app.use("/users", userRoutes);
 app.use("/animes", animeRoutes);
 app.use("/episodes", episodeRoutes);
+
+app.listen(5000, () => {
+  console.log("Server is running on port 5000");
+});
