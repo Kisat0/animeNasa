@@ -1,5 +1,4 @@
-const express = require("express");
-const router = express.Router();
+import { Router } from "express";
 
 import {
     getEpisodes,
@@ -9,6 +8,8 @@ import {
     deleteEpisode,
     getEpisodesByAnime
 } from "../controllers/episodeController";
+
+const router = Router();
     
 router.get("/", getEpisodes);
 router.get("/:id", getEpisode);
@@ -18,4 +19,4 @@ router.delete("/:id", deleteEpisode);
 
 router.get("/anime/:animeId", getEpisodesByAnime);
 
-module.exports = router;
+export default router;

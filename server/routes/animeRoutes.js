@@ -1,5 +1,6 @@
-const express = require("express");
-const router = express.Router();
+import { Router } from "express";
+
+const router = Router();
 
 import {
   getAnimes,
@@ -10,7 +11,7 @@ import {
   getAnimeCategories,
   getAnimeEpisodes,
   getCompletedAnimes,
-  getLastestEpisodes,
+  getLatestEpisodes,
   getReleasedAnimes,
   getTrendingAnimes,
 } from "../controllers/animeController";
@@ -27,6 +28,6 @@ router.get("/:id/episodes", getAnimeEpisodes);
 router.get("/trending", getTrendingAnimes);
 router.get("/released", getReleasedAnimes);
 router.get("/completed", getCompletedAnimes);
-router.get("/:index/latest-episodes", getLastestEpisodes);
+router.get("/:index/latest-episodes", getLatestEpisodes);
 
-module.exports = router;
+export default router;

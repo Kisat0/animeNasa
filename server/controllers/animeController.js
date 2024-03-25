@@ -1,4 +1,4 @@
-const Anime = require('../models/animeModel');
+const Anime = require('../models/anime');
 
 const getAnimes = async (req, res) => {
     try {
@@ -73,7 +73,7 @@ const getAnimeEpisodes = async (req, res) => {
     res.json(anime.episodes);
 }
 
-const getLastestEpisodes = async (req, res) => {
+const getLatestEpisodes = async (req, res) => {
     const { index } = req.params;
 
     if (!index) {
@@ -121,7 +121,7 @@ module.exports = {
     updateAnime,
     deleteAnime,
     getAnimeEpisodes,
-    getLastestEpisodes,
+    getLatestEpisodes,
     getAnimeCategories,
     getTrendingAnimes,
     getReleasedAnimes,
