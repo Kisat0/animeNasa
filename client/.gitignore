@@ -21,7 +21,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-src/assets/videos/.episode.mp4
+bun.lockb
 
-
-/src/assets/videos/.episode.mp4
+src/assets/images/*
+src/assets/videos/*
