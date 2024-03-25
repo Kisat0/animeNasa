@@ -1,0 +1,44 @@
+.episode-details {
+    display: flex;
+    flex-flow: row nowrap;
+    width: 800px;
+    height: 250px;
+    /* background: white; */
+    border-radius: 20px;
+
+
+    &>img {
+        object-fit: cover;
+        width: 35%;
+        height: 100%;
+    }
+
+    .episode-infos {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: space-between;
+        height: 100%;
+        
+
+        .episode-description {
+            display: flex;
+            flex-flow: column nowrap;
+            padding: 20px 40px;
+
+            &>p {
+                padding-top: 20px;
+            }
+        }
+
+        .episode-time {
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: space-between;
+            width: 100%;
+            padding: 10px;
+            align-items: end;
+            padding-left: 40px;
+        }
+
+    }
+}
