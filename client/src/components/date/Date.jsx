@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import moment from 'moment';
 import 'moment/locale/fr'; // Importer la locale française
 import "./Date.scss"
