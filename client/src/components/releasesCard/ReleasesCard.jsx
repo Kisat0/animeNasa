@@ -7,11 +7,11 @@ function ReleasesCard() {
     <div>
       <div className="releases">
         {weekDays.map((each) => (
-          <div key={each.id}>
+          <div key={each.id} className="day">
             <h3>{each.name}</h3>
             {each.releases.map((release, index) => (
               <div key={index} className={index + 1}>
-                <image src={release}>{release}</image>
+                <img src={release} className="img" />
               </div>
             ))}
           </div>
