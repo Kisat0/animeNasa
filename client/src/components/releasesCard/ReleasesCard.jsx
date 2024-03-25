@@ -1,18 +1,22 @@
 import weekDays from "../../utils/Week";
+import "./ReleasesCard.scss";
 
 
 function ReleasesCard() {
   return (
     <div>
-      <h2>Mon planning hebdomadaire</h2>
-      <ul>
-        {weekDays.map((jour) => (
-          <li key={jour.id}>
-            <h3>{jour.name}</h3>
-            {/* Ajoutez ici le contenu de votre planning pour chaque jour */}
-          </li>
+      <div className="releases">
+        {weekDays.map((each) => (
+          <div key={each.id}>
+            <h3>{each.name}</h3>
+            {each.releases.map((release, index) => (
+              <div key={index} className={index + 1}>
+                <image src={release}>{release}</image>
+              </div>
+            ))}
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
