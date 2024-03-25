@@ -23,7 +23,7 @@ const Navbar = () => {
           <StyledLink to="">News</StyledLink>
         </li>
         <li>
-          <StyledLink to="">Calendrier</StyledLink>
+          <StyledLink to="/calendar">Calendrier</StyledLink>
         </li>
         <li>
           <StyledLink to="">Contact</StyledLink>
