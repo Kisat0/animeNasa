@@ -36,13 +36,21 @@ const animeSchema = new Schema({
     type: [String],
     required: true,
   },
-    episodes: {
-        type: [episodeSchema],
-        required: true,
+  episodes: {
+    type: [episodeSchema],
+    required: true,
   },
   isInTrending: {
     type: Boolean,
     default: false,
+  },
+  poster: {
+    type: String,
+    required: true,
+  },
+  thumbnail: {
+    type: String,
+    required: true,
   },
 });
 
