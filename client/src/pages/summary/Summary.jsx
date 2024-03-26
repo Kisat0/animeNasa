@@ -1,4 +1,5 @@
 import SerieDetails from "../../components/serieDetails/SerieDetails";
+import Seasons from "../../components/seasons/Seasons";
 import "./Summary.scss"
 import { useTheme } from "@mui/material"
 var json = require("../../utils/fr.json");
@@ -25,6 +26,9 @@ const Summary = () => {
                 <SerieDetails />
                 <SerieDetails />
                 <SerieDetails />
+            </div>
+            <div>
+                <Seasons/>
             </div>
         </div>
     );
