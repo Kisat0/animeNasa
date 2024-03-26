@@ -1,5 +1,4 @@
 .chatbot-page-container {
-
   .chatbot-container {
     position: fixed;
     bottom: 0;
@@ -13,8 +12,8 @@
       right: 0;
       margin: 20px;
       z-index: 1000;
-      background-color: #313131;
-      border: 1px solid #989898;
+      background: url("../../assets/images/miku.jpg") no-repeat center center;
+      background-size: cover;
       border-radius: 50%;
       padding: 10px;
       width: 75px;

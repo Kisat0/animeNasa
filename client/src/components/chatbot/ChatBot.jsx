@@ -14,6 +14,7 @@ const ChatBotFrame = () => {
 export const ChatBot = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const openChatbot = () => {
+    if (isOpen) return;
     setIsOpen(true);
   };
 
@@ -46,14 +47,15 @@ export const ChatBot = () => {
         <div className="chatbot-container">
           {!isOpen && (
             <div className="chatbot-button" onClick={openChatbot}>
-              <span className="material-symbols-outlined">chat</span>
+         
             </div>
           )}
-          {isOpen && (
-            <div className="chatbot-content">
-              <ChatBotFrame />
-            </div>
-          )}
+          <div
+            className="chatbot-content"
+            style={{ display: isOpen ? "block" : "none" }}
+          >
+            <ChatBotFrame />
+          </div>
         </div>
       </div>
     </>
