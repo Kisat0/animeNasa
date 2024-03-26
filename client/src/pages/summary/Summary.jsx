@@ -23,14 +23,18 @@ const Summary = () => {
 
             </div>
             <div className="SerieComponent">
-                <SerieDetails />
-                <SerieDetails />
-                <SerieDetails />
+                <SerieDetails/>
+                <SerieDetails/>
+                <SerieDetails/>
             </div>
-            <div>
+            <div className="SeasonList">
+                <Seasons/>
+                <Seasons/>
                 <Seasons/>
             </div>
+            <img src="https://static.bandainamcoent.eu/high/jujutsu-kaisen/jujutsu-kaisen-cursed-clash/00-page-setup/JJK-header-mobile2.jpg" alt="jujutsu kaisen" className="background" />
         </div>
+        
     );
 }
 export default Summary;

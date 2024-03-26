@@ -2,8 +2,6 @@
 
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    gap: 50px;
 
 
     .AnimeInfos {
@@ -11,21 +9,22 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        width: 40%;
-
-        gap: 20px;
+        width: 60%;
+        padding-left: 100px;
+        padding-top: 50px;
+        
         
 
         &>img {
             object-fit: cover;
             width: 90%;
-            height: 30%;
+            height: 40%;
             border-radius: 15px;
             
         }
 
         &>h1 {
-            font-size: 50px;
+            font-size: 70px;
             font-weight: bold;
             text-shadow: 30%;
         }
@@ -39,19 +38,30 @@
             &>h3 {
                 padding: 3px 10px;
                 border-radius: 10px;
+                font-size: 25px;
             }
         }
         &>h3 {
-            width: 60%;
+            width: 80%;
+            padding-top: 30px;
         }
     }
 
     .SerieComponent {
-        width: 50%;
+        width: 43%;
         height: 100%;
         display: flex;
         flex-direction: column;
         gap: 20px;
+        padding-top: 100px;
+    }
+
+    .SeasonList {
+        display: flex;
+        flex-flow: column nowrap;
+        gap: 10px;
+        padding-left: 15px;
+        padding-top: 100px;
     }
 
 }
