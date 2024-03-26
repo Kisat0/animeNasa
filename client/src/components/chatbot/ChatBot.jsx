@@ -44,11 +44,15 @@ export const ChatBot = () => {
   return (
     <>
       <div className="chatbot-page-container">
-        <div className="chatbot-container">
+        <div
+          className="chatbot-container"
+          style={{
+            height: isOpen ? "500px" : "",
+            width: isOpen ? "400px" : "",
+          }}
+        >
           {!isOpen && (
-            <div className="chatbot-button" onClick={openChatbot}>
-         
-            </div>
+            <div className="chatbot-button" onClick={openChatbot}></div>
           )}
           <div
             className="chatbot-content"
