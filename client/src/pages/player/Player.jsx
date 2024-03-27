@@ -465,7 +465,9 @@ function Player() {
             <CloseIcon className="close-icon" onClick={closeMenu} />
           </div>
           <div className="short-menu">
-            <LogoutIcon className="open-icon" onClick={openMenu} />
+            <div className="short-menu-header">
+              <LogoutIcon className="open-icon" onClick={openMenu} />
+            </div>
             <ul>
               <li className="season-short-menu">S1</li>
               <li className="ep-short-menu ep-active">EP.1</li>
