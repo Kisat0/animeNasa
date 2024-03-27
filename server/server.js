@@ -8,10 +8,7 @@ import userRoutes from "./routes/userRoutes";
 import animeRoutes from "./routes/animeRoutes";
 import episodeRoutes from "./routes/episodeRoutes";
 
-mongoose.connect(mongoString, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(mongoString);
 
 const database = mongoose.connection;
 
