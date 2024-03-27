@@ -22,28 +22,28 @@ function FormLogin() {
     event.preventDefault();
 
     console.log(data);
-
-    // await fetch(`/login`, {
-    //   method: 'POST',
-    //   body: JSON.stringify(data),
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    // })
-    //   .then(async (response) => {
-    //     return {
-    //       status: response.status,
-    //       data: await response.json(),
-    //     };
-    //   })
-    //   .then(({ status, data }) => {
-    //     if (status == 200) {
-    //       localStorage.setItem('token', data.token);
-    //       navigate('/');
-    //     } else {
-    //       setError(data.message);
-    //     }
-    //   });
+    await fetch(`http://localhost:5001/users/login`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        return {
+          status: response.status,
+          data: await response.json(),
+        };
+      })
+      .then(({ status, data }) => {
+        if (status == 200) {
+          console.log(data);
+          localStorage.setItem('token', data.token);
+          navigate('/');
+        } else {
+          setError(data.message);
+        }
+      });
   };
   
   return (
@@ -54,10 +54,10 @@ function FormLogin() {
         <div className="mb-6">
           <TextField
             required
-            type="email"
+            type="identifier"
             onChange={updateData}
-            name="email"
-            label="Email"
+            name="identifier"
+            label="Email or Username"
             variant="outlined"
             className="w-full"
           />
