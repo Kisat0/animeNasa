@@ -20,7 +20,7 @@ const Theme = () => {
                     episodeDefault: "rgba(0, 0, 0, 0.9)",
                     episode: "rgba(0, 0, 0, 0.81)",
                     input: "#424242",
-                    episodeDetailsBackground: "rgba(66, 66, 66, 0.5)"
+                    episodeDetailsBackground: "rgba(66, 66, 66, 0.70)"
                 },
                 buttons: {
                     primary: "rgba(79, 79, 79, 1)",

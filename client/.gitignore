@@ -23,5 +23,4 @@ yarn-debug.log*
 yarn-error.log*
 bun.lockb
 
-src/assets/images/*
 src/assets/videos/*
