@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
     backgroundColor: theme.palette.background.paper,
     borderRadius: theme.shape.borderRadius,
+    color: "black",
   },
   textField: {
     marginBottom: theme.spacing(2),
@@ -24,6 +25,10 @@ const useStyles = makeStyles((theme) => ({
   select: {
     marginBottom: theme.spacing(2),
     width: "100%",
+  },
+
+  ".MuiMenuItem-root": {
+    color: "black",
   },
 }));
 
@@ -210,7 +215,6 @@ const AdminPage = () => {
         <MultiSelect
           data={animeCategories}
           label={"Categories"}
-          color="primary"
           placeholder={"Choose categories"}
           onSelectionChange={(data) => setCategories(data)}
         />

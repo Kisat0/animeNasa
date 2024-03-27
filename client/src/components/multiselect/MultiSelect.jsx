@@ -35,7 +35,7 @@ export default function MultiSelect({
           {...props}
           key={option}
           value={option}
-          sx={{ justifyContent: "space-between" }}
+          sx={{ justifyContent: "space-between", color: "black" }}
         >
           {option}
           {selected ? <CheckIcon color="info" /> : null}
