@@ -9,9 +9,11 @@ const StyledLink = styled(Link)(({ theme }) => ({
 const Navbar = () => {
   const theme = useTheme().palette;
   return (
-    <nav style={{
-      backgroundColor: theme.nav.primary
-    }}>
+    <nav
+      style={{
+        backgroundColor: theme.nav.primary,
+      }}
+    >
       <StyledLink to="/" className="logo">
         AnimeNation
       </StyledLink>

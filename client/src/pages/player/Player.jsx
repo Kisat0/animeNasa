@@ -239,7 +239,6 @@ function Player() {
     
     function updateVolume(event) {
         const video = document.getElementById("video");
-        const volume = document.getElementById("volume");
 
         video.volume = event.target.value;
         setVolumeValue(event.target.value);
