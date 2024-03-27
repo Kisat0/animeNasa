@@ -53,7 +53,7 @@ const LastEps = () => {
                 Saison {episode.season}
               </p>
               <p style={{ backgroundColor: theme.tags.vf }}>
-                {episode.lang === "vf" ? "VF" : "VOSTFR"}
+                        {episode.lang.toUpperCase()}
               </p>
             </div>
             <p
@@ -66,24 +66,6 @@ const LastEps = () => {
             </p>
           </div>
         ))}
-        <div onClick={() => navigate("/watch/1")}>
-          <img
-            src="https://static.bandainamcoent.eu/high/jujutsu-kaisen/jujutsu-kaisen-cursed-clash/00-page-setup/JJK-header-mobile2.jpg"
-            alt="jujutsu kaisen"
-          />
-          <div>
-            <p style={{ backgroundColor: theme.tags.season }}>Saison 3</p>
-            <p style={{ backgroundColor: theme.tags.vf }}>VF</p>
-          </div>
-          <p
-            style={{
-              backgroundColor: theme.tags.episode,
-              marginBottom: "5px",
-            }}
-          >
-            Episode 33
-          </p>
-        </div>
       </div>
     </section>
   );

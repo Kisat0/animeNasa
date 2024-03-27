@@ -47,6 +47,10 @@ const episodeSchema = new Schema({
     ref: "anime",
     required: true,
   },
+  thumbnail: {
+    type: String,
+    required: false,
+  },
 });
 
 module.exports = mongoose.model("episode", episodeSchema);

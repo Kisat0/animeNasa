@@ -28,6 +28,7 @@ const getLatestEpisodes = async (req, res) => {
     .sort({ createdAt: -1 })
     .limit(8)
     .skip(index || 0);
+
   res.json(episodes);
 };
 
@@ -42,6 +43,7 @@ const createEpisode = async (req, res) => {
 
   try {
     const anime = await Anime.findById(episode.anime);
+    episode.thumbnail = anime.thumbnail;
     const newEpisode = await episode.save();
 
     anime.episodes.push(newEpisode);
