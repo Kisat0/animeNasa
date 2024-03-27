@@ -4,6 +4,7 @@ import Player from "./pages/player/Player";
 import Summary from "./pages/summary/Summary";
 import Calendar from "./pages/calendar/Calendar";
 import { ChatBot } from "./components/chatbot/ChatBot";
+import News from "./pages/news/News";
 
 const Router = () => {
   return (
@@ -16,6 +17,7 @@ const Router = () => {
           <Route path="/watch/:id" element={<Player />} />
           <Route path="*" element={<h1>Not Found</h1>} />
           <Route path="/summary" element={<Summary />} />
+          <Route path="/news" element={<News />} />
         </Routes>
       </BrowserRouter>
       <ChatBot />

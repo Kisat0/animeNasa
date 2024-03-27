@@ -1,0 +1,28 @@
+.NewsContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+    border: 1px gray solid;
+    box-shadow: 1px gray ;
+    width: 500px;
+    border-radius: 10px;
+    
+    
+
+    &>img {
+        object-fit: cover;
+        width: 35%;
+        height: 100%;
+    }
+
+    .NewsInfos {
+        display: flex;
+        flex-direction: column;
+        padding-top: 20px;
+
+        &>p {
+            padding-top: 15px;
+            font-size: 20px;
+        }
+    }
+}
