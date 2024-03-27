@@ -16,7 +16,7 @@ function FormSignup() {
   };
   
   return (
-    <div className='form-signup'>
+    <div className='div-form-signup'>
       <form
         // onSubmit={sendSignup} 
         className="w-50">
@@ -56,7 +56,7 @@ function FormSignup() {
 
         {error && <div className="text-red-500 text-sm my-3">{error}</div>}
 
-        <div className="my-3">
+        <div className="mb-3">
           Vous avez déjà un compte ?{' '}
           <Link to={'/login'} className="text-blue-600 hover:underline">
             Connectez vous
