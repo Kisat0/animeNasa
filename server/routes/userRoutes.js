@@ -9,9 +9,9 @@ import {
 
 const router = Router();
 
-router.get("/", getUsers);
-router.get("/login", getUser);
-router.get("/protected", protectedRessource);
-router.post("/", createUser);
+router.get('/', getUsers);
+router.post('/login', getUser);
+router.get('/protected', protectedRessource);
+router.post('/', createUser);
 
 export default router;

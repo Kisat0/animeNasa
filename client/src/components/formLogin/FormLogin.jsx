@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 
-import { TextField, Button, Link } from '@mui/material';
+import { TextField, Button } from '@mui/material';
 
 import './FormLogin.scss';
 
 function FormLogin() {
   const [data, setData] = useState({});
   const [error, setError] = useState('');
+
+  const navigate = useNavigate();
 
   const updateData = (e) => {
     setData({
@@ -19,28 +22,28 @@ function FormLogin() {
     event.preventDefault();
 
     console.log(data);
-
-    // await fetch(`/login`, {
-    //   method: 'POST',
-    //   body: JSON.stringify(data),
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    // })
-    //   .then(async (response) => {
-    //     return {
-    //       status: response.status,
-    //       data: await response.json(),
-    //     };
-    //   })
-    //   .then(({ status, data }) => {
-    //     if (status == 200) {
-    //       localStorage.setItem('token', data.token);
-    //       navigate('/');
-    //     } else {
-    //       setError(data.message);
-    //     }
-    //   });
+    await fetch(`http://localhost:5001/users/login`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        return {
+          status: response.status,
+          data: await response.json(),
+        };
+      })
+      .then(({ status, data }) => {
+        if (status == 200) {
+          console.log(data);
+          localStorage.setItem('token', data.token);
+          navigate('/');
+        } else {
+          setError(data.message);
+        }
+      });
   };
   
   return (
@@ -51,10 +54,10 @@ function FormLogin() {
         <div className="mb-6">
           <TextField
             required
-            type="email"
+            type="identifier"
             onChange={updateData}
-            name="email"
-            label="Email"
+            name="identifier"
+            label="Email or Username"
             variant="outlined"
             className="w-full"
           />
@@ -75,7 +78,7 @@ function FormLogin() {
 
         <div className="mb-3">
           Vous n'avez pas de compte ?{' '}
-          <Link to={'/signup'} className="text-blue-600 hover:underline">
+          <Link to={'/signup'} className="link">
             Inscrivez-vous
           </Link>
         </div>
