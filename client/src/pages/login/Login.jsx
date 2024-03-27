@@ -12,9 +12,8 @@ const Login = () => {
 
   return (
     <div className="white">
-      <h1>Login</h1>
-      <div className="containeur-login">
-
+      <h1 className="login-title">Connectez-vous</h1>
+      <div className="containeur-form-login">
         <ThemeProvider theme={darkTheme}>
           <FormLogin />
         </ThemeProvider>

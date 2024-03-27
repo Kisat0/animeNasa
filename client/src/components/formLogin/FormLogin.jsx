@@ -14,12 +14,40 @@ function FormLogin() {
       [e.target.name]: e.target.value,
     });
   };
+
+  const sendLogin = async (event) => {
+    event.preventDefault();
+
+    console.log(data);
+
+    // await fetch(`/login`, {
+    //   method: 'POST',
+    //   body: JSON.stringify(data),
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    // })
+    //   .then(async (response) => {
+    //     return {
+    //       status: response.status,
+    //       data: await response.json(),
+    //     };
+    //   })
+    //   .then(({ status, data }) => {
+    //     if (status == 200) {
+    //       localStorage.setItem('token', data.token);
+    //       navigate('/');
+    //     } else {
+    //       setError(data.message);
+    //     }
+    //   });
+  };
   
   return (
-    <div className='form-login'>
+    <div className='div-form-login'>
       <form
-        // onSubmit={sendLogin} 
-        className="w-50">
+        onSubmit={sendLogin} 
+        className="form-login">
         <div className="mb-6">
           <TextField
             required
@@ -51,15 +79,6 @@ function FormLogin() {
             Inscrivez-vous
           </Link>
         </div>
-
-        {/* <div className="my-3">
-          <Link
-            to={'/password-reset-request'}
-            className="text-blue-600 hover:underline"
-          >
-            Mot de passe oublié
-          </Link>
-        </div> */}
 
         <Button type="submit" variant="contained">
           Envoyer

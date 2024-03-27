@@ -15,10 +15,38 @@ function FormSignup() {
     });
   };
   
+  const sendSignup = async (event) => {
+    event.preventDefault();
+
+    console.log(data);
+
+    // await fetch(`/signup`, {
+    //   method: 'POST',
+    //   body: JSON.stringify(data),
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    // })
+    //   .then(async (response) => {
+    //     return {
+    //       status: response.status,
+    //       result: await response.json(),
+    //     };
+    //   })
+    //   .then(({ status, result }) => {
+    //     if (status !== 201) {
+    //       setError(result.message);
+    //     } else {
+    //       alert(`Un email de vérification a été envoyé à ${data['email']}`);
+    //       navigate('/');
+    //     }
+    //   });
+  };
+
   return (
-    <div className='form-signup'>
+    <div className='div-form-signup'>
       <form
-        // onSubmit={sendSignup} 
+        onSubmit={sendSignup} 
         className="w-50">
         <div className="mb-6">
           <TextField
@@ -56,7 +84,7 @@ function FormSignup() {
 
         {error && <div className="text-red-500 text-sm my-3">{error}</div>}
 
-        <div className="my-3">
+        <div className="mb-3">
           Vous avez déjà un compte ?{' '}
           <Link to={'/login'} className="text-blue-600 hover:underline">
             Connectez vous

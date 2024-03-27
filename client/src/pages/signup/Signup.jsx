@@ -12,9 +12,8 @@ const Signup = () => {
 
   return (
     <div className="white">
-      <h1>Signup</h1>
-      <div className="containeur-signup">
-
+    <h1 className="login-title">Inscrivez-vous</h1>
+      <div className="containeur-form-signup">
         <ThemeProvider theme={darkTheme}>
           <FormSignup />
         </ThemeProvider>
