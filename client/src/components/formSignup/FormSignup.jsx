@@ -22,7 +22,7 @@ function FormSignup() {
 
     console.log(data);
 
-    await fetch("http://localhost:5001/users", {
+    await fetch(`${process.env.REACT_APP_API_ADDRESS}/users`, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
