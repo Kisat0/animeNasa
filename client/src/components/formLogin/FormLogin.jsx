@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 
-import { TextField, Button, Link } from '@mui/material';
+import { TextField, Button } from '@mui/material';
 
 import './FormLogin.scss';
 
 function FormLogin() {
   const [data, setData] = useState({});
   const [error, setError] = useState('');
+
+  const navigate = useNavigate();
 
   const updateData = (e) => {
     setData({
@@ -75,7 +78,7 @@ function FormLogin() {
 
         <div className="mb-3">
           Vous n'avez pas de compte ?{' '}
-          <Link to={'/signup'} className="text-blue-600 hover:underline">
+          <Link to={'/signup'} className="link">
             Inscrivez-vous
           </Link>
         </div>
