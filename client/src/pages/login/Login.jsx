@@ -14,7 +14,6 @@ const Login = () => {
     <div className="white">
       <h1 className="login-title">Connectez-vous</h1>
       <div className="containeur-form-login">
-
         <ThemeProvider theme={darkTheme}>
           <FormLogin />
         </ThemeProvider>
