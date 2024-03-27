@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 
-import { TextField, Button, Link } from '@mui/material';
+import { useNavigate, Link } from 'react-router-dom';
+import { TextField, Button } from '@mui/material';
 
 import './FormSignup.scss';
 
 function FormSignup() {
   const [data, setData] = useState({});
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const updateData = (e) => {
     setData({
@@ -20,27 +22,26 @@ function FormSignup() {
 
     console.log(data);
 
-    // await fetch(`/signup`, {
-    //   method: 'POST',
-    //   body: JSON.stringify(data),
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    // })
-    //   .then(async (response) => {
-    //     return {
-    //       status: response.status,
-    //       result: await response.json(),
-    //     };
-    //   })
-    //   .then(({ status, result }) => {
-    //     if (status !== 201) {
-    //       setError(result.message);
-    //     } else {
-    //       alert(`Un email de vérification a été envoyé à ${data['email']}`);
-    //       navigate('/');
-    //     }
-    //   });
+    await fetch("http://localhost:5001/users", {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        return {
+          status: response.status,
+          result: await response.json(),
+        };
+      })
+      .then(({ status, result }) => {
+        if (status !== 201) {
+          setError(result.message);
+        } else {
+          navigate('/');
+        }
+      });
   };
 
   return (
@@ -59,6 +60,7 @@ function FormSignup() {
             className="w-full"
           />
         </div>
+
         <div className="mb-6">
           <TextField
             required
@@ -70,6 +72,7 @@ function FormSignup() {
             className="w-full"
           />
         </div>
+
         <div className="mb-6">
           <TextField
             required
@@ -82,11 +85,11 @@ function FormSignup() {
           />
         </div>
 
-        {error && <div className="text-red-500 text-sm my-3">{error}</div>}
+        {error && <div className="error">{error}</div>}
 
         <div className="mb-3">
           Vous avez déjà un compte ?{' '}
-          <Link to={'/login'} className="text-blue-600 hover:underline">
+          <Link to={'/login'} className="link">
             Connectez vous
           </Link>
         </div>
