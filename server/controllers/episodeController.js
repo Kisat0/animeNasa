@@ -14,6 +14,21 @@ const getEpisodes = async (req, res) => {
 const getEpisode = async (req, res) => {
   const { id } = req.params;
   const episode = await Episode.findById(id);
+
+  if (!episode) {
+    return res.status(404).send("Episode not found");
+  }
+
+  res.status(200).json(episode);
+};
+
+const getLatestEpisodes = async (req, res) => {
+  const { index } = req.params;
+  const episodes = await Episode.find()
+    .sort({ createdAt: -1 })
+    .limit(8)
+    .skip(index || 0);
+  res.json(episodes);
 };
 
 const getEpisodesByAnime = async (req, res) => {
@@ -78,4 +93,5 @@ module.exports = {
   createEpisode,
   updateEpisode,
   deleteEpisode,
+  getLatestEpisodes,
 };

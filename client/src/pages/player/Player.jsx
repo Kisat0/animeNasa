@@ -6,12 +6,13 @@ import { Link } from "react-router-dom";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import LogoutIcon from "@mui/icons-material/Logout";
-import Video from "../../assets/videos/episode.mp4";
 import { useEffect, useState } from "react";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Loader from "../../components/loader/loader";
 import Navbar from "../../components/navbar/Navbar";
+import axios from "axios";
+import { useParams } from "react-router";
 
 import "./Player.scss";
 
@@ -21,6 +22,9 @@ function Player() {
   const [videoWorks, setVideoWorks] = useState(false);
   const [volumeValue, setVolumeValue] = useState(1);
   const [isLoaded, setIsLoaded] = useState(true);
+  const [episode, setEpisode] = useState({});
+
+  const { id } = useParams();
 
   const closeMenu = () => {
     const menu = document.querySelector(".menu");
@@ -64,9 +68,9 @@ function Player() {
     playbackIcons.forEach((icon) => icon.classList.toggle("hidden"));
 
     if (video.paused) {
-      playButton.setAttribute("data-title", "Play (k)");
+      playButton.setAttribute("data-title", "Play (space)");
     } else {
-      playButton.setAttribute("data-title", "Pause (k)");
+      playButton.setAttribute("data-title", "Pause (space)");
     }
   }
 
@@ -82,18 +86,34 @@ function Player() {
     };
   }
 
-  function initializeVideo() {
+  const initializeVideo = (videoSource) => {
     const duration = document.getElementById("duration");
     const video = document.getElementById("video");
     const progressBar = document.getElementById("progress-bar");
     const seek = document.getElementById("seek");
 
-    const videoDuration = Math.round(video.duration);
-    seek.setAttribute("max", videoDuration);
-    progressBar.setAttribute("max", videoDuration);
-    const time = formatTime(videoDuration);
-    duration.innerText = `${time.minutes}:${time.seconds}`;
-    duration.setAttribute("datetime", `${time.minutes}m ${time.seconds}s`);
+    video.source = videoSource;
+    video.removeAttribute("poster");
+    video.removeAttribute("controls");
+
+    video.addEventListener("loadedmetadata", () => {
+      const time = formatTime(Math.round(video.duration));
+      duration.innerText = `${time.minutes}:${time.seconds}`;
+      duration.setAttribute("datetime", `${time.minutes}m ${time.seconds}s`);
+
+      const videoDuration = Math.round(video.duration);
+      seek.setAttribute("max", videoDuration);
+      progressBar.setAttribute("max", videoDuration);
+    });
+
+    video.addEventListener("timeupdate", updateTimeElapsed);
+    video.addEventListener("timeupdate", updateProgress);
+    video.addEventListener("volumechange", updateVolumeIcon);
+    video.addEventListener("click", togglePlay);
+    video.addEventListener("mouseenter", showControls);
+    video.addEventListener("mouseleave", hideControls);
+
+    video.load();
 
     if (videoWorks) {
       const videoControls = document.getElementById("video-controls");
@@ -101,7 +121,7 @@ function Player() {
       video.controls = false;
       videoControls.classList.remove("hidden");
     }
-  }
+  };
 
   function updateTimeElapsed() {
     const timeElapsed = document.getElementById("time-elapsed");
@@ -163,7 +183,14 @@ function Player() {
 
   const togglePlay = useCallback(() => {
     const video = document.getElementById("video");
-    if (video.paused || video.ended) {
+
+    var isPlaying =
+      video.currentTime > 0 &&
+      !video.paused &&
+      !video.ended &&
+      video.readyState > video.HAVE_CURRENT_DATA;
+
+    if (!isPlaying) {
       video.play();
     } else {
       video.pause();
@@ -236,14 +263,14 @@ function Player() {
       volume.value = volume.dataset.volume;
     }
   }
-    
-    function updateVolume(event) {
-        const video = document.getElementById("video");
 
-        video.volume = event.target.value;
-        setVolumeValue(event.target.value);
-        updateVolumeIcon();
-    }
+  function updateVolume(event) {
+    const video = document.getElementById("video");
+
+    video.volume = event.target.value;
+    setVolumeValue(event.target.value);
+    updateVolumeIcon();
+  }
 
   function animatePlayback() {
     const playbackAnimation = document.getElementById("playback-animation");
@@ -332,6 +359,7 @@ function Player() {
     const videoControls = document.getElementById("video-controls");
 
     videoControls.classList.remove("hide");
+    videoControls.classList.remove("hidden");
   }
 
   useEffect(() => {
@@ -348,12 +376,14 @@ function Player() {
       },
       false
     );
+
     const videoTest = document.createElement("video");
     document.addEventListener("keyup", keyboardShortcuts);
     setVideoWorks(!!videoTest.canPlayType);
     document
       .getElementById("video-container")
       .addEventListener("fullscreenchange", updateFullscreenButton);
+
     function keyboardShortcuts(event) {
       const video = document.getElementById("video");
 
@@ -399,16 +429,36 @@ function Player() {
           break;
       }
     }
+
     return () => {
       document.removeEventListener("keyup", keyboardShortcuts);
     };
   }, [decreaseVol, increaseVol, togglePlay]);
 
+  useEffect(() => {
+    const fetchEpisode = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_ADDRESS}/episodes/${id}`
+        );
+        setEpisode(response.data);
+        initializeVideo(response.data.source);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchEpisode();
+  }, [id]);
+
+  if (!episode) {
+    return <Loader size={400} color="blue" />;
+  }
+
   return (
     <>
       <img src={backDrStone} alt="" className="background" />
-      {/*      <Navbar />
-       */}{" "}
+      <Navbar />
       <div className="menu-content">
         <div className="menu close">
           <div className="close-cross">
@@ -567,7 +617,6 @@ function Player() {
                 onPause={updatePlayButton}
                 onLoadedMetadata={() => {
                   setIsLoaded(true);
-                  initializeVideo();
                 }}
                 onTimeUpdate={updateProgress}
                 onVolumeChange={updateVolumeIcon}
@@ -575,7 +624,7 @@ function Player() {
                 onMouseEnter={showControls}
                 onMouseLeave={hideControls}
               >
-                <source src={Video} type="video/mp4"></source>
+                <source src={episode.source} type="video/mp4"></source>
               </video>
             ) : (
               <div className="loader-container">

@@ -19,7 +19,7 @@ const Navbar = () => {
       </StyledLink>
       <ul>
         <li>
-          <StyledLink to="">Accueil</StyledLink>
+          <StyledLink to="/">Accueil</StyledLink>
         </li>
         <li>
           <StyledLink to="">News</StyledLink>

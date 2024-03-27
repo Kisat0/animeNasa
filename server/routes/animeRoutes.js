@@ -11,7 +11,6 @@ import {
   getAnimeCategories,
   getAnimeEpisodes,
   getCompletedAnimes,
-  getLatestEpisodes,
   getReleasedAnimes,
   getTrendingAnimes,
 } from "../controllers/animeController";
@@ -28,6 +27,5 @@ router.get("/:id/episodes", getAnimeEpisodes);
 router.get("/trending", getTrendingAnimes);
 router.get("/released", getReleasedAnimes);
 router.get("/completed", getCompletedAnimes);
-router.get("/:index/latest-episodes", getLatestEpisodes);
 
 export default router;
