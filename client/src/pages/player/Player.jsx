@@ -127,6 +127,8 @@ function Player() {
     const timeElapsed = document.getElementById("time-elapsed");
     const video = document.getElementById("video");
 
+    if (!video) return;
+
     const time = formatTime(Math.round(video.currentTime));
     timeElapsed.innerText = `${time?.minutes || "00"}:${time?.seconds || "00"}`;
     timeElapsed.setAttribute(
@@ -140,6 +142,7 @@ function Player() {
     const seek = document.getElementById("seek");
 
     const video = document.getElementById("video");
+    if (!video) return;
 
     var currentTime = Math.round(video.currentTime);
 
@@ -449,6 +452,8 @@ function Player() {
     };
 
     fetchEpisode();
+
+    return () => {};
   }, [id]);
 
   if (!episode) {
