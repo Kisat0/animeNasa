@@ -73,21 +73,6 @@ const getAnimeEpisodes = async (req, res) => {
     res.json(anime.episodes);
 }
 
-const getLatestEpisodes = async (req, res) => {
-    const { index } = req.params;
-
-    if (!index) {
-        return res.status(400).send("Index is missing");
-    }
-
-    const animes = await Anime.find();
-    const episodes = animes.map((anime) => anime.episodes).flat();
-    const sortedEpisodes = episodes.sort((a, b) => b.releaseDate - a.releaseDate);
-    const lastestEpisodes = sortedEpisodes.slice(0, index);
-
-    res.json(lastestEpisodes);
-}
-
 const getAnimeCategories = async (req, res) => {
     const { id } = req.params;
     const anime = await Anime.findById(id);
@@ -121,7 +106,6 @@ module.exports = {
     updateAnime,
     deleteAnime,
     getAnimeEpisodes,
-    getLatestEpisodes,
     getAnimeCategories,
     getTrendingAnimes,
     getReleasedAnimes,
