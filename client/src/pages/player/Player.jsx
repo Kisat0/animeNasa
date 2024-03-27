@@ -65,6 +65,8 @@ function Player() {
     const playButton = document.getElementById("play");
 
     const video = document.getElementById("video");
+    if (!video) return;
+
     playbackIcons.forEach((icon) => icon.classList.toggle("hidden"));
 
     if (video.paused) {
@@ -186,6 +188,7 @@ function Player() {
 
   const togglePlay = useCallback(() => {
     const video = document.getElementById("video");
+    if (!video) return;
 
     var isPlaying =
       video.currentTime > 0 &&
@@ -269,6 +272,7 @@ function Player() {
 
   function updateVolume(event) {
     const video = document.getElementById("video");
+    if (!video) return;
 
     video.volume = event.target.value;
     setVolumeValue(event.target.value);
@@ -389,6 +393,7 @@ function Player() {
 
     function keyboardShortcuts(event) {
       const video = document.getElementById("video");
+      if (!video) return;
 
       const { key } = event;
       switch (key) {
@@ -445,15 +450,16 @@ function Player() {
           `${process.env.REACT_APP_API_ADDRESS}/episodes/${id}`
         );
         setEpisode(response.data);
-        initializeVideo(response.data.source);
+        const videoElement = document.getElementById("video");
+        if (videoElement) {
+          initializeVideo(response.data.source);
+        }
       } catch (error) {
         console.error(error);
       }
     };
 
     fetchEpisode();
-
-    return () => {};
   }, [id]);
 
   if (!episode) {
