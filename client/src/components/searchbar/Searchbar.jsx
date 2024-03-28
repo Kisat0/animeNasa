@@ -21,7 +21,6 @@ function Searchbar() {
           `${process.env.REACT_APP_API_ADDRESS}/animes`
         );
         setAnimes(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error(error);
       }

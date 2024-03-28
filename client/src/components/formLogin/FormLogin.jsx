@@ -21,7 +21,6 @@ function FormLogin() {
   const sendLogin = async (event) => {
     event.preventDefault();
 
-    console.log(data);
     await fetch(`${process.env.REACT_APP_API_ADDRESS}/users/login`, {
       method: 'POST',
       body: JSON.stringify(data),
@@ -37,7 +36,6 @@ function FormLogin() {
       })
       .then(({ status, data }) => {
         if (status == 200) {
-          console.log(data);
           localStorage.setItem('token', data.token);
           navigate('/');
         } else {

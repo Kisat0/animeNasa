@@ -6,15 +6,13 @@ function Results({ data, animes }) {
   const [results, setResults] = useState([]);
 
   useEffect(() => {
-    if (animes) {
+    if (animes ) {
       setResults(animes);
-      console.log(animes);
     }
     if (data && data.search && data.search.length > 0) {
       setResults(animes.filter((anime) =>
         anime.title.toLowerCase().includes(data.search.toLowerCase())
       ));
-      console.log(results);
     }
   }, [data, animes]); 
 
