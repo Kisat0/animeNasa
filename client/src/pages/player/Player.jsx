@@ -561,7 +561,7 @@ function Player() {
               <ul>
                 {anime.episodes.map((episode, index) => (
                   <li key={index}>
-                    <Link to={`/watch/${episode.id}`} key={index}>
+                    <Link to={`/watch/${episode._id}`} key={index}>
                       {episode.title}
                     </Link>
                   </li>

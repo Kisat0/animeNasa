@@ -18,7 +18,7 @@ const Navbar = () => {
       <StyledLink to="/" className="logo">
         AnimeNation
       </StyledLink>
-      
+
       <ul>
         <li>
           <StyledLink to="/">Accueil</StyledLink>
