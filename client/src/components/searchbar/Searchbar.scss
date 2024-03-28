@@ -1,0 +1,27 @@
+.searchbar-container {
+  position: absolute;
+  margin-top: 7.5rem;
+  width: 100%;
+  text-align: center;
+  align-items: center;
+}
+
+.input {
+  width: 80%;
+  height: 2.5rem;
+  border-radius: 5px;
+  color: white;
+  border: 1px solid #ccc;
+  padding: 0 10px;
+  font-size: 1.2rem;
+  background-color: #020617;
+}
+
+::placeholder {
+  color: white;
+  opacity: 1; /* Firefox */
+}
+
+::-ms-input-placeholder { /* Edge 12 -18 */
+  color: white;
+}
