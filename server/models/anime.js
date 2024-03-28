@@ -38,7 +38,8 @@ const animeSchema = new Schema({
   },
   episodes: {
     type: [episodeSchema],
-    required: true,
+    required: false,
+    default: [],
   },
   isInTrending: {
     type: Boolean,
@@ -51,6 +52,11 @@ const animeSchema = new Schema({
   thumbnail: {
     type: String,
     required: true,
+  },
+  lang_available: {
+    type: [String],
+    required: false,
+    default: [],
   },
 });
 
