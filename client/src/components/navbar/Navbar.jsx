@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { styled, useTheme } from "@mui/material";
 import "./Navbar.scss";
+import Searchbar from "../searchbar/Searchbar";
 
 const StyledLink = styled(Link)(({ theme }) => ({
   color: theme.palette.text.primary,
@@ -17,6 +18,7 @@ const Navbar = () => {
       <StyledLink to="/" className="logo">
         AnimeNation
       </StyledLink>
+      <Searchbar />
       <ul>
         <li>
           <StyledLink to="/">Accueil</StyledLink>
@@ -32,6 +34,9 @@ const Navbar = () => {
         </li>
         <li>
           <StyledLink to="">Discord</StyledLink>
+        </li>
+        <li>
+          <StyledLink to="/login">Connexion</StyledLink>
         </li>
       </ul>
     </nav>
