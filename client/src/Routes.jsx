@@ -7,6 +7,7 @@ import { ChatBot } from "./components/chatbot/ChatBot";
 import Login from "./pages/login/Login";
 import Signup from "./pages/signup/Signup";
 import Admin from "./pages/admin/Admin";
+import Search from "./pages/search/Search";
 
 const Router = () => {
   return (
@@ -16,6 +17,7 @@ const Router = () => {
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
           <Route path="/calendar" element={<Calendar />} />
+          <Route path="/search" element={<Search />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/watch/:id" element={<Player />} />
