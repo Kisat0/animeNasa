@@ -18,6 +18,7 @@ const Signup = () => {
           <FormSignup />
         </ThemeProvider>
       </div>
+      <img src="https://wallpapercave.com/wp/wp8994577.jpg" className="background login-background" />
     </div>
   )
 }
