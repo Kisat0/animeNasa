@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 
 import "./Results.scss";
 
 function Results({ data, animes }) {
   const [results, setResults] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (animes ) {
@@ -19,7 +22,7 @@ function Results({ data, animes }) {
   return (
     <div className="results">
       {results.map((result) => (
-        <div key={result._id} className="each-result">
+        <div key={result._id} className="each-result" onClick={() => navigate(`/summary/${result._id}`)}>
           <img src={result.poster} alt="" />
           <span className="result-text">
             {result.title}
