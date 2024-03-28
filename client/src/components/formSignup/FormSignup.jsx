@@ -20,8 +20,6 @@ function FormSignup() {
   const sendSignup = async (event) => {
     event.preventDefault();
 
-    console.log(data);
-
     await fetch(`${process.env.REACT_APP_API_ADDRESS}/users`, {
       method: 'POST',
       body: JSON.stringify(data),
