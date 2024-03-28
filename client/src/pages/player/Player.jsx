@@ -13,6 +13,7 @@ import Loader from "../../components/loader/loader";
 import Navbar from "../../components/navbar/Navbar";
 import axios from "axios";
 import { useParams } from "react-router";
+import { useTheme } from "@mui/material";
 
 import "./Player.scss";
 
@@ -21,8 +22,11 @@ var json = require("../../utils/fr.json");
 function Player() {
   const [videoWorks, setVideoWorks] = useState(false);
   const [volumeValue, setVolumeValue] = useState(1);
-  const [isLoaded, setIsLoaded] = useState(true);
-  const [episode, setEpisode] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [episode, setEpisode] = useState(null);
+  const [source, setSource] = useState("");
+  const [anime, setAnime] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   const { id } = useParams();
 
@@ -30,12 +34,14 @@ function Player() {
     const menu = document.querySelector(".menu");
     menu.classList.remove("open");
     menu.classList.add("close");
+    setIsOpen(false);
   };
 
   const openMenu = () => {
     const menu = document.querySelector(".menu");
     menu.classList.add("open");
     menu.classList.remove("close");
+    setIsOpen(true);
   };
 
   function previousVideo() {
@@ -69,7 +75,13 @@ function Player() {
 
     playbackIcons.forEach((icon) => icon.classList.toggle("hidden"));
 
-    if (video.paused) {
+    var isPlaying =
+      video.currentTime > 0 &&
+      !video.paused &&
+      !video.ended &&
+      video.readyState > video.HAVE_CURRENT_DATA;
+
+    if (!isPlaying) {
       playButton.setAttribute("data-title", "Play (space)");
     } else {
       playButton.setAttribute("data-title", "Pause (space)");
@@ -88,32 +100,30 @@ function Player() {
     };
   }
 
-  const initializeVideo = (videoSource) => {
+  function initDuration() {
     const duration = document.getElementById("duration");
-    const video = document.getElementById("video");
     const progressBar = document.getElementById("progress-bar");
     const seek = document.getElementById("seek");
+
+    const time = formatTime(Math.round(video.duration));
+    duration.innerText = `${time.minutes}:${time.seconds}`;
+    duration.setAttribute("datetime", `${time.minutes}m ${time.seconds}s`);
+
+    const videoDuration = Math.round(video.duration);
+    seek.setAttribute("max", videoDuration);
+    progressBar.setAttribute("max", videoDuration);
+  }
+
+  const initializeVideo = (videoSource) => {
+    const video = document.getElementById("video");
 
     video.source = videoSource;
     video.removeAttribute("poster");
     video.removeAttribute("controls");
 
-    video.addEventListener("loadedmetadata", () => {
-      const time = formatTime(Math.round(video.duration));
-      duration.innerText = `${time.minutes}:${time.seconds}`;
-      duration.setAttribute("datetime", `${time.minutes}m ${time.seconds}s`);
-
-      const videoDuration = Math.round(video.duration);
-      seek.setAttribute("max", videoDuration);
-      progressBar.setAttribute("max", videoDuration);
-    });
-
-    video.addEventListener("timeupdate", updateTimeElapsed);
-    video.addEventListener("timeupdate", updateProgress);
-    video.addEventListener("volumechange", updateVolumeIcon);
-    video.addEventListener("click", togglePlay);
-    video.addEventListener("mouseenter", showControls);
-    video.addEventListener("mouseleave", hideControls);
+    document
+      .getElementById("video-container")
+      .addEventListener("fullscreenchange", updateFullscreenButton);
 
     video.load();
 
@@ -186,7 +196,7 @@ function Player() {
     }
   }
 
-  const togglePlay = useCallback(() => {
+  const togglePlay = () => {
     const video = document.getElementById("video");
     if (!video) return;
 
@@ -201,8 +211,9 @@ function Player() {
     } else {
       video.pause();
     }
+    updatePlayButton();
     animatePlayback();
-  }, []);
+  };
 
   const updateVolumeIcon = useCallback(() => {
     const volumeLow = document.querySelector('use[href="#volume-low"]');
@@ -384,12 +395,7 @@ function Player() {
       false
     );
 
-    const videoTest = document.createElement("video");
     document.addEventListener("keyup", keyboardShortcuts);
-    setVideoWorks(!!videoTest.canPlayType);
-    document
-      .getElementById("video-container")
-      .addEventListener("fullscreenchange", updateFullscreenButton);
 
     function keyboardShortcuts(event) {
       const video = document.getElementById("video");
@@ -450,28 +456,52 @@ function Player() {
           `${process.env.REACT_APP_API_ADDRESS}/episodes/${id}`
         );
         setEpisode(response.data);
+        fetchAnime(response.data.anime);
         const videoElement = document.getElementById("video");
         if (videoElement) {
           initializeVideo(response.data.source);
+          setSource(response.data.source);
         }
       } catch (error) {
         console.error(error);
       }
     };
 
+    const fetchAnime = async (animeId) => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_ADDRESS}/animes/${animeId}`
+        );
+
+        setAnime(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     fetchEpisode();
+    setIsLoading(false);
   }, [id]);
 
-  if (!episode) {
+  const theme = useTheme().palette;
+
+  if (isLoading || !anime || !episode) {
     return <Loader size={400} color="blue" />;
   }
 
   return (
     <>
-      <img src={backDrStone} alt="" className="background" />
+      <img src={anime.thumbnail} alt="" className="background" />
       <Navbar />
       <div className="menu-content">
-        <div className="menu close">
+        <div
+          className="menu close"
+          style={{
+            backgroundColor: isOpen
+              ? theme.background.default
+              : theme.nav.primary,
+          }}
+        >
           <div className="close-cross">
             <CloseIcon className="close-icon" onClick={closeMenu} />
           </div>
@@ -480,61 +510,29 @@ function Player() {
               <LogoutIcon className="open-icon" onClick={openMenu} />
             </div>
             <ul>
-              <li className="season-short-menu">S1</li>
-              <li className="ep-short-menu ep-active">EP.1</li>
-              <li className="ep-short-menu">EP.2</li>
-              <li className="ep-short-menu">EP.3</li>
-              <li className="ep-short-menu">EP.4</li>
-              <li className="ep-short-menu">EP.5</li>
-              <li className="ep-short-menu">EP.6</li>
-              <li className="ep-short-menu">EP.7</li>
-              <li className="ep-short-menu">EP.8</li>
-              <li className="ep-short-menu">EP.9</li>
-              <li className="ep-short-menu">EP.10</li>
-              <li className="ep-short-menu">EP.11</li>
-              <li className="ep-short-menu">EP.12</li>
-              <li className="ep-short-menu">EP.13</li>
-              <li className="ep-short-menu">EP.14</li>
-              <li className="ep-short-menu">EP.15</li>
-              <li className="ep-short-menu">EP.16</li>
-              <li className="ep-short-menu">EP.17</li>
-              <li className="ep-short-menu">EP.18</li>
-              <li className="season-short-menu">S2</li>
-              <li className="ep-short-menu">EP.19</li>
-              <li className="ep-short-menu">EP.20</li>
-              <li className="ep-short-menu">EP.21</li>
-              <li className="ep-short-menu">EP.22</li>
-              <li className="ep-short-menu">EP.23</li>
-              <li className="ep-short-menu">EP.24</li>
-              <li className="ep-short-menu">EP.25</li>
-              <li className="ep-short-menu">EP.26</li>
-              <li className="ep-short-menu">EP.27</li>
-              <li className="ep-short-menu">EP.28</li>
-              <li className="ep-short-menu">EP.29</li>
-              <li className="ep-short-menu">EP.30</li>
-              <li className="ep-short-menu">EP.31</li>
-              <li className="ep-short-menu">EP.32</li>
-              <li className="ep-short-menu">EP.33</li>
-              <li className="ep-short-menu">EP.34</li>
-              <li className="ep-short-menu">EP.35</li>
-              <li className="ep-short-menu">EP.36</li>
+              {anime.episodes.map((episode, index) => (
+                <li key={index}>
+                  <Link to={`/watch/${episode.id}`} key={index}>
+                    EP. {index + 1}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           <div className="header-menu">
             <img
-              src={backDrStone}
+              src={anime.thumbnail}
               alt="background anime"
               className="back-img"
             />
             <div className="header-back-layout">
               <div className="anime-infos">
-                <img src={affiche} alt="poster" />
+                <img src={anime.poster} alt="poster" />
                 <div className="anime-infos-text">
-                  <span>ANIME TITLE</span>
+                  <span>{anime.title}</span>
                   <p>
-                    Nullam facilisis sagittis mauris, nec faucibus felis maximus
-                    eu. Vestibulum interdum nulla non volutpat accumsan...
+                    {anime.description}
                     <Link to="/summary">{json.play.SeeMore}</Link>
                   </p>
                 </div>
@@ -544,13 +542,16 @@ function Player() {
                   <span className="genre-tag">
                     {" "}
                     <LocalOfferIcon />
-                    Genres: Comédie,Action..
+                    Genres:
+                    {anime?.categories?.map((genre) => (
+                      <span key={genre}>{genre}</span>
+                    ))}
                   </span>
                   <span className="date-tag">
-                    <CalendarMonthIcon /> Date: 29/02/2019
+                    <CalendarMonthIcon /> Date: {anime.releaseDate}
                   </span>
                 </div>
-                <span className="lang-tag">VOSTFR</span>
+                <span className="lang-tag">{episode.lang.toUpperCase()}</span>
               </div>
             </div>
           </div>
@@ -558,33 +559,13 @@ function Player() {
             <div className="season-content">
               <p className="season-number">SAISON 1</p>
               <ul>
-                <li className="ep-active-menu">EPISODE 1: “Stone World”</li>
-                <li>EPISODE 2: “King of the Stone World”</li>
-                <li>EPISODE 3: “Weapons of the Science”</li>
-                <li>EPISODE 1: “Stone World”</li>
-                <li>EPISODE 2: “King of the Stone World”</li>
-                <li>EPISODE 3: “Weapons of the Science”</li>
-                <li>EPISODE 1: “Stone World”</li>
-                <li>EPISODE 2: “King of the Stone World”</li>
-                <li>EPISODE 3: “Weapons of the Science”</li>
-                <li>EPISODE 1: “Stone World”</li>
-                <li>EPISODE 2: “King of the Stone World”</li>
-                <li>EPISODE 3: “Weapons of the Science”</li>
-                <li>EPISODE 1: “Stone World”</li>
-                <li>EPISODE 2: “King of the Stone World”</li>
-                <li>EPISODE 3: “Weapons of the Science”</li>
-                <li>EPISODE 1: “Stone World”</li>
-                <li>EPISODE 2: “King of the Stone World”</li>
-                <li>EPISODE 3: “Weapons of the Science”</li>
-                <li>EPISODE 1: “Stone World”</li>
-                <li>EPISODE 2: “King of the Stone World”</li>
-                <li>EPISODE 3: “Weapons of the Science”</li>
-                <li>EPISODE 1: “Stone World”</li>
-                <li>EPISODE 2: “King of the Stone World”</li>
-                <li>EPISODE 3: “Weapons of the Science”</li>
-                <li>EPISODE 1: “Stone World”</li>
-                <li>EPISODE 2: “King of the Stone World”</li>
-                <li>EPISODE 3: “Weapons of the Science”</li>
+                {anime.episodes.map((episode, index) => (
+                  <li key={index}>
+                    <Link to={`/watch/${episode.id}`} key={index}>
+                      {episode.title}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
@@ -592,9 +573,7 @@ function Player() {
       </div>
       <div className="player-content">
         <div className="container-watch">
-          <h1 className="anime-episode-title">
-            DR.STONE EPISODE 27 SAISON 1 VOSTFR
-          </h1>
+          <h1 className="anime-episode-title">{}</h1>
           <div className="player-buttons">
             <div className="player-button">
               <p>{json.play.Player}</p>
@@ -619,23 +598,18 @@ function Player() {
                 <use className="hidden" href="#pause"></use>
               </svg>
             </div>
-            {isLoaded ? (
+            {!isLoading ? (
               <video
-                controls
                 className="video"
                 id="video"
+                poster={anime.poster}
                 preload="metadata"
-                poster={affiche}
-                onPlay={updatePlayButton}
-                onPause={updatePlayButton}
-                onLoadedMetadata={() => {
-                  setIsLoaded(true);
-                }}
                 onTimeUpdate={updateProgress}
                 onVolumeChange={updateVolumeIcon}
                 onClick={togglePlay}
                 onMouseEnter={showControls}
                 onMouseLeave={hideControls}
+                onLoadedMetadata={initDuration}
               >
                 <source src={episode.source} type="video/mp4"></source>
               </video>
