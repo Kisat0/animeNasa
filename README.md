@@ -7,6 +7,16 @@ Après avoir cloné le projet ou avoir pull des modifications (à faire sur clie
 yarn install
 ```
 
+### Demarrer le client
+```bash
+yarn start
+```
+
+### Demarrer le server
+```bash
+yarn dev
+```
+
 # Organiser le projet
 ## Pages
 
