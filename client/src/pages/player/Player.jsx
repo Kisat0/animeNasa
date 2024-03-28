@@ -512,7 +512,7 @@ function Player() {
             <ul>
               {anime.episodes.map((episode, index) => (
                 <li key={index}>
-                  <Link to={`/watch/${episode.id}`} key={index}>
+                  <Link to={`/watch/${episode._id}`} key={index}>
                     EP. {index + 1}
                   </Link>
                 </li>
@@ -561,7 +561,7 @@ function Player() {
               <ul>
                 {anime.episodes.map((episode, index) => (
                   <li key={index}>
-                    <Link to={`/watch/${episode.id}`} key={index}>
+                    <Link to={`/watch/${episode._id}`} key={index}>
                       {episode.title}
                     </Link>
                   </li>
@@ -573,7 +573,7 @@ function Player() {
       </div>
       <div className="player-content">
         <div className="container-watch">
-          <h1 className="anime-episode-title">{}</h1>
+          <h1 className="anime-episode-title">{anime.title + " EPISODE " + " " + episode.number + " " + episode.lang}</h1>
           <div className="player-buttons">
             <div className="player-button">
               <p>{json.play.Player}</p>

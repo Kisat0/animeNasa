@@ -18,13 +18,13 @@ const Navbar = () => {
       <StyledLink to="/" className="logo">
         AnimeNation
       </StyledLink>
-      
+
       <ul>
         <li>
           <StyledLink to="/">Accueil</StyledLink>
         </li>
         <li>
-          <StyledLink to="">News</StyledLink>
+          <StyledLink to="/news">News</StyledLink>
         </li>
         <li>
           <StyledLink to="/calendar">Calendrier</StyledLink>

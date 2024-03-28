@@ -4,7 +4,7 @@ import "./ChatBot.scss";
 const ChatBotFrame = () => {
   return (
     <iframe
-      src="https://www.chatbase.co/chatbot-iframe/UE3hxvd1dv4bbFSTMgjWQ"
+      src="https://www.chatbase.co/chatbot-iframe/odKfMk0UqdwaYAt_jHdN8"
       title="Chatbot"
       className="chatbot-iframe"
     ></iframe>
