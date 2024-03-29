@@ -1,4 +1,5 @@
 import React, { useCallback } from "react";
+import { useParams } from "react-router";
 import backDrStone from "../../assets/images/1027254.jpg";
 import affiche from "../../assets/images/981906.jpg";
 import CloseIcon from "@mui/icons-material/Close";
@@ -12,7 +13,6 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Loader from "../../components/loader/loader";
 import Navbar from "../../components/navbar/Navbar";
 import axios from "axios";
-import { useParams } from "react-router";
 import { useTheme } from "@mui/material";
 
 import "./Player.scss";
