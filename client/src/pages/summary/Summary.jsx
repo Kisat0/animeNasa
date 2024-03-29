@@ -5,13 +5,10 @@ import Navbar from "../../components/navbar/Navbar";
 import SerieDetails from "../../components/serieDetails/SerieDetails";
 import Seasons from "../../components/seasons/Seasons";
 
-
-const SummaryPage = () => {
-
 import { useTheme, Backdrop, CircularProgress } from "@mui/material"
 import "./Summary.scss";
 
-const Summary = () => {
+const SummaryPage = () => {
     const [data, setData] = useState({});
     const [open, setOpen] = useState(true); // Initialiser le Backdrop à ouvert
     const theme = useTheme().palette;
@@ -91,4 +88,5 @@ const Summary = () => {
         
     );
 }
+
 export default SummaryPage;
