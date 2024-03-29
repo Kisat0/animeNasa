@@ -23,9 +23,9 @@ yarn dev
 Créez un dossier pour votre page dans src/pages **(nom en camelCase)**. Puis créez un fichier **page.tsx** et **page.scss** pour votre page dans ce dossier **(nom en PascalCase)**.
 
 **Exemple :**
-Dans src/pages/signup,créez un fichier Signup.tsx :
+Dans src/pages/signup,créez un fichier SignupPage.tsx :
 ```tsx
-export default function Signup() {
+export default function SignupPage() {
   return (
     <div>
       <h1>Login</h1>
@@ -36,7 +36,7 @@ export default function Signup() {
 
 Ensuite importez le dans src/Routes.tsx :
 ```tsx
-import Signup from "./pages/signup";
+import SignupPage from "./pages/signup";
 /* Reste du code ... */
 
 <Router>
