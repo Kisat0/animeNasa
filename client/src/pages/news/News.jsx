@@ -17,7 +17,9 @@ const News = () => {
             </div >
             <div className="black-gradiant">
             </div>
-            <div className="NewComponantBlock">
+            <div className="NewComponentBlock">
+                <NewsPageAnimes />
+                <NewsPageAnimes />
                 <NewsPageAnimes />
                 <NewsPageAnimes />
                 <NewsPageAnimes />
