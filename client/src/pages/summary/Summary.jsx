@@ -5,6 +5,9 @@ import Navbar from "../../components/navbar/Navbar";
 import SerieDetails from "../../components/serieDetails/SerieDetails";
 import Seasons from "../../components/seasons/Seasons";
 
+
+const SummaryPage = () => {
+
 import { useTheme, Backdrop, CircularProgress } from "@mui/material"
 import "./Summary.scss";
 
@@ -88,4 +91,4 @@ const Summary = () => {
         
     );
 }
-export default Summary;
+export default SummaryPage;

@@ -5,7 +5,7 @@ import "./Search.scss";
 
 import { ThemeProvider, createTheme } from "@mui/material";
 
-const Search = () => {
+const SearchPage = () => {
   const darkTheme = createTheme({
     palette: {
       mode: 'dark',
@@ -22,4 +22,4 @@ const Search = () => {
     </div>
   )
 }
-export default Search; 
+export default SearchPage; 

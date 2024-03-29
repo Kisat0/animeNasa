@@ -3,7 +3,7 @@ import "./Login.scss";
 
 import { ThemeProvider, createTheme } from "@mui/material";
 
-const Login = () => {
+const LoginPage = () => {
   const darkTheme = createTheme({
     palette: {
       mode: 'dark',
@@ -22,4 +22,4 @@ const Login = () => {
     </div>
   )
 }
-export default Login; 
+export default LoginPage; 
