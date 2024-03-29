@@ -9,7 +9,7 @@ const SerieDetails = () => {
     return (
         <div className="episode-details">
             <img src="https://static.bandainamcoent.eu/high/jujutsu-kaisen/jujutsu-kaisen-cursed-clash/00-page-setup/JJK-header-mobile2.jpg" alt="jujutsu kaisen" />
-            <div className="episode-txt" style={{ background: theme.background.episodeDetailsBackground}}>
+            <div className="episode-txt">
                 <div className="episode-infos">
                     <div className="episode-description" >
                         <h1 style={{ color: theme.text.primary }}>{json.summary.Episode} </h1>
