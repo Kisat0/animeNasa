@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+
+import Navbar from "../../components/navbar/Navbar";
 import SerieDetails from "../../components/serieDetails/SerieDetails";
 import Seasons from "../../components/seasons/Seasons";
-import { useLocation } from 'react-router-dom';
-import "./Summary.scss"
+
 import { useTheme, Backdrop, CircularProgress } from "@mui/material"
-import { useEffect } from "react";
-var json = require("../../utils/fr.json");
+import "./Summary.scss";
 
 const Summary = () => {
     const [data, setData] = useState({});
@@ -46,6 +47,7 @@ const Summary = () => {
 
     return (
         <div>
+            <Navbar />
             {open && (
                 <Backdrop
                     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
