@@ -4,7 +4,7 @@ import Navbar from "../../components/navbar/Navbar";
 import NewsSeasons from "../../components/newsSeasons/NewsSeasons";
 import Trends from "../../components/trends/Trends";
 
-const Home = () => {
+const HomePage = () => {
     return (
         <div>
             <Navbar />
@@ -15,4 +15,4 @@ const Home = () => {
         </div>
     )
 }
-export default Home;
+export default HomePage;

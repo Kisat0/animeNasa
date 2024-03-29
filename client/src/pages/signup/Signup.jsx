@@ -3,7 +3,7 @@ import "./Signup.scss";
 
 import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
 
-const Signup = () => {
+const SignupPage = () => {
   const darkTheme = createTheme({
     palette: {
       mode: 'dark',
@@ -22,4 +22,4 @@ const Signup = () => {
     </div>
   )
 }
-export default Signup; 
+export default SignupPage; 
