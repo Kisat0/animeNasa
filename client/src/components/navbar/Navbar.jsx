@@ -24,6 +24,9 @@ const Navbar = () => {
           <StyledLink to="/">Accueil</StyledLink>
         </li>
         <li>
+          <StyledLink to="/search">Rechercher</StyledLink>
+        </li>
+        <li>
           <StyledLink to="/news">News</StyledLink>
         </li>
         <li>

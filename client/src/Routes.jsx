@@ -19,13 +19,16 @@ const Router = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/search" element={<Search />} />
+          <Route path="/news" element={<News />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/watch/:id" element={<Player />} />
-          <Route path="*" element={<h1>Not Found</h1>} />
-          <Route path="/summary/:id" element={<Summary />} />
-          <Route path="/news" element={<News />} />
+          
           <Route path="/admin" element={<Admin />} />
+
+          <Route path="/watch/:id" element={<Player />} />
+          <Route path="/summary/:id" element={<Summary />} />
+
+          <Route path="*" element={<h1>Not Found</h1>} />
         </Routes>
       </BrowserRouter>
       <ChatBot />
