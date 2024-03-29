@@ -19,7 +19,7 @@ import "./Player.scss";
 
 var json = require("../../utils/fr.json");
 
-function Player() {
+function PlayerPage() {
   const [videoWorks, setVideoWorks] = useState(false);
   const [volumeValue, setVolumeValue] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
@@ -770,4 +770,4 @@ function Player() {
   );
 }
 
-export default Player;
+export default PlayerPage;

@@ -4,7 +4,7 @@ import Date from "../../components/date/Date";
 import "./Calendar.scss";
 import ReleasesCard from "../../components/releasesCard/ReleasesCard";
 
-const Calendar = () => {
+const CalendarPage = () => {
   return (
     <div>
       <Navbar />
@@ -15,4 +15,4 @@ const Calendar = () => {
     </div>
   )
 }
-export default Calendar; 
+export default CalendarPage; 

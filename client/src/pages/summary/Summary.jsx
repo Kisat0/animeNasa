@@ -4,7 +4,7 @@ import "./Summary.scss"
 import { useTheme } from "@mui/material"
 var json = require("../../utils/fr.json");
 
-const Summary = () => {
+const SummaryPage = () => {
 
     const theme = useTheme().palette;
 
@@ -37,4 +37,4 @@ const Summary = () => {
         
     );
 }
-export default Summary;
+export default SummaryPage;
