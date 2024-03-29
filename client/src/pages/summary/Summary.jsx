@@ -1,38 +1,92 @@
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+
+import Navbar from "../../components/navbar/Navbar";
 import SerieDetails from "../../components/serieDetails/SerieDetails";
 import Seasons from "../../components/seasons/Seasons";
-import "./Summary.scss"
-import { useTheme } from "@mui/material"
-var json = require("../../utils/fr.json");
+
 
 const SummaryPage = () => {
 
+import { useTheme, Backdrop, CircularProgress } from "@mui/material"
+import "./Summary.scss";
+
+const Summary = () => {
+    const [data, setData] = useState({});
+    const [open, setOpen] = useState(true); // Initialiser le Backdrop à ouvert
     const theme = useTheme().palette;
 
-    return (
-        <div className="SummaryGlobal">
-            <div className="AnimeInfos">
-                <img src="https://static.bandainamcoent.eu/high/jujutsu-kaisen/jujutsu-kaisen-cursed-clash/00-page-setup/JJK-header-mobile2.jpg" alt="jujutsu kaisen" />
-                <h1>Jujutsu Kaisen</h1>
-                <div className="genres">
-                    <h3 style={{ background: theme.background.episodeWatched }}>Comédie</h3>
-                    <h3 style={{ background: theme.background.episodeWatched }}>Action</h3>
-                    <h3 style={{ background: theme.background.episodeWatched }}>Isekai</h3>
-                    <h3 style={{ background: theme.background.episodeWatched }}>Fantastique</h3>
-                </div>
-                <h3>{json.summary.Description}</h3>
+    // récupérer l'id dans l'url et récupérer l'anime qui a cet id
+    const location = useLocation();
+    const animeID = location.pathname.split("/").pop();
 
-            </div>
-            <div className="SerieComponent">
-                <SerieDetails/>
-                <SerieDetails/>
-                <SerieDetails/>
-            </div>
-            <div className="SeasonList">
-                <Seasons/>
-                <Seasons/>
-                <Seasons/>
-            </div>
-            <img src="https://static.bandainamcoent.eu/high/jujutsu-kaisen/jujutsu-kaisen-cursed-clash/00-page-setup/JJK-header-mobile2.jpg" alt="jujutsu kaisen" className="background" />
+    const getAnime = async () => {
+        await fetch(`${process.env.REACT_APP_API_ADDRESS}/animes/${animeID}`, {
+            method: 'GET',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+        })
+        .then(async (response) => {
+        return {
+            status: response.status,
+            data: await response.json(),
+        };
+        })
+        .then(({ status, data }) => {
+            if (status == 200) {
+                setData(data);
+                console.log(data);
+                setOpen(false);
+            } else {
+                setOpen(false); // Fermer le Backdrop en cas d'erreur
+            }
+        });
+    };
+
+    useEffect(() => {
+        getAnime();
+    }, []);
+
+    return (
+        <div>
+            <Navbar />
+            {open && (
+                <Backdrop
+                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    open={open}
+                >
+                    <CircularProgress color="inherit" />
+                </Backdrop>
+            )}
+            {data && Object.keys(data).length > 0 ? (
+                <div className="SummaryGlobal">
+                    <div className="AnimeInfos">
+                        <img src={data.thumbnail} alt="jujutsu kaisen" />
+                        <h1>{data.title}</h1>
+                        <div className="genres">
+                        {data.categories.map((category) => (
+                            <h3 key={category} style={{ background: theme.background.episodeWatched }}>
+                            {category}
+                            </h3>
+                        ))}
+                        </div>
+                        <h3>{data.description}</h3>
+
+                    </div>
+                    <div className="SerieComponent">
+                        {data.episodes.map((episode) => (
+                            <SerieDetails episode={episode}/>
+                        ))}
+                    </div>
+                    <div className="SeasonList">
+                        <Seasons/>
+                        <Seasons/>
+                        <Seasons/>
+                    </div>
+                    <img src={data.thumbnail} alt="jujutsu kaisen" className="background" />
+                </div>
+            ): null}
         </div>
         
     );
