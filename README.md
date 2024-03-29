@@ -25,7 +25,7 @@ Créez un dossier pour votre page dans src/pages **(nom en camelCase)**. Puis cr
 **Exemple :**
 Dans src/pages/signup,créez un fichier Signup.tsx :
 ```tsx
-export default function SignupPage() {
+export default function Signup() {
   return (
     <div>
       <h1>Login</h1>
@@ -36,7 +36,7 @@ export default function SignupPage() {
 
 Ensuite importez le dans src/Routes.tsx :
 ```tsx
-import SignupPage from "./pages/signup";
+import Signup from "./pages/signup";
 /* Reste du code ... */
 
 <Router>
