@@ -71,7 +71,7 @@ const Summary = () => {
                     </div>
                     <div className="SerieComponent">
                         {data.episodes.map((episode) => (
-                        <SerieDetails/>
+                            <SerieDetails episode={episode}/>
                         ))}
                     </div>
                     <div className="SeasonList">
