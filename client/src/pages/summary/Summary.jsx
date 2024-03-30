@@ -33,7 +33,6 @@ const SummaryPage = () => {
         .then(({ status, data }) => {
             if (status == 200) {
                 setData(data);
-                console.log(data);
                 setOpen(false);
             } else {
                 setOpen(false); // Fermer le Backdrop en cas d'erreur
@@ -73,7 +72,7 @@ const SummaryPage = () => {
                     </div>
                     <div className="SerieComponent">
                         {data.episodes.map((episode) => (
-                            <SerieDetails episode={episode}/>
+                            <SerieDetails key={episode} episode={episode}/>
                         ))}
                     </div>
                     <div className="SeasonList">
