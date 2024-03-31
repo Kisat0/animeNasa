@@ -71,7 +71,6 @@ function getDominantColor(imagePath) {
         
         // If the dominant color is too white, we take the second dominant color, then the third, and so on...
 
-        console.log(dominantColor, secondDominantColor, thirdDominantColor);
         if (isTooWhite(dominantColor)) {
           if (isTooWhite(secondDominantColor)) {
             if (isTooWhite(thirdDominantColor)) {

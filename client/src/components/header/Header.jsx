@@ -14,7 +14,6 @@ const Header = () => {
         getDominantColor(Image)
         .then((color) => {
             setColor(color)
-            console.log(color);
         }
         ).catch((error) => {
             console.log(error)

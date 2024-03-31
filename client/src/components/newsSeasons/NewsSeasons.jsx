@@ -14,9 +14,6 @@ const NewsSeasons = () => {
         const carouselItems = document.querySelector(".seasons-carousel-items");
         const carouselItem = document.querySelector(".seasons-carousel-item");
 
-        console.log(carousel);
-        console.log(carouselItems);
-        console.log(carouselItem);
 
         const carouselItemWidth = carouselItem.offsetWidth;
         const carouselWidth = carousel.offsetWidth;

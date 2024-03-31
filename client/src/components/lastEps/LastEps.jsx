@@ -18,7 +18,6 @@ const LastEps = () => {
           `${process.env.REACT_APP_API_ADDRESS}/episodes/latest/${0}`
         );
         const data = await res.json();
-        console.log(data);
         setLastEps(data);
       } catch (error) {
         console.log(error);

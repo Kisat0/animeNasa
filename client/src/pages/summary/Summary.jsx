@@ -33,7 +33,6 @@ const SummaryPage = () => {
         .then(({ status, data }) => {
             if (status == 200) {
                 setData(data);
-                console.log(data);
                 setOpen(false);
             } else {
                 setOpen(false); // Fermer le Backdrop en cas d'erreur
