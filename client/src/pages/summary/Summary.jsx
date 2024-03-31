@@ -72,7 +72,7 @@ const SummaryPage = () => {
                     </div>
                     <div className="SerieComponent">
                         {data.episodes.map((episode) => (
-                            <SerieDetails episode={episode}/>
+                            <SerieDetails key={episode} episode={episode}/>
                         ))}
                     </div>
                     <div className="SeasonList">
