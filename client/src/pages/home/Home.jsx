@@ -1,3 +1,4 @@
+import Footer from "../../components/footer/Footer";
 import Header from "../../components/header/Header";
 import LastEps from "../../components/lastEps/LastEps";
 import Navbar from "../../components/navbar/Navbar";
@@ -11,7 +12,8 @@ const HomePage = () => {
             <Header />
             <LastEps />
             <Trends />
-            <NewsSeasons/>
+            <NewsSeasons />
+            <Footer />
         </div>
     )
 }
