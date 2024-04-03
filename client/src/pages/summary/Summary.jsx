@@ -58,7 +58,9 @@ const SummaryPage = () => {
             {data && Object.keys(data).length > 0 ? (
                 <div className="SummaryGlobal">
                     <div className="AnimeInfos">
-                        <img src={data.thumbnail} alt="jujutsu kaisen" />
+                        <div className='imgSummary'>
+                            <img src={data.poster} alt="jujutsu kaisen" />
+                        </div>
                         <h1>{data.title}</h1>
                         <div className="genres">
                         {data.categories.map((category) => (
