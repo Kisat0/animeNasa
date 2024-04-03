@@ -1,6 +1,7 @@
 import "./News.scss"
 import { useTheme } from "@mui/material"
 import NewsPageAnimes from "../../components/newsPageAnimes/NewsPageAnimes";
+import Navbar from "../../components/navbar/Navbar";
 var json = require("../../utils/fr.json");
 
 const News = () => {
@@ -9,6 +10,7 @@ const News = () => {
 
     return (
         <div className="NewsPage">
+            <Navbar />
             <img className="backgroundNews" src="https://static.bandainamcoent.eu/high/jujutsu-kaisen/jujutsu-kaisen-cursed-clash/00-page-setup/JJK-header-mobile2.jpg" alt="jujutsu kaisen" />
 
             <div className="NewsTitleDesc">
