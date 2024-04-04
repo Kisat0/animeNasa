@@ -15,6 +15,7 @@
     "express": "^4.19.2",
     "google-auth-library": "^9.7.0",
     "googleapis": "^134.0.0",
+    "express-session-jwt": "^0.2.2",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.5.0",
     "mongoose": "^8.2.3",

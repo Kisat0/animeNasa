@@ -1,5 +1,5 @@
-import React from 'react';
-
+import React, { useEffect } from "react";
+import axios from "axios";
 import "./Footer.scss"
 
 function Footer() {
