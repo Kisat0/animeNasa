@@ -36,7 +36,12 @@ function FormLogin() {
       })
       .then(({ status, data }) => {
         if (status == 200) {
-          localStorage.setItem('token', data.token);
+          localStorage.clear();
+          localStorage.setItem('username', data.user.username);
+          localStorage.setItem('email', data.user.email);
+          localStorage.setItem('role', data.user.role);
+          localStorage.setItem('createdAt', data.user.createdAt);
+          localStorage.setItem('id', data.user._id);
           navigate('/');
         } else {
           setError(data.message);

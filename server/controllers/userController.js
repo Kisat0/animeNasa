@@ -2,20 +2,29 @@ import User from "../models/user";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import express from "express";
+import session from 'express-session-jwt';
+
+const app = express();
 
 const generateSecretKey = () => {
   return crypto.randomBytes(32).toString("hex");
 };
-const secretKey = generateSecretKey();
 
-export const getUsers = async (req, res) => {
-  try {
-    const users = await User.find();
-    res.json(users);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
+export const secretKey = generateSecretKey();
+
+const sessionOptions = {
+  keys: secretKey,
+  jwtFromReq: req => req.headers.authorization.split(' ')[1],
+  // autres options si nécessaire
+};
+
+app.use(session(sessionOptions));
+
+let user = {
+  username: "",
+  password: "",
+  email: "",
 };
 
 export const getUser = async (req, res) => {
@@ -36,7 +45,28 @@ export const getUser = async (req, res) => {
 
   const options = { expiresIn: "1h" };
   const token = jwt.sign({ userId: user._id }, secretKey, options);
-  res.send({ token });
+  req.session.user = { id: user._id, username: user.username, email: user.email };
+  let { _id, username, email } = user;
+  return res.send({ user, token });
+};
+
+export const checkSession = async (req, res) => {
+  console.log(req.session.user);
+  if (req.session.user) {
+    return res.send(`hello, ${req.session.user.username}!`);
+  } else {
+    return res.send('You are not logged in');
+  }
+}
+
+export const getUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
 };
 
 export const protectedRessource = async (req, res) => {
