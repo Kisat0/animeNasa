@@ -1,25 +1,26 @@
-import "./NewsPageAnimes.scss"
-import { useTheme } from "@mui/material"
-var json = require("../../utils/fr.json");
+import React from 'react';
+import { useTheme } from "@mui/material";
+import json from "../../utils/fr.json";
+import "./NewsPageAnimes.scss";
 
-const NewsPageAnimes = () => {
-
+const NewsPageAnimes = ({ title, description, thumbnail, _id }) => {
     const theme = useTheme().palette;
+
+    const openEpisode = async () => {
+        navigate(`/watch/${_id}`);
+    };
 
     return (
         <div className="NewsContainer">
-            <img src="https://static.bandainamcoent.eu/high/jujutsu-kaisen/jujutsu-kaisen-cursed-clash/00-page-setup/JJK-header-mobile2.jpg" alt="jujutsu kaisen" />
+            <div className='ImgNewsCompo'>
+                <img className="imgNewsComponent" src={thumbnail} alt="jujutsu kaisen" />
+            </div>
             <div className="NewsInfos">
-                <h1>Jujutsu Kaisen</h1>
-                <p>S3 Episode 17</p>
+                <h1>{title}</h1>
+                <p>{description}</p>
             </div>
         </div>
     );
-}
+};
+
 export default NewsPageAnimes;
-
-
-
-
-
-

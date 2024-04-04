@@ -32,6 +32,19 @@ const getLatestEpisodes = async (req, res) => {
   res.json(episodes);
 };
 
+const getNewsEpisodes = async (req, res) => {
+  try {
+    const episodes = await Episode.find()
+      .sort({ releaseDate: -1 })
+      .limit(5);
+
+    res.json(episodes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+}
+
 const getEpisodesByAnime = async (req, res) => {
   const { animeId } = req.params;
   const episodes = await Episode.find({ animeId });
@@ -96,4 +109,5 @@ module.exports = {
   updateEpisode,
   deleteEpisode,
   getLatestEpisodes,
+  getNewsEpisodes
 };

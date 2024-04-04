@@ -8,10 +8,13 @@ import {
   deleteEpisode,
   getEpisodesByAnime,
   getLatestEpisodes,
+  getNewsEpisodes
 } from "../controllers/episodeController";
 
 const router = Router();
-    
+
+router.get("/news", getNewsEpisodes);
+
 router.get("/", getEpisodes);
 router.get("/:id", getEpisode);
 router.post("/", createEpisode);
