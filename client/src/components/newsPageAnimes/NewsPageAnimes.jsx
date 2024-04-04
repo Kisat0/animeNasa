@@ -1,23 +1,47 @@
-import React from 'react';
 import { useTheme } from "@mui/material";
+import React, { useState, useEffect } from 'react';
 import json from "../../utils/fr.json";
 import "./NewsPageAnimes.scss";
 
-const NewsPageAnimes = ({ title, description, thumbnail, _id }) => {
+const NewsPageAnimes = ({ anime, season, number, thumbnail, _id, onClick }) => {
+
+    const [dataAnime, setDataAnime] = useState([]);
     const theme = useTheme().palette;
 
-    const openEpisode = async () => {
-        navigate(`/watch/${_id}`);
+    const handleOnClick = () => {
+        onClick(anime); 
     };
 
+
+    const getAnime = async () => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_ADDRESS}/animes/${anime}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch anime');
+            }
+            const dataAnime = await response.json();
+            setDataAnime(dataAnime);
+        } catch (error) {
+            console.error('Error fetching anime:', error);
+        }
+    };
+
+    useEffect(() => {
+        getAnime();
+    }, []);
+
+
     return (
-        <div className="NewsContainer">
+        <div className="NewsContainer" onClick={handleOnClick}>
             <div className='ImgNewsCompo'>
                 <img className="imgNewsComponent" src={thumbnail} alt="jujutsu kaisen" />
             </div>
             <div className="NewsInfos">
-                <h1>{title}</h1>
-                <p>{description}</p>
+                <h1>{dataAnime.title}</h1>
+                <div className="EpisodeData">
+                    <p>S{season}</p>
+                    <p>Episode {number}</p>
+                </div>
             </div>
         </div>
     );

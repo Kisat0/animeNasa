@@ -36,7 +36,7 @@ const getNewsEpisodes = async (req, res) => {
   try {
     const episodes = await Episode.find()
       .sort({ releaseDate: -1 })
-      .limit(5);
+      .limit(20);
 
     res.json(episodes);
   } catch (error) {
