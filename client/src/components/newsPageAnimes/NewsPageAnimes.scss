@@ -3,46 +3,53 @@
     flex-direction: row;
     gap: 10px;
     border: 1px gray solid;
-    box-shadow: 10px gray ;
+    box-shadow: 5px 5px 5px gray;
     width: 500px;
     height: 130px;
     border-radius: 10px;
-    
-    
+
+    &:hover {
+
+        height: 140px;
+        background-color: white;
+        color: black;
+        box-shadow: 5px 5px 5px white;
+        transform: scale(1.10);
+    }
+
     .ImgNewsCompo {
 
         width: 200px;
         height: 100%;
-        
+
         .imgNewsComponent {
             object-fit: cover;
             width: 170px;
             height: 100%;
             border-radius: 10px 0 0 10px;
         }
-        }
-    }    
+    }
+}
 
-    
+.NewsInfos {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 
-    .NewsInfos {
+
+    &>h1 {
+        padding-top: 13px;
+        font-size: 22px;
+    }
+
+    .EpisodeData {
         display: flex;
-        flex-direction: column;
-        gap: 10px;
-        
+        flex-flow: row nowrap;
+        gap: 5px;
 
-        &>h1 {
-            padding-top: 13px;
-            font-size: 22px;
-        }
-
-        .EpisodeData {
-            display: flex;
-            flex-flow: row nowrap;
-            gap: 5px;
-
-            &>p {
-                font-size: 20px;
-            }
+        &>p {
+            font-size: 20px;
+            
         }
     }
+}
