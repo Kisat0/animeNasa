@@ -1,8 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 import "./Comment.scss"
 
 function Comment() {
+  const [comments, setComments] = useState({});
+
+  const url = window.location.href;
+  const id = url.substring(url.lastIndexOf("/") + 1);
+  
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_ADDRESS}/comment/${id}`
+        );
+        setComments(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchComments();
+  }, []); 
 
   return (
     <div className='comment-container'>
