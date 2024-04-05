@@ -7,6 +7,7 @@ const mongoString = process.env.DATABASE_URL;
 import userRoutes from "./routes/userRoutes";
 import animeRoutes from "./routes/animeRoutes";
 import episodeRoutes from "./routes/episodeRoutes";
+import messageRoutes from "./routes/messageRoutes"
 
 mongoose.connect(mongoString);
 
@@ -27,6 +28,7 @@ app.use(express.json());
 app.use("/users", userRoutes);
 app.use("/animes", animeRoutes);
 app.use("/episodes", episodeRoutes);
+app.use("/messages", messageRoutes);
 
 app.listen(5001, () => {
   console.log("Server is running on port 5001");

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 
-const userSchema = new Schema({ 
+const messageSchema = new Schema({ 
     title: {
         type: String,
         required: true,
@@ -10,4 +10,10 @@ const userSchema = new Schema({
         type: String,
         required: true,
       },
+      createdAt: {
+        type: Date,
+        default: Date.now,
+    },
 })
+
+module.exports = mongoose.model("message", messageSchema);
