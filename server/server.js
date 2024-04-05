@@ -10,6 +10,7 @@ import animeRoutes from "./routes/animeRoutes";
 import episodeRoutes from "./routes/episodeRoutes";
 import messageRoutes from "./routes/messageRoutes";
 import connectionRoutes from "./routes/connection";
+import commentRoutes from "./routes/commentRoutes";
 
 const WebSocket = require("websocket").server;
 
@@ -36,6 +37,7 @@ app.use("/animes", animeRoutes);
 app.use("/episodes", episodeRoutes);
 app.use("/messages", messageRoutes);
 
+app.use("/comment", commentRoutes);
 
 const server = app.listen(5001, () => {
   console.log("Server is running on port 5001");
