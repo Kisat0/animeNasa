@@ -1,0 +1,28 @@
+.comment-title {
+  margin-left: 7.5%;
+}
+
+.comment-content {
+  margin: 5% 5%;
+}
+
+.comment-infos-top {
+  display: flex;
+  flex-direction: row;
+  gap: 3rem;
+  font-weight: bold;
+}
+
+.comment-infos-bottom {
+  display: flex;
+  flex-direction: row;
+  gap: 3rem;
+  font-weight: bold;
+}
+.comment-date {
+  font-weight: lighter;
+}
+
+.comment-text {
+  margin: 0.75rem 0;
+}
