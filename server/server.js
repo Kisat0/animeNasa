@@ -8,6 +8,7 @@ const mongoString = process.env.DATABASE_URL;
 import userRoutes from "./routes/userRoutes";
 import animeRoutes from "./routes/animeRoutes";
 import episodeRoutes from "./routes/episodeRoutes";
+import commentRoutes from "./routes/commentRoutes";
 
 import { secretKey } from "./controllers/userController";
 
@@ -51,6 +52,7 @@ const ensureSession = (req, res, next) => {
 app.use('/users', ensureSession, userRoutes);
 app.use("/animes", animeRoutes);
 app.use("/episodes", episodeRoutes);
+app.use("/comment", commentRoutes);
 
 app.listen(5001, () => {
   console.log("Server is running on port 5001");
