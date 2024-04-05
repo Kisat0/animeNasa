@@ -9,6 +9,7 @@ import './FormContact.scss';
 function FormContact() {
   const [data, setData] = useState({});
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const navigate = useNavigate();
 
@@ -19,17 +20,39 @@ function FormContact() {
     });
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_ADDRESS}/messages`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      if (response.ok) {
+        setSuccessMessage('Votre message s\'est bien envoyé');
+        setData({});
+      } else {
+        setError('Une erreur s\'est produite lors de l\'envoi du message.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setError('Une erreur s\'est produite lors de l\'envoi du message.');
+    }
+  };
+
   
   return (
     <div>
       <div className='div-form-contact'>
-        <form  className="form-contact">
+        <form  className="form-contact" onSubmit={handleSubmit}> 
           <div className="">
             <TextField
               required
               type="identifier"
               onChange={updateData}
-              name="object"
+              name="title"
               label="Objet"
               variant="outlined"
               className="w-full"
@@ -48,13 +71,14 @@ function FormContact() {
             />
           </div>
 
-          {error && <div className="AAAA">{error}</div>}
+          {error && <div className="successMessage">{error}</div>}
 
           <Button type="submit" variant="contained">
             Envoyer
           </Button>
         </form>
       </div>
+      {successMessage && <div className="success-message">{successMessage}</div>}
     </div>
   );
 }

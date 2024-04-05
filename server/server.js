@@ -7,7 +7,7 @@ const mongoString = process.env.DATABASE_URL;
 import userRoutes from "./routes/userRoutes";
 import animeRoutes from "./routes/animeRoutes";
 import episodeRoutes from "./routes/episodeRoutes";
-import messageRoutes from "./routes/messageRoutes"
+import messageRoutes from "./routes/messageRoutes";
 
 mongoose.connect(mongoString);
 
