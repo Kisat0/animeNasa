@@ -9,6 +9,7 @@ import Login from "./pages/login/Login";
 import Signup from "./pages/signup/Signup";
 import Admin from "./pages/admin/Admin";
 import Search from "./pages/search/Search";
+import ContactPage from "./pages/contact/Contact";
 
 const Router = () => {
   return (
@@ -24,6 +25,7 @@ const Router = () => {
           <Route path="/signup" element={<Signup />} />
           
           <Route path="/admin" element={<Admin />} />
+          <Route path="/contact" element={<ContactPage />} />
 
           <Route path="/watch/:id" element={<Player />} />
           <Route path="/summary/:id" element={<Summary />} />
