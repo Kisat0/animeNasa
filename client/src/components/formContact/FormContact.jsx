@@ -32,7 +32,6 @@ function FormContact() {
       });
       if (response.ok) {
         setSuccessMessage('Votre message s\'est bien envoyé');
-        setData({});
       } else {
         setError('Une erreur s\'est produite lors de l\'envoi du message.');
       }
