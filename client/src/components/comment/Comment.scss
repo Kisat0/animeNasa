@@ -3,7 +3,7 @@
 }
 
 .comment-content {
-  margin: 5% 5%;
+  margin: 2.5% 5%;
 }
 
 .comment-infos-top {
@@ -26,3 +26,52 @@
 .comment-text {
   margin: 0.75rem 0;
 }
+
+.youtube-comment-input {
+  margin: 2.5% 5%;
+  width: 80%;
+  display: flex;
+  align-items: center;
+  // background-color: #f0f0f0;
+  border-bottom: white 1px solid;
+  padding: 10px;
+  color: white;
+}
+
+.youtube-comment-input textarea {
+  color: white;
+  flex: 1;
+  border: none;
+  background-color: transparent;
+  font-size: 14px;
+  padding: 8px 12px;
+  resize: none;
+  overflow-y: auto;
+}
+
+.youtube-comment-input textarea:focus {
+  outline: none;
+}
+
+.youtube-comment-input button {
+  background-color: #167ac6;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.youtube-comment-input button:hover {
+  background-color: #0d5d9e;
+}
+
+.comment-list {
+  margin-top: 2.5rem;
+}
+
+// textarea::placeholder {
+//   color: black; /* Définit la couleur du texte en rouge */
+// }
