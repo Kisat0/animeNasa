@@ -13,7 +13,7 @@ function Comment() {
   const theme = useTheme().palette;
 
   const url = window.location.href;
-  const id = url.substring(url.lastIndexOf("/") + 1);
+  const videoID = url.substring(url.lastIndexOf("/") + 1);
 
   const darkTheme = createTheme({
     palette: {
@@ -24,9 +24,10 @@ function Comment() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (id && localStorage.getItem('username') && text.text) {
+      if (videoID && localStorage.getItem('username') && text.text) {
+        console.log(videoID, localStorage.getItem('username'), text.text);
         await axios.post('http://localhost:5001/comment/', {
-          videoID: id,
+          videoID: videoID,
           author: localStorage.getItem('username'),
           text: text.text,
         });
@@ -46,7 +47,7 @@ function Comment() {
     const fetchComments = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_ADDRESS}/comment/${id}`
+          `${process.env.REACT_APP_API_ADDRESS}/comment/${videoID}`
         );
         setComments(response.data);
         setOpen(false); // Fermer le Backdrop une fois les données chargées
