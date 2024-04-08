@@ -11,6 +11,8 @@ import "./Summary.scss";
 const SummaryPage = () => {
     const [data, setData] = useState({});
     const [open, setOpen] = useState(true); // Initialiser le Backdrop à ouvert
+    const [dataNumberSeasons, setDataNumberSeasons] = useState([]);
+
     const theme = useTheme().palette;
 
     // récupérer l'id dans l'url et récupérer l'anime qui a cet id
@@ -21,27 +23,73 @@ const SummaryPage = () => {
         await fetch(`${process.env.REACT_APP_API_ADDRESS}/animes/${animeID}`, {
             method: 'GET',
             headers: {
-            'Content-Type': 'application/json',
+                'Content-Type': 'application/json',
             },
         })
-        .then(async (response) => {
-        return {
-            status: response.status,
-            data: await response.json(),
-        };
-        })
-        .then(({ status, data }) => {
-            if (status == 200) {
-                setData(data);
-                setOpen(false);
-            } else {
-                setOpen(false); // Fermer le Backdrop en cas d'erreur
-            }
-        });
+            .then(async (response) => {
+                return {
+                    status: response.status,
+                    data: await response.json(),
+                };
+            })
+            .then(({ status, data }) => {
+                if (status == 200) {
+                    setData(data);
+                    setOpen(false);
+                } else {
+                    setOpen(false); // Fermer le Backdrop en cas d'erreur
+                }
+            });
     };
+
+    const getNumberSeasons = async () => {
+        await fetch(`${process.env.REACT_APP_API_ADDRESS}/episodes/numberSeasons/${animeID}`,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(async (response) => {
+                return {
+                    status: response.status,
+                    dataNumberSeasons: await response.json(),
+                };
+            })
+            .then(({ status, dataNumberSeasons }) => {
+                if (status == 200) {
+                    setDataNumberSeasons(dataNumberSeasons);
+                }
+            });
+    }
+
+    const handleSeasonEpisodes = async (season) => {
+        await fetch(`${process.env.REACT_APP_API_ADDRESS}/animes/filter/${animeID}/${season}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(async (response) => {
+                return {
+                    status: response.status,
+                    data: await response.json(),
+                };
+            })
+            .then(({ status, data }) => {
+                if (status == 200) {
+                    setData(data);
+                    setOpen(false);
+                } else {
+                    setOpen(false); // Fermer le Backdrop en cas d'erreur
+                }
+            });
+    }
 
     useEffect(() => {
         getAnime();
+        getNumberSeasons();
+
     }, []);
 
     return (
@@ -63,30 +111,32 @@ const SummaryPage = () => {
                         </div>
                         <h1>{data.title}</h1>
                         <div className="genres">
-                        {data.categories.map((category) => (
-                            <h3 key={category} style={{ background: theme.background.episodeWatched }}>
-                            {category}
-                            </h3>
-                        ))}
+                            {data.categories.map((category) => (
+                                <h3 key={category} style={{ background: theme.background.episodeWatched }}>
+                                    {category}
+                                </h3>
+                            ))}
                         </div>
                         <h3>{data.description}</h3>
 
                     </div>
                     <div className="SerieComponent">
                         {data.episodes.map((episode) => (
-                            <SerieDetails key={episode} episode={episode}/>
+                            <SerieDetails key={episode} episode={episode} />
                         ))}
                     </div>
                     <div className="SeasonList">
-                        <Seasons/>
-                        <Seasons/>
-                        <Seasons/>
+                        {dataNumberSeasons.map((season) => (
+                            <Seasons key={`${animeID}-${season}`} season={season} onClick={handleSeasonEpisodes} />
+                        ))}
                     </div>
+
+
                     <img src={data.thumbnail} alt="jujutsu kaisen" className="background" />
                 </div>
-            ): null}
+            ) : null}
         </div>
-        
+
     );
 }
 

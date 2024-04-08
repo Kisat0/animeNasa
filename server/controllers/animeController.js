@@ -99,6 +99,25 @@ const getCompletedAnimes = async (req, res) => {
     res.json(animes);
 }
 
+const getAnimeFilterSeason = async (req, res) => {
+    try {
+        const { id } = req.params;
+        let { season } = req.params; 
+        season = parseInt(season);
+        const anime = await Anime.findById(id);
+        if (!anime) {
+            return res.status(404).send("Anime not found");
+        }
+        const episodesOfSeason = anime.episodes.filter(episode => episode.season == season);
+        anime.episodes = episodesOfSeason;
+        res.json(anime);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
+
 module.exports = {
     getAnimes,
     getAnime,
@@ -110,4 +129,5 @@ module.exports = {
     getTrendingAnimes,
     getReleasedAnimes,
     getCompletedAnimes,
+    getAnimeFilterSeason
 };

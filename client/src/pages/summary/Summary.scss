@@ -11,6 +11,7 @@
         padding-left: 100px;
         padding-top: 100px;
         overflow-y: hidden;
+        height: 100vh;
         
         
         .imgSummary{
@@ -52,7 +53,7 @@
 
     .SerieComponent {
         width: 43%;
-        height: 100%;
+        height: 100vh;
         display: flex;
         flex-direction: column;
         gap: 20px;
@@ -67,6 +68,7 @@
         padding-left: 15px;
         padding-top: 100px;
         overflow-y: hidden;
+        padding-bottom: 100px;
     }
 
 }
