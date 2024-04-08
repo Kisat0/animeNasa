@@ -8,7 +8,7 @@ const Seasons = ({ season, onClick }) => {
 
     const handleOnClick = () => {
         onClick(season);
-        setClicked(true);
+        setClicked(!clicked);
     };
 
     return (
@@ -17,7 +17,7 @@ const Seasons = ({ season, onClick }) => {
             style={{
                 background: clicked ? 'white' : theme.background.episodeWatched,
                 color: clicked ? 'black' : 'white',
-                transform: clicked ? 'scale(1.05)' : 'scale(1.00)',
+                
             }}
             onClick={handleOnClick}
         >

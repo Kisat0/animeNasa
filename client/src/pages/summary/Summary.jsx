@@ -12,6 +12,7 @@ const SummaryPage = () => {
     const [data, setData] = useState({});
     const [open, setOpen] = useState(true); // Initialiser le Backdrop à ouvert
     const [dataNumberSeasons, setDataNumberSeasons] = useState([]);
+    const [activeSeason, setActiveSeason] = useState(null);
 
     const theme = useTheme().palette;
 
@@ -89,7 +90,6 @@ const SummaryPage = () => {
     useEffect(() => {
         getAnime();
         getNumberSeasons();
-
     }, []);
 
     return (
@@ -127,12 +127,13 @@ const SummaryPage = () => {
                     </div>
                     <div className="SeasonList">
                         {dataNumberSeasons.map((season) => (
-                            <Seasons key={`${animeID}-${season}`} season={season} onClick={handleSeasonEpisodes} />
+                            <Seasons key={`${animeID}-${season}`} season={season} onClick={handleSeasonEpisodes} activeSeason={activeSeason}
+                                setActiveSeason={setActiveSeason} />
                         ))}
                     </div>
 
 
-                    <img src={data.thumbnail} alt="jujutsu kaisen" className="background" />
+                    <img src={data.thumbnail} alt="jujutsu kaisen" className="backgroundGrayscale" />
                 </div>
             ) : null}
         </div>
