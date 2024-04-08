@@ -8,6 +8,7 @@ import userRoutes from "./routes/userRoutes";
 import animeRoutes from "./routes/animeRoutes";
 import episodeRoutes from "./routes/episodeRoutes";
 import messageRoutes from "./routes/messageRoutes";
+import connectionRoutes from "./routes/connection";
 
 mongoose.connect(mongoString);
 
@@ -25,10 +26,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use("/connection", connectionRoutes )
 app.use("/users", userRoutes);
 app.use("/animes", animeRoutes);
 app.use("/episodes", episodeRoutes);
 app.use("/messages", messageRoutes);
+
 
 app.listen(5001, () => {
   console.log("Server is running on port 5001");
