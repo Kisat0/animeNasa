@@ -13,6 +13,7 @@ import Navbar from "../../components/navbar/Navbar";
 import axios from "axios";
 import { useTheme } from "@mui/material";
 import PreviewChat from "../../components/preview-chat/PreviewChat";
+import { useUser } from "../../utils/useUser";
 
 import "./Player.scss";
 
@@ -26,8 +27,49 @@ function PlayerPage() {
   const [anime, setAnime] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isComingSoon, setIsComingSoon] = useState(true);
+  const [isMenuReportOpen, setIsMenuReportOpen] = useState(false);
+  const [dataReport, setDataReport] = useState({});
+  const { user } = useUser();
+  const [error, setError] = useState('');
+  
 
   const { id } = useParams();
+  const pageLink = window.location.href;
+
+  const updateDataReport = (e) => {
+    setDataReport({
+
+      user,
+      ...dataReport,
+      pageLink,
+      [e.target.name]: `${e.target.value}`,
+    });
+  };
+
+  const CustomReportValidation = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_ADDRESS}/connection/reportEpisode`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataReport),
+
+      });
+      if (response.ok) {
+        const responseData = await response.json();
+        setSuccessMessage(`L'email a été envoyé`);
+      } else {
+        const responseData = await response.json();
+        setError(responseData.message);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setError('Une erreur s\'est produite lors de l\'envoi de l\'e-mail.');
+    }
+    // console.log("Description du problème :", customReportDescription);
+    setIsMenuReportOpen(false)
+  };
 
   const closeMenu = () => {
     const menu = document.querySelector(".menu");
@@ -171,7 +213,7 @@ function PlayerPage() {
 
     const skipTo = Math.round(
       (event.clientX / event.target.clientWidth) *
-        parseInt(event.target.getAttribute("max"), 10)
+      parseInt(event.target.getAttribute("max"), 10)
     );
     seek.setAttribute("data-seek", skipTo);
     const t = formatTime(skipTo);
@@ -477,20 +519,20 @@ function PlayerPage() {
 
     const addView = async (animeId) => {
       try {
-          const response = await axios.put(
-              `${process.env.REACT_APP_API_ADDRESS}/animes/views/${animeId}`
-          );
-  
-          if (response.status === 200) {
-              console.log("Le nombre de vues a été mis à jour avec succès !");
-          } else {
-              console.log("La requête a échoué avec le code :", response.status);
-          }
+        const response = await axios.put(
+          `${process.env.REACT_APP_API_ADDRESS}/animes/views/${animeId}`
+        );
+
+        if (response.status === 200) {
+          console.log("Le nombre de vues a été mis à jour avec succès !");
+        } else {
+          console.log("La requête a échoué avec le code :", response.status);
+        }
       } catch (error) {
-          console.error("Une erreur s'est produite lors de la mise à jour du nombre de vues :", error);
+        console.error("Une erreur s'est produite lors de la mise à jour du nombre de vues :", error);
       }
-  }
-  
+    }
+
 
     const fetchAnime = async (animeId) => {
       try {
@@ -755,9 +797,23 @@ function PlayerPage() {
             </div>
           </div>
           <div className="bottom-buttons">
-            <button className="reported-button">
+            {isMenuReportOpen && (
+              <div className="menu-report">
+                <input
+                  type="identifier"
+                  placeholder="Décrire le problème..."
+                  name="customReportDescription"
+                  required
+                  variant="outlined"
+                  onChange={updateDataReport}
+                />
+                <button onClick={CustomReportValidation}>Valider</button>
+              </div>
+            )}
+            <button className="reported-button" onClick={() => setIsMenuReportOpen(!isMenuReportOpen)}>
               {json.play["Reported-button"]}
             </button>
+
           </div>
         </div>
 
