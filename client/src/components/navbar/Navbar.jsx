@@ -12,7 +12,6 @@ const Navbar = () => {
   const theme = useTheme().palette;
   const { isLoggedIn } = useAuth();
 
-  console.log(isLoggedIn);
   return (
     <nav
       style={{
