@@ -24,12 +24,11 @@ function FormSignup() {
       return;
     }
 
-    await axios
-      .post(`${process.env.REACT_APP_API_ADDRESS}/users/register`, {
-        userMail: mail,
-        userName: username,
-        userPassword: password,
-      })
+    await axios.post(`${process.env.REACT_APP_API_ADDRESS}/users/register`, {
+      userMail: mail,
+      userName: username,
+      userPassword: password,
+    })
       .then((response) => {
         if (response.status === 200) {
           toastSuccess("Compte créé avec succès");

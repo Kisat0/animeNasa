@@ -1,5 +1,3 @@
-const mongoose = require("mongoose");
-
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
@@ -55,42 +53,6 @@ const signup = async (req, res) => {
 };
 
 /**
- * The function `verifyEmail` is an asynchronous function that verifies a user's email by checking if
- * the provided verification token matches the one stored in the database, and updates the user's
- * `verified` status accordingly.
- * @param req - The `req` parameter is the request object, which contains information about the
- * incoming HTTP request, such as the request headers, query parameters, and body.
- * @param res - The `res` parameter is the response object that is used to send the response back to
- * the client. It contains methods and properties that allow you to control the response, such as
- * setting the status code, sending data, and setting headers.
- * @returns If the user is found and successfully verified, the user object is returned with a status
- * code of 200. If the verification token is invalid, a message object with a status code of 400 is
- * returned. If an error occurs during the verification process, a message object with a status code of
- * 500 is returned.
- */
-const verifyEmail = async (req, res) => {
-  const { token } = req.query;
-
-  try {
-    const user = await User.findOne({ verificationToken: token });
-
-    if (!user) {
-      return res.status(400).send({ message: "Invalid verification token." });
-    } else {
-      user.verified = true;
-      user.verificationToken = undefined;
-      await user.save();
-      return res.status(200).send(user);
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      message: "An error occurred while verifying the email.",
-    });
-  }
-};
-
-/**
  * The login function is responsible for authenticating a user by checking their email and password,
  * generating access and refresh tokens, and returning them in the response.
  * @param req - The `req` parameter is the request object that contains information about the incoming
@@ -107,20 +69,13 @@ const verifyEmail = async (req, res) => {
  * a message indicating that the user does not exist. If the user's account is not verified, it returns
  */
 const login = async (req, res) => {
-  const { userEmail, userPassword } = req.body;
+  const { userMail, userPassword } = req.body;
 
   try {
-    const user = await User.findOne({ email: userEmail });
+    const user = await User.findOne({ email: userMail });
 
     if (!user) {
       return res.status(404).send({ message: "L'utilisateur n'existe pas" });
-    }
-
-    if (!user.verified) {
-      return res.status(401).send({
-        message:
-          "Compte non vérifié. Veuillez vérifier votre e-mail avant de vous connecter.",
-      });
     }
 
     const passwordMatch = await bcrypt.compare(userPassword, user.password);
@@ -362,7 +317,6 @@ const resetPasswordUser = async (req, res) => {
 
 module.exports = {
   signup,
-  verifyEmail,
   login,
   getUserLoggedData,
   refreshToken,

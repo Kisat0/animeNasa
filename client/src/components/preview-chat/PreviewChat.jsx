@@ -2,12 +2,16 @@ import { useEffect, useState } from "react";
 import Message from "./Message";
 
 import "./PreviewChat.scss";
+import { useUser } from "../../utils/useUser";
 
 const PreviewChat = () => {
-  const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState([]);
+    const { user } = useUser();
 
   useEffect(() => {
-    const ws = new WebSocket("ws://localhost:5001");
+      const ws = new WebSocket("ws://localhost:5001");
+      
+      console.log(user);
     ws.onopen = () => {
         console.log("Connected to server");
         ws.send(JSON.stringify({ episode: "episode" }));

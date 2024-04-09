@@ -29,7 +29,7 @@ export const UserContextProvider = ({ children }) => {
 
         if (currentAccessToken) {
           const res = await axios.post(
-            `${process.env.REACT_APP_API_ADDRESS}/auth/user`,
+            `${process.env.REACT_APP_API_ADDRESS}/users/me`,
             {
               accessToken: currentAccessToken,
             }

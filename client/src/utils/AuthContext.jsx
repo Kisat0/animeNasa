@@ -14,15 +14,11 @@ export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(initialIsLoggedIn);
 
   const loginUser = async (email, password) => {
-    console.log(email, password);
     try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_API_ADDRESS}/auth/login`,
-        {
-          userEmail: email,
-          userPassword: password,
-        }
-      );
+        const res = await axios.post(`${process.env.REACT_APP_API_ADDRESS}/users/login`, {
+            userMail: email,
+            userPassword: password,
+        });
 
       const { accessToken, refreshToken } = res.data;
 
@@ -48,7 +44,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       const res = await axios.post(
-        `${process.env.REACT_APP_API_ADDRESS}/auth/refresh-token`,
+        `${process.env.REACT_APP_API_ADDRESS}/users/refresh-token`,
         {
           refreshToken,
         }
