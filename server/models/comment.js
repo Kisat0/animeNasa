@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 const { Schema } = require("mongoose");
-
 const commentSchema = new Schema({
   id: { type: mongoose.Schema.Types.ObjectId, required: false, auto: true },
   videoID: {
@@ -31,8 +30,8 @@ const commentSchema = new Schema({
     type: String,
   },
   reply: {
-    type: Schema.Types.ObjectId,
-    ref: "comment",
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: "comment" }],
+    default: [],
   },
 });
 
