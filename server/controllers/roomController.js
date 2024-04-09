@@ -9,7 +9,7 @@ const broadcastToAll = (connections, data) => {
 };
 
 const ws = (episode, receivedDataString, Rooms, Data) => {
-    const receivedData = JSON.parse(receivedDataString);
+  const receivedData = JSON.parse(receivedDataString);
 
   if (receivedData?.message) {
     Data[episode].chat.push(receivedData.message);
@@ -17,7 +17,7 @@ const ws = (episode, receivedDataString, Rooms, Data) => {
     broadcastToAll(
       Rooms.get(episode),
       JSON.stringify({
-        chat: Data[roomName].chat,
+        chat: Data[episode].chat,
       })
     );
   }
@@ -41,13 +41,13 @@ const ws = (episode, receivedDataString, Rooms, Data) => {
 };
 
 const handleUserJoin = async (episode, connection, Rooms, Data) => {
-
   if (!Rooms.has(episode)) {
     Rooms.set(episode, new Set());
     Data[episode] = { users: [], chat: [] };
   }
 
   Rooms.get(episode).add(connection);
+
   connection.sendUTF(
     JSON.stringify({
       users: Data[episode].users,

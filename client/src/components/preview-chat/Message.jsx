@@ -1,6 +1,8 @@
 import { Avatar } from "@mui/material";
+import { useUser } from "../../utils/useUser";
 
-const Message = ({ message, time, username, avatarUrl }) => {
+const Message = ({ message, time, username, avatarUrl, userId }) => {
+  const { user } = useUser();
   return (
     <div className="preview-chat-message">
       <div className="preview-chat-message-avatar">

@@ -386,6 +386,11 @@ function PlayerPage() {
       "keydown",
       function (e) {
         if (
+          ["input", "textarea"].indexOf(e.target.tagName.toLowerCase()) > -1
+        ) {
+          return;
+        }
+        if (
           ["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].indexOf(
             e.code
           ) > -1
@@ -401,6 +406,8 @@ function PlayerPage() {
     function keyboardShortcuts(event) {
       const video = document.getElementById("video");
       if (!video) return;
+
+      if (document.activeElement.tagName === "INPUT") return;
 
       const { key } = event;
       switch (key) {
@@ -771,7 +778,7 @@ function PlayerPage() {
             </symbol>
           </defs>
         </svg>
-      {isComingSoon && <PreviewChat />}
+        {isComingSoon && <PreviewChat episode={episode} />}
       </div>
     </>
   );

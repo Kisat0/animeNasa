@@ -48,11 +48,13 @@ wsServer.on("request", (request) => {
 
   console.log("Connection established");
 
-  // call the function to handle user join
-
   connection.on("message", (message) => {
-    const { episode } = JSON.parse(message.utf8Data);
-    ws(episode, message.utf8Data, Rooms, Data);
+    const { episode, type } = JSON.parse(message.utf8Data);
+
+    if (type === "join") handleUserJoin(episode, connection, Rooms, Data);
+    else ws(episode, message.utf8Data, Rooms, Data);
+
+    console.log(episode);
   });
 
   connection.on("close", () => {
