@@ -1,43 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import { useNavigate, Link } from 'react-router-dom';
-import { TextField, Button } from '@mui/material';
+import { useNavigate, Link } from "react-router-dom";
+import { TextField, Button } from "@mui/material";
 
-import './FormSignup.scss';
-import { useAuth } from '../../utils/AuthContext';
-import { toastFail, toastSuccess } from '../../utils/toasts';
+import "./FormSignup.scss";
+import { useAuth } from "../../utils/AuthContext";
+import { toastFail, toastSuccess } from "../../utils/toasts";
+import axios from "axios";
 
 function FormSignup() {
-  const [mail, setMail] = useState('');
-  const [password, setPassword] = useState('');
+  const [mail, setMail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const { loginUser } = useAuth();
 
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const navigate = useNavigate();
-  
-  const sendSignup = async (event) => {
-    const { success, error } = await loginUser(mail, password);
-    if (success) {
-      toastSuccess('Vous êtes connecté');
-      navigate('/');
-    } else {
-      setError(error);
-      toastFail('Une erreur s\'est produite');
+
+  const sendSignup = async () => {
+    if (!mail || !username || !password) {
+      setError("Veuillez remplir tous les champs");
+      return;
     }
-    
+
+    await axios
+      .post(`${process.env.REACT_APP_API_ADDRESS}/users/register`, {
+        userMail: mail,
+        userName: username,
+        userPassword: password,
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          toastSuccess("Compte créé avec succès");
+          loginUser(mail, password);
+          navigate("/");
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          toastFail(`${error.response.data.message}`);
+        }
+      });
   };
 
   return (
-    <div className='div-form-signup'>
-      <form
-        onSubmit={sendSignup} 
-        className="w-50">
+    <div className="div-form-signup">
+      <form onSubmit={sendSignup} className="w-50">
         <div className="mb-6">
           <TextField
             required
             type="username"
-            onChange={updateData}
+            onChange={(e) => setUsername(e.target.value)}
             name="username"
             label="Username"
             variant="outlined"
@@ -49,7 +63,7 @@ function FormSignup() {
           <TextField
             required
             type="email"
-            onChange={() => setMail(event.target.value)}
+            onChange={(e) => setMail(e.target.value)}
             name="email"
             label="Email"
             variant="outlined"
@@ -61,7 +75,7 @@ function FormSignup() {
           <TextField
             required
             type="password"
-            onChange={() => setPassword(event.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             name="password"
             label="Mot de passe"
             variant="outlined"
@@ -72,8 +86,8 @@ function FormSignup() {
         {error && <div className="error">{error}</div>}
 
         <div className="mb-3">
-          Vous avez déjà un compte ?{' '}
-          <Link to={'/login'} className="link">
+          Vous avez déjà un compte ?{" "}
+          <Link to={"/login"} className="link">
             Connectez vous
           </Link>
         </div>

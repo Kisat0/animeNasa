@@ -17,6 +17,11 @@ import Admin from "./pages/admin/Admin";
 import Search from "./pages/search/Search";
 import { useAuth } from "./utils/AuthContext";
 
+const PublicRoute = () => {
+  const { isLoggedIn } = useAuth();
+  return isLoggedIn ? <Navigate to="/" /> : <Outlet />;
+};
+
 const PrivateRoute = () => {
   const { isLoggedIn } = useAuth();
   return isLoggedIn ? <Outlet /> : <Navigate to="/login" />;
@@ -26,21 +31,24 @@ const Router = () => {
   return (
     <>
       <BrowserRouter>
-          <PrivateRoute />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/calendar" element={<Calendar />} />
-          <Route path="/search" element={<Search />} />
-          <Route path="/news" element={<News />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+          <Route element={<PublicRoute />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+          </Route>
 
-          <Route path="/admin" element={<Admin />} />
+          <Route element={<PrivateRoute />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/calendar" element={<Calendar />} />
+            <Route path="/search" element={<Search />} />
+            <Route path="/news" element={<News />} />
 
-          <Route path="/watch/:id" element={<Player />} />
-          <Route path="/summary/:id" element={<Summary />} />
+            <Route path="/admin" element={<Admin />} />
 
+            <Route path="/watch/:id" element={<Player />} />
+            <Route path="/summary/:id" element={<Summary />} />
+          </Route>
           <Route path="*" element={<h1>Not Found</h1>} />
         </Routes>
       </BrowserRouter>
