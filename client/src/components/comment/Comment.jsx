@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Backdrop, CircularProgress, useTheme } from "@mui/material";
 
-import "./Comment.scss"
 import CommentInput from "../CommentInput/CommentInput";
+
+import "./Comment.scss"
 
 function Comment() {
   const [comments, setComments] = useState([]);
@@ -26,8 +27,11 @@ function Comment() {
         })
         .then((response) => {
           if (response.statusText === 'Created') {
-            comments.push(response.data);
+            const newComment = response.data;
+            newComment.showReplyInput = false; // Initialiser showReplyInput à false pour le nouveau commentaire
+            comments.push(newComment);
             comments.sort((a, b) => new Date(b.date) - new Date(a.date));
+            setComments([...comments]);
           }
         })
         setText({ text: '' }); // Réinitialiser le champ de texte après la soumission
@@ -37,6 +41,14 @@ function Comment() {
       console.error(error);
     }
   };
+
+  const handleReplyClick = (index) => {
+    setComments((prevComments) =>
+      prevComments.map((comment, i) =>
+        i === index ? { ...comment, showReplyInput: !comment.showReplyInput } : comment
+      )
+    );
+  };
   
   useEffect(() => {
     const fetchComments = async () => {
@@ -44,7 +56,11 @@ function Comment() {
         const response = await axios.get(
           `${process.env.REACT_APP_API_ADDRESS}/comment/${videoID}`
         );
-        setComments(response.data);
+        const commentsWithReplyInput = response.data.map((comment) => ({
+          ...comment,
+          showReplyInput: false,
+        }));
+        setComments(commentsWithReplyInput);
         setOpen(false); // Fermer le Backdrop une fois les données chargées
       } catch (error) {
         console.error(error);
@@ -88,13 +104,21 @@ function Comment() {
                 <div className='comment-infos-bottom'>
                   <p className='comment-like'>Likes: {comment.like}</p>
                   <p className='comment-dislike'>Dislikes: {comment.dislike}</p>
-                  <button className='comment-reply'>Reply</button>
+                  <button className='comment-reply' onClick={() => handleReplyClick(index)}>
+                    Reply
+                  </button>
                 </div>
+                {comment.showReplyInput && (
+                  <CommentInput
+                    text={text}
+                    setText={setText}
+                    handleSubmit={handleSubmit}
+                  />
+                )}
               </div>
             ))
           ) : null}
         </div>
-
       </div>
     </>
   );
