@@ -1,13 +1,21 @@
 import { useTheme } from "@mui/material";
 import "./Header.scss";
 import { PlayIcon } from "../../utils/Icons";
-import Image from "../../assets/images/konosuba.webp";
+import { useState } from "react";
 
-const Header = ({color}) => {
+const Header = ({ color, data }) => {
   const theme = useTheme().palette;
+  const [currentTitle, setCurrentTitle] = useState(data[0]?.anime.title);
+  const [currentBackground, setCurrentBackground] = useState(data[0].thumbnail);
+  const [currentSeason, setCurrentSeason] = useState(data[0].season);
+  const [currentNumber, setCurrentNumber] = useState(data[0].number);
+  const [currentPoster, setCurrentPoster] = useState(data[0]?.anime.poster);
+  const [currentDesc, setCurrentDesc] = useState(data[0]?.anime.description);
+
+
   return (
     <header className="header">
-      <img src={Image} alt="" id="header-background" />
+      <img src={currentBackground} alt="" id="header-background" />
       <div>
         <div>
           <div
@@ -16,17 +24,16 @@ const Header = ({color}) => {
               color: theme.text.grey,
             }}
           >
-            <p>SAISON 1</p>
+            <p>SAISON {currentSeason}</p>
             <p> | </p>
-            <p>EPISODE 1</p>
+            <p>EPISODE {currentNumber}</p>
           </div>
-          <h1>Konosuba</h1>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Consequuntur nostrum tempora architecto nam. Eaque quisquam modi
-            necessitatibus magni exercitationem sint eveniet porro molestiae.
-            Repellendus dolore omnis fugit esse vero corporis.
-          </p>
+          <h1>{currentTitle}</h1>
+           <p>
+            {currentDesc.length > 100
+              ? currentDesc.substring(0, 100) + "..."
+              : currentDesc}
+          </p> 
           <div className="header-buttons">
             <button
               style={{
@@ -45,10 +52,7 @@ const Header = ({color}) => {
             </button>
           </div>
         </div>
-        <img
-          src="https://fr.web.img3.acsta.net/pictures/20/09/14/10/31/4875617.jpg"
-          alt="Group-1"
-        />
+        <img src={currentPoster} alt="Group-1" />
       </div>
     </header>
   );
