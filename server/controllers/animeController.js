@@ -42,7 +42,7 @@ const updateAnime = async (req, res) => {
     }
 
     try {
-        const updatedAnime = await Anime.findByIdAndUpdate(id, anime, { new: true });
+        const updatedAnime = await Anime.findByIdAndUpdate(id, anime);
         res.json(updatedAnime);
     } catch (error) {
         console.error(error);
@@ -136,6 +136,8 @@ const getAnimeTrends = async (req, res) => {
 const calculTrendingScore = (anime) => {
     let score = 0;
     const episodes = anime.episodes
+    const views = anime.views || 0;
+    //date de l ep
     episodes.sort((a, b) => new Date(b.releaseDate) - new Date(a.releaseDate));
     const latestEpisode = episodes[0];
     const timeDifference = new Date() - new Date(latestEpisode.releaseDate);
@@ -152,9 +154,36 @@ const calculTrendingScore = (anime) => {
     else if (differenceInDays < 365) {
         score += 2;
     }
+    //vues de l'ep
+    score += views / 10;
+
+    //note de l ep
     score += anime.rating;
     return score;
 }
+
+const updateViews = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        let updatedAnime = await Anime.findByIdAndUpdate(
+            id,
+            { $inc: { views: 1 } },
+            { new: true } 
+        );
+
+        if (!updatedAnime) {
+            return res.status(404).send("Anime not found");
+        }
+
+        res.json(updatedAnime); 
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
+
 
 
 module.exports = {
@@ -169,5 +198,6 @@ module.exports = {
     getReleasedAnimes,
     getCompletedAnimes,
     getAnimeFilterSeason,
-    getAnimeTrends
+    getAnimeTrends,
+    updateViews,
 };

@@ -15,13 +15,16 @@ import {
   getTrendingAnimes,
   getAnimeFilterSeason,
   getAnimeTrends,
+  updateViews,
 } from "../controllers/animeController";
 
 router.get("/trends",getAnimeTrends);
+router.put("/views/:id",updateViews )
+router.put("/:id", updateAnime);
 router.get("/", getAnimes);
 router.get("/:id", getAnime);
 router.post("/", createAnime);
-router.put("/:id", updateAnime);
+
 router.delete("/:id", deleteAnime);
 
 
