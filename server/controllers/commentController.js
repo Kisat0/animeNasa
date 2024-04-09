@@ -24,6 +24,17 @@ const getCommentsByvideoID = async (req, res) => {
   }
 };
 
+const getRepliesByCommentID = async (req, res) => {
+  const { commentID } = req.params;
+  try {
+    const replies = await Comment.find({ reply_to: commentID });
+    res.json(replies);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
 const createComment = async (req, res) => {
   const comment = new Comment(req.body);
   try {
@@ -70,6 +81,7 @@ const createReplyToComment = async (req, res) => {
 module.exports = {
   getComments,
   getCommentsByvideoID,
+  getRepliesByCommentID,
   createComment,
   createReplyToComment
 }

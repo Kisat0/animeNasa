@@ -8,8 +8,10 @@ import "./Comment.scss"
 
 function Comment() {
   const [comments, setComments] = useState([]);
-  const [open, setOpen] = useState(true); // Initialiser le Backdrop à ouvert
-  const [text, setText] = useState({ text: '' }); // Nouvel état local pour le texte du commentaire
+  const [replies, setReplies] = useState([]);
+  const [showReplies, setShowReplies] = useState({}); // Nouvel état local pour suivre l'affichage des réponses
+  const [open, setOpen] = useState(true);
+  const [text, setText] = useState({ text: '' });
   const [isReply, setIsReply] = useState(false);
   const [commentIdToReply, setCommentIdToReply] = useState(null);
 
@@ -28,14 +30,14 @@ function Comment() {
           ...comment,
           showReplyInput: false,
           isReply: false,
-          reply: comment.reply || [], // Use the 'reply' field from the server-side response
+          reply: comment.reply || [],
         }));
         setComments(commentsWithReplyInput);
         console.log(commentsWithReplyInput);
-        setOpen(false); // Fermer le Backdrop une fois les données chargées
+        setOpen(false);
       } catch (error) {
         console.error(error);
-        setOpen(false); // Fermer le Backdrop en cas d'erreur
+        setOpen(false);
       }
     };
 
@@ -47,7 +49,6 @@ function Comment() {
     try {
       if (videoID && localStorage.getItem('username') && text.text) {
         if (isReply) {
-          // Appel back-end pour une réponse à un commentaire
           await axios.post(`${process.env.REACT_APP_API_ADDRESS}/comment/reply`, {
             author: localStorage.getItem('username'),
             text: text.text,
@@ -55,7 +56,6 @@ function Comment() {
             reply_to: commentIdToReply,
           })
           .then((response) => {
-            console.log(response);
             if (response.statusText === 'Created') {
               const newReply = response.data;
               newReply.showReplyInput = false;
@@ -63,14 +63,13 @@ function Comment() {
               setComments((prevComments) =>
                 prevComments.map((comment) =>
                   comment._id === commentIdToReply
-                    ? { ...comment, reply: [...comment.reply, newReply] } // Use the 'reply' field
+                    ? { ...comment, reply: [...comment.reply, newReply] }
                     : comment
                 )
               );
             }
           });
         } else {
-          // Appel back-end pour un commentaire global
           await axios.post(`${process.env.REACT_APP_API_ADDRESS}/comment/`, {
             videoID: videoID,
             author: localStorage.getItem('username'),
@@ -88,7 +87,7 @@ function Comment() {
             }
           });
         }
-        setText({ text: '' }); // Réinitialiser le champ de texte après la soumission
+        setText({ text: '' });
         setIsReply(false);
         setCommentIdToReply(null);
       }
@@ -110,6 +109,22 @@ function Comment() {
     setCommentIdToReply(commentId);
   };
 
+  const handleOpenReply = async (commentId) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_ADDRESS}/comment/reply/${commentId}`
+      );
+      setReplies(response.data);
+      setShowReplies((prevState) => ({
+        ...prevState,
+        [commentId]: !prevState[commentId], // Inverser l'état d'affichage des réponses
+      }));
+    } catch (error) {
+      console.error(error);
+      setOpen(false);
+    }
+  };
+
   return (
     <>
       {open && (
@@ -121,18 +136,16 @@ function Comment() {
         </Backdrop>
       )}
       <div className='comment-container'>
-        {comments.length == 1 ? (
+        {comments.length === 1 ? (
           <h1 className='comment-title'>{comments.length} commentaire</h1>
-        ) : null}
-        
-        {comments.length > 1 ? (
+        ) : (
           <h1 className='comment-title'>{comments.length} commentaires</h1>
-        ) : null}
+        )}
         
         <CommentInput text={text} setText={setText} handleSubmit={handleSubmit} />
 
         <div className="comment-list">
-          {comments.length > 0 ? (
+          {comments.length > 0 && (
             comments.map((comment) => (
               <div key={comment._id} className='comment-content'>
                 <div className='comment-infos-top'>
@@ -143,11 +156,19 @@ function Comment() {
                 <div className='comment-infos-bottom'>
                   <p className='comment-like'>Likes: {comment.like}</p>
                   <p className='comment-dislike'>Dislikes: {comment.dislike}</p>
-                  <p className='comment-reply'>Replies: {comment.reply.length}</p>
+                  {comment.reply.length > 0 && (
+                    <p
+                      className='comment-reply'
+                      onClick={() => handleOpenReply(comment._id)}
+                    >
+                      {showReplies[comment._id] ? "Masquer les commentaires" : "Voir les commentaires"}
+                    </p>
+                  )}
                   <button className='comment-reply' onClick={() => handleReplyClick(comment._id)}>
                     Reply
                   </button>
                 </div>
+
                 {comment.showReplyInput && (
                   <CommentInput
                     text={text}
@@ -155,9 +176,28 @@ function Comment() {
                     handleSubmit={handleSubmit}
                   />
                 )}
+
+                {/* Affichage de la liste des réponses */}
+                {showReplies[comment._id] && (
+                  <div className="replies-container">
+                    {replies.map((reply) => (
+                      <div key={reply._id} className="comment-content">
+                        <div className="comment-infos-top">
+                          <p className="comment-author">{reply.author}</p>
+                          <p className="comment-date">{new Date(reply.date).toLocaleString()}</p>
+                        </div>
+                        <p className="comment-text">{reply.text}</p>
+                        <div className="comment-infos-bottom">
+                          <p className="comment-like">Likes: {reply.like}</p>
+                          <p className="comment-dislike">Dislikes: {reply.dislike}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             ))
-          ) : null}
+          )}
         </div>
       </div>
     </>
