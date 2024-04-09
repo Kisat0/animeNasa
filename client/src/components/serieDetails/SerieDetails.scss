@@ -5,6 +5,10 @@
     height: 160px;
     border-radius: 20px;
 
+    &:hover {
+        cursor: pointer;
+    }
+
     
 
     &>img {

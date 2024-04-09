@@ -21,6 +21,7 @@ const SummaryPage = () => {
     const animeID = location.pathname.split("/").pop();
 
     const getAnime = async () => {
+        setActiveSeason(null)
         await fetch(`${process.env.REACT_APP_API_ADDRESS}/animes/${animeID}`, {
             method: 'GET',
             headers: {
@@ -65,26 +66,31 @@ const SummaryPage = () => {
     }
 
     const handleSeasonEpisodes = async (season) => {
-        await fetch(`${process.env.REACT_APP_API_ADDRESS}/animes/filter/${animeID}/${season}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-            .then(async (response) => {
-                return {
-                    status: response.status,
-                    data: await response.json(),
-                };
+        if (season === activeSeason) {
+            await getAnime();
+        } else {
+            await fetch(`${process.env.REACT_APP_API_ADDRESS}/animes/filter/${animeID}/${season}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             })
-            .then(({ status, data }) => {
-                if (status == 200) {
-                    setData(data);
-                    setOpen(false);
-                } else {
-                    setOpen(false); // Fermer le Backdrop en cas d'erreur
-                }
-            });
+                .then(async (response) => {
+                    return {
+                        status: response.status,
+                        data: await response.json(),
+                    };
+                })
+                .then(({ status, data }) => {
+                    if (status == 200) {
+                        setData(data);
+                        setOpen(false);
+                        setActiveSeason(season);
+                    } else {
+                        setOpen(false); // Fermer le Backdrop en cas d'erreur
+                    }
+                });
+        }
     }
 
     useEffect(() => {
