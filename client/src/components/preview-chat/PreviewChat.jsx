@@ -21,7 +21,19 @@ const PreviewChat = ({ episode }) => {
     };
     ws.onmessage = (message) => {
       const data = JSON.parse(message.data);
-        setMessages(data.chat);
+      setMessages(data.chat);
+    };
+
+    document
+      .querySelector(".preview-chat-input input")
+      .addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          sendMessage();
+        }
+      });
+
+    return () => {
+      ws.close();
     };
   }, []);
 
@@ -48,16 +60,17 @@ const PreviewChat = ({ episode }) => {
   return (
     <div className="preview-chat-container">
       <div className="preview-chat-content">
-        {messages.length > 0 && messages.map((message) => (
-          <Message
-            key={message.id}
-            message={message.message}
-            time={message.time}
-            username={message.username}
-            avatarUrl={message.avatarUrl}
-            userId={message.userId}
-          />
-        ))}
+        {messages.length > 0 &&
+          messages.map((message) => (
+            <Message
+              key={message.id}
+              message={message.message}
+              time={message.time}
+              username={message.username}
+              avatarUrl={message.avatarUrl}
+              userId={message.userId}
+            />
+          ))}
       </div>
       <div className="preview-chat-input">
         <input type="text" placeholder="Envoyer un message" />
