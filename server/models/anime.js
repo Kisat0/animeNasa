@@ -58,6 +58,10 @@ const animeSchema = new Schema({
     required: false,
     default: [],
   },
+  views: {
+    type: Number,
+    default: 0,
+  },
 });
 
 module.exports = mongoose.model("anime", animeSchema);

@@ -42,7 +42,7 @@ const updateAnime = async (req, res) => {
     }
 
     try {
-        const updatedAnime = await Anime.findByIdAndUpdate(id, anime, { new: true });
+        const updatedAnime = await Anime.findByIdAndUpdate(id, anime);
         res.json(updatedAnime);
     } catch (error) {
         console.error(error);
@@ -102,7 +102,7 @@ const getCompletedAnimes = async (req, res) => {
 const getAnimeFilterSeason = async (req, res) => {
     try {
         const { id } = req.params;
-        let { season } = req.params; 
+        let { season } = req.params;
         season = parseInt(season);
         const anime = await Anime.findById(id);
         if (!anime) {
@@ -117,6 +117,74 @@ const getAnimeFilterSeason = async (req, res) => {
     }
 }
 
+const getAnimeTrends = async (req, res) => {
+    try {
+        const animes = await Anime.find().lean(); 
+        for (const anime of animes) {
+            const trendingScore = calculTrendingScore(anime);
+            anime.trendingScore = trendingScore;
+        }
+        animes.sort((a, b) => b.trendingScore - a.trendingScore);
+        res.json(animes);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
+
+const calculTrendingScore = (anime) => {
+    let score = 0;
+    const episodes = anime.episodes
+    const views = anime.views || 0;
+    //date de l ep
+    episodes.sort((a, b) => new Date(b.releaseDate) - new Date(a.releaseDate));
+    const latestEpisode = episodes[0];
+    const timeDifference = new Date() - new Date(latestEpisode.releaseDate);
+    const differenceInDays = timeDifference / (1000 * 3600 * 24);
+    if (differenceInDays < 1) {
+        score += 10;
+    }
+    else if (differenceInDays < 7) {
+        score += 7;
+    }
+    else if (differenceInDays < 30) {
+        score += 5;
+    }
+    else if (differenceInDays < 365) {
+        score += 2;
+    }
+    //vues de l'ep
+    score += views / 10;
+
+    //note de l ep
+    score += anime.rating;
+    return score;
+}
+
+const updateViews = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        let updatedAnime = await Anime.findByIdAndUpdate(
+            id,
+            { $inc: { views: 1 } },
+            { new: true } 
+        );
+
+        if (!updatedAnime) {
+            return res.status(404).send("Anime not found");
+        }
+
+        res.json(updatedAnime); 
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
+
+
 
 module.exports = {
     getAnimes,
@@ -129,5 +197,7 @@ module.exports = {
     getTrendingAnimes,
     getReleasedAnimes,
     getCompletedAnimes,
-    getAnimeFilterSeason
+    getAnimeFilterSeason,
+    getAnimeTrends,
+    updateViews,
 };

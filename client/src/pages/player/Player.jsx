@@ -465,6 +465,7 @@ function PlayerPage() {
         );
         setEpisode(response.data);
         fetchAnime(response.data.anime);
+        addView(response.data.anime);
         const videoElement = document.getElementById("video");
         if (videoElement) {
           initializeVideo(response.data.source);
@@ -473,6 +474,23 @@ function PlayerPage() {
         console.error(error);
       }
     };
+
+    const addView = async (animeId) => {
+      try {
+          const response = await axios.put(
+              `${process.env.REACT_APP_API_ADDRESS}/animes/views/${animeId}`
+          );
+  
+          if (response.status === 200) {
+              console.log("Le nombre de vues a été mis à jour avec succès !");
+          } else {
+              console.log("La requête a échoué avec le code :", response.status);
+          }
+      } catch (error) {
+          console.error("Une erreur s'est produite lors de la mise à jour du nombre de vues :", error);
+      }
+  }
+  
 
     const fetchAnime = async (animeId) => {
       try {
