@@ -1,17 +1,12 @@
 import { Router } from "express";
 
-import {
-  getUsers,
-  getUser,
-  protectedRessource,
-  createUser,
-} from "../controllers/userController";
+import { login, signup, refreshToken, getUserLoggedData } from "../controllers/userController";
 
 const router = Router();
 
-router.get('/', getUsers);
-router.post('/login', getUser);
-router.get('/protected', protectedRessource);
-router.post('/', createUser);
+router.post("/login", login);
+router.post("/register", signup);
+router.post("/refresh-token", refreshToken);
+router.post("/me", getUserLoggedData);
 
 export default router;

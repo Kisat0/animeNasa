@@ -1,7 +1,5 @@
 import React, { useCallback } from "react";
 import { useParams } from "react-router";
-import backDrStone from "../../assets/images/1027254.jpg";
-import affiche from "../../assets/images/981906.jpg";
 import CloseIcon from "@mui/icons-material/Close";
 import { Link } from "react-router-dom";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
@@ -14,6 +12,7 @@ import Loader from "../../components/loader/loader";
 import Navbar from "../../components/navbar/Navbar";
 import axios from "axios";
 import { useTheme } from "@mui/material";
+import PreviewChat from "../../components/preview-chat/PreviewChat";
 
 import "./Player.scss";
 
@@ -24,9 +23,9 @@ function PlayerPage() {
   const [volumeValue, setVolumeValue] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [episode, setEpisode] = useState(null);
-  const [source, setSource] = useState("");
   const [anime, setAnime] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [isComingSoon, setIsComingSoon] = useState(true);
 
   const { id } = useParams();
 
@@ -208,8 +207,10 @@ function PlayerPage() {
 
     if (!isPlaying) {
       video.play();
+      setVideoWorks(true);
     } else {
       video.pause();
+      setVideoWorks(false);
     }
     updatePlayButton();
     animatePlayback();
@@ -385,6 +386,11 @@ function PlayerPage() {
       "keydown",
       function (e) {
         if (
+          ["input", "textarea"].indexOf(e.target.tagName.toLowerCase()) > -1
+        ) {
+          return;
+        }
+        if (
           ["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].indexOf(
             e.code
           ) > -1
@@ -400,6 +406,8 @@ function PlayerPage() {
     function keyboardShortcuts(event) {
       const video = document.getElementById("video");
       if (!video) return;
+
+      if (document.activeElement.tagName === "INPUT") return;
 
       const { key } = event;
       switch (key) {
@@ -460,7 +468,6 @@ function PlayerPage() {
         const videoElement = document.getElementById("video");
         if (videoElement) {
           initializeVideo(response.data.source);
-          setSource(response.data.source);
         }
       } catch (error) {
         console.error(error);
@@ -491,7 +498,7 @@ function PlayerPage() {
 
   return (
     <>
-      <img src={anime.thumbnail} alt="" className="background" />
+      <img src={anime.thumbnail} alt="" className="background innershadow" />
       <Navbar />
       <div className="menu-content">
         <div
@@ -573,10 +580,16 @@ function PlayerPage() {
       </div>
       <div className="player-content">
         <div className="container-watch">
-          <h1 className="anime-episode-title">{anime.title + " EPISODE " + " " + episode.number + " " + episode.lang}</h1>
+          <h1 className="anime-episode-title">
+            {anime.title +
+              " EPISODE " +
+              " " +
+              episode.number +
+              " " +
+              episode.lang}
+          </h1>
           <div className="player-buttons">
             <div className="player-button">
-              <p>{json.play.Player}</p>
               <select className="top-video-button">
                 <option>Lecteur 1</option>
                 <option>Lecteur 2</option>
@@ -765,6 +778,7 @@ function PlayerPage() {
             </symbol>
           </defs>
         </svg>
+        {isComingSoon && <PreviewChat episode={episode} />}
       </div>
     </>
   );
