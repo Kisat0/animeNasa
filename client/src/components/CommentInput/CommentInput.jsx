@@ -1,4 +1,5 @@
-
+import "./CommentInput.scss"
+  
 function CommentInput({ text, setText, handleSubmit }) {
 
   const handleCommentTextChange = (e) => {
