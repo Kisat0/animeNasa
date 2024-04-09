@@ -1,37 +1,21 @@
 import { useTheme } from "@mui/material";
 import "./Header.scss";
 import { PlayIcon } from "../../utils/Icons";
-import { useEffect,useState} from "react";
-import getDominantColor from "../../utils/Color";
-import Image from "../../assets/images/konosuba.webp"
+import Image from "../../assets/images/konosuba.webp";
 
-const Header = () => {
-    const theme = useTheme().palette;
-    
-  const [color, setColor] = useState();
-    
-    useEffect(() => {
-        getDominantColor(Image)
-        .then((color) => {
-            setColor(color)
-        }
-        ).catch((error) => {
-            console.log(error)
-            setColor(theme.text.orange);
-        })
-    }, [color,theme])
+const Header = ({color}) => {
+  const theme = useTheme().palette;
   return (
     <header className="header">
-      <img
-        src={Image}
-        alt=""
-        id="header-background"
-      />
+      <img src={Image} alt="" id="header-background" />
       <div>
         <div>
-          <div className="anime-status" style={{
-            color: theme.text.grey
-          }}>
+          <div
+            className="anime-status"
+            style={{
+              color: theme.text.grey,
+            }}
+          >
             <p>SAISON 1</p>
             <p> | </p>
             <p>EPISODE 1</p>
@@ -44,12 +28,21 @@ const Header = () => {
             Repellendus dolore omnis fugit esse vero corporis.
           </p>
           <div className="header-buttons">
-            <button style={{
-                backgroundColor: color
-            }}> <PlayIcon /> Regarder</button>
-            <button style={{
-                backgroundColor: theme.buttons.secondary
-            }}>Détails</button>
+            <button
+              style={{
+                backgroundColor: color,
+              }}
+            >
+              {" "}
+              <PlayIcon /> Regarder
+            </button>
+            <button
+              style={{
+                backgroundColor: theme.buttons.secondary,
+              }}
+            >
+              Détails
+            </button>
           </div>
         </div>
         <img
