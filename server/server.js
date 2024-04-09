@@ -8,6 +8,8 @@ import userRoutes from "./routes/userRoutes";
 import animeRoutes from "./routes/animeRoutes";
 import episodeRoutes from "./routes/episodeRoutes";
 
+const WebSocket = require("websocket").server;
+
 mongoose.connect(mongoString);
 
 const database = mongoose.connection;
@@ -28,6 +30,37 @@ app.use("/users", userRoutes);
 app.use("/animes", animeRoutes);
 app.use("/episodes", episodeRoutes);
 
-app.listen(5001, () => {
+const server = app.listen(5001, () => {
   console.log("Server is running on port 5001");
+});
+
+const wsServer = new WebSocket({
+  httpServer: server,
+});
+
+const { ws, handleUserJoin, onClose } = require("./controllers/roomController");
+
+const Rooms = new Map();
+const Data = {};
+
+wsServer.on("request", (request) => {
+  const connection = request.accept(null, request.origin);
+
+  console.log("Connection established");
+
+  // call the function to handle user join
+
+  connection.on("message", (message) => {
+    const { episode } = JSON.parse(message.utf8Data);
+    ws(episode, message.utf8Data, Rooms, Data);
+  });
+
+  connection.on("close", () => {
+    onClose(connection, Rooms);
+    console.log("Connection closed");
+  });
+
+  connection.on("error", (error) => {
+    console.log(error);
+  });
 });
