@@ -4,42 +4,28 @@ import { useNavigate, Link } from 'react-router-dom';
 import { TextField, Button } from '@mui/material';
 
 import './FormSignup.scss';
+import { useAuth } from '../../utils/AuthContext';
+import { toastFail, toastSuccess } from '../../utils/toasts';
 
 function FormSignup() {
-  const [data, setData] = useState({});
+  const [mail, setMail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const { loginUser } = useAuth();
+
   const [error, setError] = useState('');
   const navigate = useNavigate();
-
-  const updateData = (e) => {
-    setData({
-      ...data,
-      [e.target.name]: e.target.value,
-    });
-  };
   
   const sendSignup = async (event) => {
-    event.preventDefault();
-
-    await fetch(`${process.env.REACT_APP_API_ADDRESS}/users`, {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(async (response) => {
-        return {
-          status: response.status,
-          result: await response.json(),
-        };
-      })
-      .then(({ status, result }) => {
-        if (status !== 201) {
-          setError(result.message);
-        } else {
-          navigate('/');
-        }
-      });
+    const { success, error } = await loginUser(mail, password);
+    if (success) {
+      toastSuccess('Vous êtes connecté');
+      navigate('/');
+    } else {
+      setError(error);
+      toastFail('Une erreur s\'est produite');
+    }
+    
   };
 
   return (
@@ -63,7 +49,7 @@ function FormSignup() {
           <TextField
             required
             type="email"
-            onChange={updateData}
+            onChange={() => setMail(event.target.value)}
             name="email"
             label="Email"
             variant="outlined"
@@ -75,7 +61,7 @@ function FormSignup() {
           <TextField
             required
             type="password"
-            onChange={updateData}
+            onChange={() => setPassword(event.target.value)}
             name="password"
             label="Mot de passe"
             variant="outlined"
@@ -101,7 +87,7 @@ function FormSignup() {
           </Link>
         </div> */}
 
-        <Button type="submit" variant="contained">
+        <Button type="submit" variant="contained" onClick={sendSignup}>
           Envoyer
         </Button>
       </form>
