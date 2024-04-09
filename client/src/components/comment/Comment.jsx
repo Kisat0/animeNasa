@@ -10,45 +10,13 @@ function Comment() {
   const [comments, setComments] = useState([]);
   const [open, setOpen] = useState(true); // Initialiser le Backdrop à ouvert
   const [text, setText] = useState({ text: '' }); // Nouvel état local pour le texte du commentaire
+  const [isReply, setIsReply] = useState(false);
+  const [commentIdToReply, setCommentIdToReply] = useState(null);
 
   comments.sort((a, b) => new Date(b.date) - new Date(a.date));
 
   const url = window.location.href;
   const videoID = url.substring(url.lastIndexOf("/") + 1);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (videoID && localStorage.getItem('username') && text.text) {
-        await axios.post('http://localhost:5001/comment/', {
-          videoID: videoID,
-          author: localStorage.getItem('username'),
-          text: text.text,
-        })
-        .then((response) => {
-          if (response.statusText === 'Created') {
-            const newComment = response.data;
-            newComment.showReplyInput = false; // Initialiser showReplyInput à false pour le nouveau commentaire
-            comments.push(newComment);
-            comments.sort((a, b) => new Date(b.date) - new Date(a.date));
-            setComments([...comments]);
-          }
-        })
-        setText({ text: '' }); // Réinitialiser le champ de texte après la soumission
-      }
-    }
-    catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleReplyClick = (index) => {
-    setComments((prevComments) =>
-      prevComments.map((comment, i) =>
-        i === index ? { ...comment, showReplyInput: !comment.showReplyInput } : comment
-      )
-    );
-  };
   
   useEffect(() => {
     const fetchComments = async () => {
@@ -59,8 +27,11 @@ function Comment() {
         const commentsWithReplyInput = response.data.map((comment) => ({
           ...comment,
           showReplyInput: false,
+          isReply: false,
+          reply: comment.reply || [], // Use the 'reply' field from the server-side response
         }));
         setComments(commentsWithReplyInput);
+        console.log(commentsWithReplyInput);
         setOpen(false); // Fermer le Backdrop une fois les données chargées
       } catch (error) {
         console.error(error);
@@ -70,6 +41,74 @@ function Comment() {
 
     fetchComments();
   }, []); 
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (videoID && localStorage.getItem('username') && text.text) {
+        if (isReply) {
+          // Appel back-end pour une réponse à un commentaire
+          await axios.post(`${process.env.REACT_APP_API_ADDRESS}/comment/reply`, {
+            author: localStorage.getItem('username'),
+            text: text.text,
+            videoID: videoID,
+            reply_to: commentIdToReply,
+          })
+          .then((response) => {
+            console.log(response);
+            if (response.statusText === 'Created') {
+              const newReply = response.data;
+              newReply.showReplyInput = false;
+              newReply.isReply = false;
+              setComments((prevComments) =>
+                prevComments.map((comment) =>
+                  comment._id === commentIdToReply
+                    ? { ...comment, reply: [...comment.reply, newReply] } // Use the 'reply' field
+                    : comment
+                )
+              );
+            }
+          });
+        } else {
+          // Appel back-end pour un commentaire global
+          await axios.post(`${process.env.REACT_APP_API_ADDRESS}/comment/`, {
+            videoID: videoID,
+            author: localStorage.getItem('username'),
+            text: text.text,
+          })
+          .then((response) => {
+            if (response.statusText === 'Created') {
+              const newComment = response.data;
+              newComment.showReplyInput = false;
+              newComment.isReply = false;
+              newComment.reply = [];
+              comments.push(newComment);
+              comments.sort((a, b) => new Date(b.date) - new Date(a.date));
+              setComments([...comments]);
+            }
+          });
+        }
+        setText({ text: '' }); // Réinitialiser le champ de texte après la soumission
+        setIsReply(false);
+        setCommentIdToReply(null);
+      }
+    }
+    catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleReplyClick = (commentId) => {
+    setComments((prevComments) =>
+      prevComments.map((comment) =>
+        comment._id === commentId
+          ? { ...comment, showReplyInput: !comment.showReplyInput, isReply: !comment.isReply }
+          : comment
+      )
+    );
+    setIsReply(!isReply);
+    setCommentIdToReply(commentId);
+  };
 
   return (
     <>
@@ -94,8 +133,8 @@ function Comment() {
 
         <div className="comment-list">
           {comments.length > 0 ? (
-            comments.map((comment, index) => (
-              <div key={index} className='comment-content'>
+            comments.map((comment) => (
+              <div key={comment._id} className='comment-content'>
                 <div className='comment-infos-top'>
                   <p className='comment-author'>{comment.author}</p>
                   <p className='comment-date'>{new Date(comment.date).toLocaleString()}</p>
@@ -104,7 +143,8 @@ function Comment() {
                 <div className='comment-infos-bottom'>
                   <p className='comment-like'>Likes: {comment.like}</p>
                   <p className='comment-dislike'>Dislikes: {comment.dislike}</p>
-                  <button className='comment-reply' onClick={() => handleReplyClick(index)}>
+                  <p className='comment-reply'>Replies: {comment.reply.length}</p>
+                  <button className='comment-reply' onClick={() => handleReplyClick(comment._id)}>
                     Reply
                   </button>
                 </div>
