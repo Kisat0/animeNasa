@@ -37,7 +37,7 @@ const Navbar = () => {
           <StyledLink to="/calendar">Calendrier</StyledLink>
         </li>
         <li>
-          <StyledLink to="">Contact</StyledLink>
+          <StyledLink to="/contact">Contact</StyledLink>
         </li>
         <li>
           <StyledLink to="">Discord</StyledLink>

@@ -16,6 +16,7 @@ import Signup from "./pages/signup/Signup";
 import Admin from "./pages/admin/Admin";
 import Search from "./pages/search/Search";
 import { useAuth } from "./utils/AuthContext";
+import ContactPage from "./pages/contact/Contact";
 
 const PublicRoute = () => {
   const { isLoggedIn } = useAuth();
@@ -43,9 +44,8 @@ const Router = () => {
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/search" element={<Search />} />
             <Route path="/news" element={<News />} />
-
             <Route path="/admin" element={<Admin />} />
-
+            <Route path="/contact" element={<ContactPage />} />
             <Route path="/watch/:id" element={<Player />} />
             <Route path="/summary/:id" element={<Summary />} />
           </Route>
