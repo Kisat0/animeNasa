@@ -1,6 +1,7 @@
 import { createTheme, ThemeProvider } from "@mui/material"
 import { CssBaseline } from "@mui/material"
 import App from "./App"
+import { UserContextProvider } from "./utils/useUser"
 
 const Theme = () => {
     const theme = createTheme(
@@ -39,11 +40,13 @@ const Theme = () => {
         }
     )
     return (
+      <UserContextProvider>
         <ThemeProvider theme={theme}>
-            <CssBaseline />
-            {/* Réinitialise les styles CSS de base pour une meilleure cohérence */}
-            <App />
+          <CssBaseline />
+          {/* Réinitialise les styles CSS de base pour une meilleure cohérence */}
+          <App />
         </ThemeProvider>
-    )
+      </UserContextProvider>
+    );
 }
 export default Theme;

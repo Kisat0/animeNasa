@@ -1,57 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import { useNavigate, Link } from 'react-router-dom';
-import { TextField, Button } from '@mui/material';
+import { useNavigate, Link } from "react-router-dom";
+import { TextField, Button } from "@mui/material";
 
-import './FormSignup.scss';
+import "./FormSignup.scss";
+import { useAuth } from "../../utils/AuthContext";
+import { toastFail, toastSuccess } from "../../utils/toasts";
+import axios from "axios";
 
 function FormSignup() {
-  const [data, setData] = useState({});
-  const [error, setError] = useState('');
+  const [mail, setMail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { loginUser } = useAuth();
+
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const updateData = (e) => {
-    setData({
-      ...data,
-      [e.target.name]: e.target.value,
-    });
-  };
-  
-  const sendSignup = async (event) => {
-    event.preventDefault();
+  const sendSignup = async () => {
+    if (!mail || !username || !password) {
+      setError("Veuillez remplir tous les champs");
+      return;
+    }
 
-    await fetch(`${process.env.REACT_APP_API_ADDRESS}/users`, {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json',
-      },
+    await axios.post(`${process.env.REACT_APP_API_ADDRESS}/users/register`, {
+      userMail: mail,
+      userName: username,
+      userPassword: password,
     })
-      .then(async (response) => {
-        return {
-          status: response.status,
-          result: await response.json(),
-        };
+      .then((response) => {
+        if (response.status === 200) {
+          toastSuccess("Compte créé avec succès");
+          loginUser(mail, password);
+          navigate("/");
+        }
       })
-      .then(({ status, result }) => {
-        if (status !== 201) {
-          setError(result.message);
-        } else {
-          navigate('/');
+      .catch((error) => {
+        if (error.response.status === 401) {
+          toastFail(`${error.response.data.message}`);
         }
       });
   };
 
   return (
-    <div className='div-form-signup'>
-      <form
-        onSubmit={sendSignup} 
-        className="w-50">
+    <div className="div-form-signup">
+      <form onSubmit={sendSignup} className="w-50">
         <div className="mb-6">
           <TextField
             required
             type="username"
-            onChange={updateData}
+            onChange={(e) => setUsername(e.target.value)}
             name="username"
             label="Username"
             variant="outlined"
@@ -63,7 +62,7 @@ function FormSignup() {
           <TextField
             required
             type="email"
-            onChange={updateData}
+            onChange={(e) => setMail(e.target.value)}
             name="email"
             label="Email"
             variant="outlined"
@@ -75,7 +74,7 @@ function FormSignup() {
           <TextField
             required
             type="password"
-            onChange={updateData}
+            onChange={(e) => setPassword(e.target.value)}
             name="password"
             label="Mot de passe"
             variant="outlined"
@@ -86,8 +85,8 @@ function FormSignup() {
         {error && <div className="error">{error}</div>}
 
         <div className="mb-3">
-          Vous avez déjà un compte ?{' '}
-          <Link to={'/login'} className="link">
+          Vous avez déjà un compte ?{" "}
+          <Link to={"/login"} className="link">
             Connectez vous
           </Link>
         </div>
@@ -101,7 +100,7 @@ function FormSignup() {
           </Link>
         </div> */}
 
-        <Button type="submit" variant="contained">
+        <Button type="submit" variant="contained" onClick={sendSignup}>
           Envoyer
         </Button>
       </form>

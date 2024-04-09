@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { styled, useTheme } from "@mui/material";
 import "./Navbar.scss";
 import Searchbar from "../searchbar/Searchbar";
+import { useAuth } from "../../utils/AuthContext";
 
 const StyledLink = styled(Link)(({ theme }) => ({
   color: theme.palette.text.primary,
@@ -9,6 +10,9 @@ const StyledLink = styled(Link)(({ theme }) => ({
 
 const Navbar = () => {
   const theme = useTheme().palette;
+  const { isLoggedIn } = useAuth();
+
+  console.log(isLoggedIn);
   return (
     <nav
       style={{
@@ -38,9 +42,11 @@ const Navbar = () => {
         <li>
           <StyledLink to="">Discord</StyledLink>
         </li>
-        <li>
-          <StyledLink to="/login">Connexion</StyledLink>
-        </li>
+        {!isLoggedIn && (
+          <li>
+            <StyledLink to="/login">Connexion</StyledLink>
+          </li>
+        )}
       </ul>
     </nav>
   );
