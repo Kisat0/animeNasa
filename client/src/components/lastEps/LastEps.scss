@@ -1,82 +1,89 @@
 section {
-    padding: 30px;
+  padding: 30px;
 
-    div:first-child {
-        display: flex;
-        flex-flow: column nowrap;
-        width: fit-content;
+  div:first-child {
+    display: flex;
+    flex-flow: column nowrap;
+    width: fit-content;
 
-        &>div {
-            display: flex;
-            flex-flow: row nowrap;
-            align-items: center;
+    & > div {
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
 
-            &>svg {
-                margin-right: 20px;
-            }
-        }
-
-        span {
-            background: linear-gradient(-270deg, #473BF0 0%, #6732FC 50.52%, transparent 100%);
-            width: 100%;
-            height: 7px;
-            display: block;
-            margin-top: 12px;
-        }
+      & > svg {
+        margin-right: 20px;
+      }
     }
 
-
-    h1 {
-        font-size: 50px;
-        font-style: normal;
-        font-weight: 800;
-        line-height: normal;
+    span {
+      background: linear-gradient(
+        -270deg,
+        #473bf0 0%,
+        #6732fc 50.52%,
+        transparent 100%
+      );
+      width: 100%;
+      height: 7px;
+      display: block;
+      margin-top: 12px;
     }
+  }
 
-    .last-eps-container {
+  h1 {
+    font-size: 50px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+  }
 
-        margin-top: 30px;
-        display: flex;
-        flex-flow: row wrap;
+  .last-eps-container {
+    margin-top: 30px;
+    display: flex;
+    flex-flow: row wrap;
+    width: 100%;
+    justify-content: space-between;
+
+    & > div {
+      overflow: hidden;
+      width: 22%;
+      height: 200px;
+      border-radius: 20px;
+      position: relative;
+      display: flex;
+      flex-flow: column nowrap;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+
+      img {
         width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: absolute;
+        transition: all 0.3s ease;
+      }
+
+      img:hover {
+        transform: scale(1.2);
+      }
+
+      p {
+        position: relative;
+        z-index: 1;
+        font-family: "Inter";
+        font-size: 1.2rem;
+        border-radius: 10px;
+        padding: 4px;
+      }
+
+      div {
+        display: flex;
+        flex-flow: row nowrap;
         justify-content: space-between;
-
-        &>div {
-            overflow: hidden;
-            width: 22%;
-            height: 200px;
-            border-radius: 20px;
-            position: relative;
-            display: flex;
-            flex-flow: column nowrap;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-
-            img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                position: absolute;
-            }
-
-            p {
-                position: relative;
-                z-index: 1;
-                font-family: "Inter";
-                font-size: 1.2rem;
-                border-radius: 10px;
-                padding: 4px;
-            }
-
-            div {
-                display: flex;
-                flex-flow: row nowrap;
-                justify-content: space-between;
-                width: 100%;
-                padding: 10px 20px;
-            }
-
-        }
+        width: 100%;
+        padding: 10px 20px;
+      }
     }
+  }
 }

@@ -42,6 +42,7 @@ const AdminPage = () => {
   const [categories, setCategories] = useState("");
   const [poster, setPoster] = useState("");
   const [thumbnail, setThumbnail] = useState("");
+  const [color, setColor] = useState("");
 
   const animeCategories = [
     "Action",
@@ -80,6 +81,7 @@ const AdminPage = () => {
       categories,
       poster,
       thumbnail,
+      color
     };
 
     try {
@@ -96,6 +98,7 @@ const AdminPage = () => {
       setCategories("");
       setPoster("");
       setThumbnail("");
+      setColor("");
     } catch (error) {
       console.error(error);
     }
@@ -223,6 +226,15 @@ const AdminPage = () => {
           label="Poster"
           value={poster}
           onChange={(e) => setPoster(e.target.value)}
+          required
+          variant="outlined"
+          color="primary"
+        />
+        <TextField
+          className={classes.textField}
+          label="Color"
+          value={poster}
+          onChange={(e) => setColor(e.target.value)}
           required
           variant="outlined"
           color="primary"

@@ -3,7 +3,7 @@ import "./Header.scss";
 import { PlayIcon } from "../../utils/Icons";
 import { useEffect, useState } from "react";
 
-const Header = ({ color, data }) => {
+const Header = ({ data }) => {
   const theme = useTheme().palette;
   const [index, setIndex] = useState(0);
   const [currentTitle, setCurrentTitle] = useState(data[0]?.anime.title);
@@ -51,14 +51,14 @@ const Header = ({ color, data }) => {
           </div>
           <h1>{currentTitle}</h1>
           <p>
-            {currentDesc.length > 100
-              ? currentDesc.substring(0, 100) + "..."
+            {currentDesc.length > 300
+              ? currentDesc.substring(0, 300) + "..."
               : currentDesc}
           </p>
           <div className="header-buttons">
             <button
               style={{
-                backgroundColor: color,
+                backgroundColor: data[index]?.anime.color || theme.buttons.primary,
               }}
             >
               {" "}
