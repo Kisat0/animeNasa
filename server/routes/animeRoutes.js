@@ -16,8 +16,10 @@ import {
   getAnimeFilterSeason,
   getAnimeTrends,
   updateViews,
+  getNewsSeasons
 } from "../controllers/animeController";
 
+router.get("/newsSeasons",getNewsSeasons)
 router.get("/trends",getAnimeTrends);
 router.put("/views/:id",updateViews )
 router.put("/:id", updateAnime);

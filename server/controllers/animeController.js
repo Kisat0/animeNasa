@@ -132,6 +132,16 @@ const getAnimeTrends = async (req, res) => {
     }
 }
 
+const getNewsSeasons = async (req, res) => {
+    try {
+        const animes = await Anime.find({ status: "ongoing" });
+        res.json(animes);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
 
 const calculTrendingScore = (anime) => {
     let score = 0;
@@ -200,4 +210,5 @@ module.exports = {
     getAnimeFilterSeason,
     getAnimeTrends,
     updateViews,
+    getNewsSeasons,
 };

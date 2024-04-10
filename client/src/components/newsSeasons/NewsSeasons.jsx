@@ -1,6 +1,7 @@
 import { useTheme } from "@mui/material"
 import { FlashIcon, StarIcon, LeftArrowIcon, RightArrowIcon } from "../../utils/Icons";
-import { useState } from "react";
+import React, { useState, useEffect } from 'react';
+import NewsSeasonsComponent from "../newsSeasonsComponent/NewsSeasonsComponent"
 
 
 import "./NewsSeasons.scss"
@@ -8,6 +9,7 @@ import "./NewsSeasons.scss"
 const NewsSeasons = () => {
     const [carouselIndex, setCarouselIndex] = useState(0);
     const theme = useTheme().palette;
+    const [DataNewsSeasons, setDataNewsSeasons] = useState([]);
 
     const handleCarousel = (index) => {
         const carousel = document.querySelector(".seasons-carousel");
@@ -44,10 +46,28 @@ const NewsSeasons = () => {
                 carouselItems.style.transform = `translateX(-${carouselItemsWidthVisible * (carouselIndex - 1)}px)`;
             }
         }
-
-
-
     }
+
+    const getNewsSeasons = async () => {
+        try {
+          const res = await fetch(
+            `${process.env.REACT_APP_API_ADDRESS}/animes/newsSeasons`
+          );
+          const data = await res.json();
+          setDataNewsSeasons(data);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+      useEffect(() => {
+        getNewsSeasons();
+    }, []);
+
+    if (!setDataNewsSeasons) {
+        return <Loader />;
+      }
+
 
     return (
         <section>
@@ -65,126 +85,9 @@ const NewsSeasons = () => {
 
                 </div>
                 <div className="trend-carousel-items seasons-carousel-items">
-                    <div className="seasons-carousel-item">
-                        <img src="https://fr.web.img5.acsta.net/c_310_420/pictures/19/09/18/13/46/0198270.jpg" alt="trend" />
-                        <p className="season-note" style={{ backgroundColor: theme.tags.season }}><StarIcon />
-                            7.7</p>
-                        <div className="seasons-anime-title-container">
-                            <p className="seasons-anime-title" style={{ backgroundColor: theme.background.episode }}>
-                                Demon Slayer
-                            </p>
-                        </div>
-                    </div>
-                    <div className="seasons-carousel-item">
-                        <img src="https://fr.web.img5.acsta.net/c_310_420/pictures/19/09/18/13/46/0198270.jpg" alt="trend" />
-                        <p className="season-note" style={{ backgroundColor: theme.tags.season }}><StarIcon />
-                            7.7</p>
-                        <div className="seasons-anime-title-container">
-                            <p className="seasons-anime-title" style={{ backgroundColor: theme.background.episode }}>
-                                Demon Slayer
-                            </p>
-                        </div>
-                    </div>
-                    <div className="seasons-carousel-item">
-                        <img src="https://fr.web.img5.acsta.net/c_310_420/pictures/19/09/18/13/46/0198270.jpg" alt="trend" />
-                        <p className="season-note" style={{ backgroundColor: theme.tags.season }}><StarIcon />
-                            7.7</p>
-                        <div className="seasons-anime-title-container">
-                            <p className="seasons-anime-title" style={{ backgroundColor: theme.background.episode }}>
-                                Demon Slayer
-                            </p>
-                        </div>
-                    </div>
-                    <div className="seasons-carousel-item">
-                        <img src="https://fr.web.img5.acsta.net/c_310_420/pictures/19/09/18/13/46/0198270.jpg" alt="trend" />
-                        <p className="season-note" style={{ backgroundColor: theme.tags.season }}><StarIcon />
-                            7.7</p>
-                        <div className="seasons-anime-title-container">
-                            <p className="seasons-anime-title" style={{ backgroundColor: theme.background.episode }}>
-                                Demon Slayer
-                            </p>
-                        </div>
-                    </div>
-                    <div className="seasons-carousel-item">
-                        <img src="https://fr.web.img5.acsta.net/c_310_420/pictures/19/09/18/13/46/0198270.jpg" alt="trend" />
-                        <p className="season-note" style={{ backgroundColor: theme.tags.season }}><StarIcon />
-                            7.7</p>
-                        <div className="seasons-anime-title-container">
-                            <p className="seasons-anime-title" style={{ backgroundColor: theme.background.episode }}>
-                                Demon Slayer
-                            </p>
-                        </div>
-                    </div>
-                    <div className="seasons-carousel-item">
-                        <img src="https://fr.web.img5.acsta.net/c_310_420/pictures/19/09/18/13/46/0198270.jpg" alt="trend" />
-                        <p className="season-note" style={{ backgroundColor: theme.tags.season }}><StarIcon />
-                            7.7</p>
-                        <div className="seasons-anime-title-container">
-                            <p className="seasons-anime-title" style={{ backgroundColor: theme.background.episode }}>
-                                Demon Slayer
-                            </p>
-                        </div>
-                    </div>
-                    <div className="seasons-carousel-item">
-                        <img src="https://fr.web.img5.acsta.net/c_310_420/pictures/19/09/18/13/46/0198270.jpg" alt="trend" />
-                        <p className="season-note" style={{ backgroundColor: theme.tags.season }}><StarIcon />
-                            7.7</p>
-                        <div className="seasons-anime-title-container">
-                            <p className="seasons-anime-title" style={{ backgroundColor: theme.background.episode }}>
-                                Demon Slayer
-                            </p>
-                        </div>
-                    </div>
-                    <div className="seasons-carousel-item">
-                        <img src="https://fr.web.img5.acsta.net/c_310_420/pictures/19/09/18/13/46/0198270.jpg" alt="trend" />
-                        <p className="season-note" style={{ backgroundColor: theme.tags.season }}><StarIcon />
-                            7.7</p>
-                        <div className="seasons-anime-title-container">
-                            <p className="seasons-anime-title" style={{ backgroundColor: theme.background.episode }}>
-                                Demon Slayer
-                            </p>
-                        </div>
-                    </div>
-                    <div className="seasons-carousel-item">
-                        <img src="https://fr.web.img5.acsta.net/c_310_420/pictures/19/09/18/13/46/0198270.jpg" alt="trend" />
-                        <p className="season-note" style={{ backgroundColor: theme.tags.season }}><StarIcon />
-                            7.7</p>
-                        <div className="seasons-anime-title-container">
-                            <p className="seasons-anime-title" style={{ backgroundColor: theme.background.episode }}>
-                                Demon Slayer
-                            </p>
-                        </div>
-                    </div>
-                    <div className="seasons-carousel-item">
-                        <img src="https://fr.web.img5.acsta.net/c_310_420/pictures/19/09/18/13/46/0198270.jpg" alt="trend" />
-                        <p className="season-note" style={{ backgroundColor: theme.tags.season }}><StarIcon />
-                            7.7</p>
-                        <div className="seasons-anime-title-container">
-                            <p className="seasons-anime-title" style={{ backgroundColor: theme.background.episode }}>
-                                Demon Slayer
-                            </p>
-                        </div>
-                    </div>
-                    <div className="seasons-carousel-item">
-                        <img src="https://fr.web.img5.acsta.net/c_310_420/pictures/19/09/18/13/46/0198270.jpg" alt="trend" />
-                        <p className="season-note" style={{ backgroundColor: theme.tags.season }}><StarIcon />
-                            7.7</p>
-                        <div className="seasons-anime-title-container">
-                            <p className="seasons-anime-title" style={{ backgroundColor: theme.background.episode }}>
-                                Demon Slayer
-                            </p>
-                        </div>
-                    </div>
-                    <div className="seasons-carousel-item">
-                        <img src="https://fr.web.img5.acsta.net/c_310_420/pictures/19/09/18/13/46/0198270.jpg" alt="trend" />
-                        <p className="season-note" style={{ backgroundColor: theme.tags.season }}><StarIcon />
-                            7.7</p>
-                        <div className="seasons-anime-title-container">
-                            <p className="seasons-anime-title" style={{ backgroundColor: theme.background.episode }}>
-                                Demon Slayer
-                            </p>
-                        </div>
-                    </div>
+                {DataNewsSeasons.map((anime) => (
+                        <NewsSeasonsComponent key={anime} anime={anime} />
+                    ))}
                 </div>
             </div>
         </section>
