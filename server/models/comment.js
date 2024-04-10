@@ -22,9 +22,17 @@ const commentSchema = new Schema({
     type: Number,
     default: 0,
   },
+  users_like: {
+    type: [String],
+    default: [],
+  },
   dislike: {
     type: Number,
     default: 0,
+  },
+  users_dislike: {
+    type: [String],
+    default: [],
   },
   reply_to: {
     type: String,

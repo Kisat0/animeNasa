@@ -47,7 +47,7 @@ const createComment = async (req, res) => {
 };
 
 const createReplyToComment = async (req, res) => {
-  const { videoID, author, text, reply_to: commentId } = req.body;
+  const { videoID, author, text, reply_to: commentID } = req.body;
 
   try {
     // Create the new reply
@@ -55,12 +55,12 @@ const createReplyToComment = async (req, res) => {
       videoID,
       author,
       text,
-      reply_to: commentId,
+      reply_to: commentID,
     });
     const savedReply = await newReply.save();
 
     // Update the original comment with the new reply
-    const originalComment = await Comment.findById(commentId);
+    const originalComment = await Comment.findById(commentID);
     if (originalComment) {
       originalComment.reply.push(savedReply._id);
       await originalComment.save();
@@ -77,11 +77,74 @@ const createReplyToComment = async (req, res) => {
   }
 };
 
+// véirifié si l'utilisateur est déjà dans la liste des user_like, si oui on enleve son like sinon on ajoute le like
+
+const toggleLike = async (req, res) => {
+  const { userID, commentID } = req.body;
+  try {
+    const comment = await Comment.findById(commentID);
+    if (!comment) {
+      return res.status(404).json({ message: "Comment not found" });
+    }
+    if (comment.users_like.includes(userID)) {
+      comment.users_like.pull(userID);  
+      comment.like--;
+    } else {
+      comment.users_like.push(userID);
+      comment.like++;
+    }
+
+    if (comment.users_dislike.includes(userID)) {
+      comment.users_dislike.pull(userID);  
+      comment.dislike--;
+    }
+
+    await comment.save();
+    res.json(comment); 
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+const toggleDislike = async (req, res) => {
+  const { userID, commentID } = req.body;
+  try {
+    const comment = await Comment.findById(commentID);
+    if (!comment) {
+      return res.status(404).json({ message: "Comment not found" });
+    }
+    if (comment.users_like.includes(userID)) {
+      comment.users_like.pull(userID);  
+      comment.like--;
+    }
+    if (comment.users_dislike.includes(userID)) {
+      comment.users_dislike.pull(userID);  
+      comment.dislike--;
+    } else {
+      comment.users_dislike.push(userID);
+      comment.dislike++;
+    }
+
+    if (comment.users_like.includes(userID)) {
+      comment.users_like.pull(userID);  
+      comment.like--;
+    }
+
+    await comment.save();
+    res.json(comment); 
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  } 
+};
 
 module.exports = {
   getComments,
   getCommentsByvideoID,
   getRepliesByCommentID,
   createComment,
-  createReplyToComment
+  createReplyToComment,
+  toggleLike,
+  toggleDislike
 }
