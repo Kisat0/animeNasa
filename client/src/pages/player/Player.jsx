@@ -17,6 +17,7 @@ import Comment from "../../components/comment/Comment";
 import { useUser } from "../../utils/useUser";
 
 import "./Player.scss";
+import { AnimeInfos, LeftArrow, RightArrow } from "../../utils/Icons";
 
 var json = require("../../utils/fr.json");
 
@@ -31,15 +32,13 @@ function PlayerPage() {
   const [isMenuReportOpen, setIsMenuReportOpen] = useState(false);
   const [dataReport, setDataReport] = useState({});
   const { user } = useUser();
-  const [error, setError] = useState('');
-  
+  const [error, setError] = useState("");
 
   const { id } = useParams();
   const pageLink = window.location.href;
 
   const updateDataReport = (e) => {
     setDataReport({
-
       user,
       ...dataReport,
       pageLink,
@@ -49,14 +48,16 @@ function PlayerPage() {
 
   const CustomReportValidation = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_ADDRESS}/connection/reportEpisode`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dataReport),
-
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_ADDRESS}/connection/reportEpisode`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataReport),
+        }
+      );
       if (response.ok) {
         const responseData = await response.json();
         setSuccessMessage(`L'email a été envoyé`);
@@ -65,11 +66,11 @@ function PlayerPage() {
         setError(responseData.message);
       }
     } catch (error) {
-      console.error('Error:', error);
-      setError('Une erreur s\'est produite lors de l\'envoi de l\'e-mail.');
+      console.error("Error:", error);
+      setError("Une erreur s'est produite lors de l'envoi de l'e-mail.");
     }
     // console.log("Description du problème :", customReportDescription);
-    setIsMenuReportOpen(false)
+    setIsMenuReportOpen(false);
   };
 
   const closeMenu = () => {
@@ -214,7 +215,7 @@ function PlayerPage() {
 
     const skipTo = Math.round(
       (event.clientX / event.target.clientWidth) *
-      parseInt(event.target.getAttribute("max"), 10)
+        parseInt(event.target.getAttribute("max"), 10)
     );
     seek.setAttribute("data-seek", skipTo);
     const t = formatTime(skipTo);
@@ -530,10 +531,12 @@ function PlayerPage() {
           console.log("La requête a échoué avec le code :", response.status);
         }
       } catch (error) {
-        console.error("Une erreur s'est produite lors de la mise à jour du nombre de vues :", error);
+        console.error(
+          "Une erreur s'est produite lors de la mise à jour du nombre de vues :",
+          error
+        );
       }
-    }
-
+    };
 
     const fetchAnime = async (animeId) => {
       try {
@@ -657,19 +660,27 @@ function PlayerPage() {
             </h1>
             <div className="player-buttons">
               <div className="player-button">
-                <p>{json.play.Player}</p>
                 <select className="top-video-button">
                   <option>Lecteur 1</option>
                   <option>Lecteur 2</option>
                 </select>
               </div>
               <button className="top-video-button">
-                <ArrowBackIosIcon className="arrow-icons" />
+                <LeftArrow className="arrow-icons" />
                 {json.play.Previous}
+              </button>
+              <button
+                className="top-video-button"
+                style={{
+                  backgroundColor: anime.color ? anime.color : "#000",
+                }}
+              >
+                {json.play.Infos}
+                <AnimeInfos />
               </button>
               <button className="top-video-button">
                 {json.play.Next}
-                <ArrowForwardIosIcon className="arrow-icons" />
+                <RightArrow className="arrow-icons" />
               </button>
             </div>
             <div className="video-container" id="video-container">
@@ -701,7 +712,7 @@ function PlayerPage() {
                   </div>
                 </div>
               )}
-              ;
+              
               <div
                 className="video-controls hidden"
                 id="video-controls"
@@ -811,6 +822,10 @@ function PlayerPage() {
             </div>
           </div>
 
+          <div className="player-comment">
+            <Comment />
+          </div>
+
           <svg style={{ display: "none" }}>
             <defs>
               <symbol id="pause" viewBox="0 0 24 24">
@@ -847,9 +862,6 @@ function PlayerPage() {
             </defs>
           </svg>
         </div>
-      </div>
-      <div className="player-comment">
-        <Comment />
       </div>
     </>
   );

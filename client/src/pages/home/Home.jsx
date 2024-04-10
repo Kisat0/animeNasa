@@ -72,9 +72,9 @@ const HomePage = () => {
     <div>
       <Navbar color={color} />
       <Header data={dataHeader} handleColor={handleColor} />
-      <LastEps data={lastEps} color={color}/>
-          <Trends color={color} />
-          <NewsSeasons color={color} />
+      <LastEps data={lastEps} color={color} />
+      <Trends color={color} />
+      <NewsSeasons color={color} />
       <Footer />
     </div>
   );

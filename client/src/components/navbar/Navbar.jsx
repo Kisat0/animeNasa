@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { styled, useTheme } from "@mui/material";
 import "./Navbar.scss";
 import { useAuth } from "../../utils/AuthContext";
-import { DiscordIcon } from "../../utils/DiscordIcon";
+import { DiscordIcon } from "../../utils/Icons";
 
 const StyledLink = styled(Link)(({ theme,color }) => ({
   color: theme.palette.text.primary,
