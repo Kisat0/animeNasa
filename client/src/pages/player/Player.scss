@@ -52,9 +52,11 @@
 
 .open {
   transform: translateX(0px);
+
   .open-icon {
     display: none;
   }
+
   .short-menu {
     display: none;
   }
@@ -62,21 +64,26 @@
 
 .close {
   transform: translateX(-325px);
+
   .header-back-layout,
   .header-menu,
   .body-menu {
     display: none;
   }
+
   .open-icon {
     display: block;
   }
+
   .short-menu {
     display: block;
   }
 }
+
 .menu-content {
   position: relative;
   color: var(--Text-Dark);
+
   .menu {
     height: 100%;
     overflow-y: scroll;
@@ -85,13 +92,16 @@
     width: 400px;
     transition: all 200ms ease-in;
     z-index: 100;
+
     .ep-active-menu {
       color: var(--Menu-Hover-Background);
     }
+
     /* width */
     ::-webkit-scrollbar {
       width: 0px;
     }
+
     .short-menu {
       height: 100%;
       width: 75px;
@@ -99,6 +109,7 @@
       right: 0;
       top: 0px;
       text-align: center;
+
       ul {
         width: 100%;
 
@@ -127,11 +138,13 @@
           border-bottom: 4px solid var(--Text-Dark);
           background-color: var(--Background-Menu-Season);
         }
+
         .ep-short-menu:hover {
           background-color: var(--Menu-Hover-Background);
         }
       }
     }
+
     .short-menu-header {
       width: 75px;
       height: 75px;
@@ -143,6 +156,7 @@
         width: 40px;
         height: 40px;
       }
+
       .open-icon:hover {
         background-color: var(--Background-Menu-Button-Hover);
       }
@@ -160,6 +174,7 @@
         text-decoration: none;
         transition: all 500ms ease-in-out;
       }
+
       a:hover {
         text-decoration: underline;
         color: red;
@@ -173,6 +188,7 @@
         max-width: 100%;
         max-height: 100%;
       }
+
       .header-back-layout {
         width: 100%;
         height: 100%;
@@ -191,9 +207,11 @@
           flex-direction: row;
           flex-wrap: nowrap;
           margin-left: 40px;
+
           .anime-infos-text {
             width: 60%;
             margin-left: 40px;
+
             span {
               font-weight: bold;
             }
@@ -203,6 +221,7 @@
               font-size: 12px;
             }
           }
+
           img {
             width: 80px;
             height: 110px;
@@ -211,6 +230,7 @@
             object-fit: cover;
           }
         }
+
         .others-informations {
           font-weight: bold;
           margin-top: 20px;
@@ -219,11 +239,13 @@
           flex-wrap: nowrap;
           width: 100%;
           margin-left: 40px;
+
           .tags {
             display: flex;
             flex-direction: column;
             width: fit-content;
             font-size: 12px;
+
             span {
               margin: 5px 0px;
               padding: 5px 15px;
@@ -231,15 +253,18 @@
               display: flex;
               flex-direction: row;
               align-items: center;
+
               svg {
                 margin-right: 5px;
                 height: 15px;
                 width: 15px;
               }
             }
+
             .genre-tag {
               background-color: var(--Tag-Tab-Genre);
             }
+
             .date-tag {
               background-color: var(--Tag-Tab-Date);
             }
@@ -264,21 +289,25 @@
         margin-top: 20px;
         margin-left: 30px;
         white-space: nowrap;
+
         .season-number {
           text-transform: uppercase;
           font-weight: bold;
           font-size: 25px;
           margin-bottom: 40px;
         }
+
         ul {
           padding-bottom: 200px;
         }
+
         li {
           list-style-type: none;
           margin: 20px 0px;
           font-weight: bold;
           white-space: nowrap;
           transition: all 200ms ease-in-out;
+
           a {
             color: var(--Text-Dark);
             text-decoration: none;
@@ -286,6 +315,7 @@
             height: 100%;
           }
         }
+
         li:hover {
           text-decoration: underline;
           color: rgb(207, 207, 207);
@@ -294,12 +324,14 @@
       }
     }
   }
+
   .menu.open {
     .close-cross {
       z-index: 100;
       position: sticky;
       top: 5px;
       width: 100%;
+
       .close-icon {
         position: absolute;
         left: 370px;
@@ -311,6 +343,7 @@
 .container-watch {
   width: 100%;
   height: 100%;
+
   .anime-episode-title {
     color: var(--Text-Dark);
     text-transform: uppercase;
@@ -324,20 +357,24 @@
     align-items: center;
     margin: 20px 0px;
     font-weight: bold;
+
     .arrow-icons {
       height: 10px;
       width: 10px;
     }
+
     .player-button {
       display: flex;
       flex-direction: row;
       color: var(--Text-Dark);
       align-items: center;
       margin-right: auto;
+
       p {
         margin-right: 7px;
       }
     }
+
     .top-video-button {
       background-color: var(--Background-Dark);
       display: flex;
@@ -359,10 +396,12 @@
       transition: all 200ms ease-in-out;
       text-align: center;
     }
+
     .top-video-button:hover {
       background-color: var(--Background-Menu-Button-Hover);
     }
   }
+
   button::before {
     content: attr(data-title);
     position: absolute;
@@ -380,6 +419,7 @@
   button:hover::before {
     display: inline-block;
   }
+
   .playback-animation {
     pointer-events: none;
     position: absolute;
@@ -408,6 +448,7 @@
     flex-direction: column;
     justify-content: center;
     background-color: var(--Background-Dark);
+
     video {
       width: 100%;
       height: 100%;
@@ -425,6 +466,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+
       .loader {
         display: flex;
         justify-content: center;
@@ -432,6 +474,7 @@
         height: 100%;
         width: 100%;
         background-color: var(--Background-Dark);
+
         svg {
           height: 200px;
           width: 200px;
@@ -447,11 +490,9 @@
       position: absolute;
       bottom: 0;
       transition: all 0.2s ease;
-      background-image: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.3),
-        rgba(0, 0, 0, 0.5)
-      );
+      background-image: linear-gradient(to bottom,
+          rgba(0, 0, 0, 0.3),
+          rgba(0, 0, 0, 0.5));
     }
 
     .video-controls.hide {
@@ -500,7 +541,7 @@
       margin: 0;
     }
 
-    .seek:hover + .seek-tooltip {
+    .seek:hover+.seek-tooltip {
       display: block;
     }
 
@@ -574,6 +615,7 @@
       width: 26px;
       height: 26px;
     }
+
     input[type="range"] {
       height: 8.4px;
       background: transparent;
@@ -662,10 +704,12 @@
     stroke: #fff;
     cursor: pointer;
   }
+
   .bottom-buttons {
     width: 100%;
     display: flex;
     justify-content: flex-end;
+
     .reported-button {
       background-color: rgb(207, 40, 40);
       font-family: "Roboto", sans-serif;
@@ -680,8 +724,31 @@
       height: 44px;
       border-radius: 4px;
     }
+
     .reported-button:hover {
       background-color: rgb(209, 60, 60);
+    }
+
+    .menu-report {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      border-radius: 12px;
+      opacity: 0.9;
+      height: 20px;
+      margin-top: 10px;
+      margin-right: 10px;
+      align-items: center;
+
+      button {
+        width: 60px;
+        background-color: rgb(207, 40, 40);
+        color: var(--Text-Dark);
+
+        &:hover {
+          background-color: rgb(209, 60, 60);
+        }
+      }
     }
   }
 }

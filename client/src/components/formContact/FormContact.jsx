@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from "../../utils/useUser";
 
 import './FormContact.scss';
 
@@ -9,9 +10,11 @@ function FormContact() {
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
+  const { user } = useUser();
 
   const updateData = (e) => {
     setData({
+      user,
       ...data,
       [e.target.name]: e.target.value,
     });
@@ -30,7 +33,7 @@ function FormContact() {
       });
       if (response.ok) {
         const responseData = await response.json();
-        setSuccessMessage(`Un email a été envoyé à ${responseData.email}`);
+        setSuccessMessage(`L'email a été envoyé`);
       } else {
         const responseData = await response.json();
         setError(responseData.message);
