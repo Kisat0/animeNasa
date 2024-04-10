@@ -131,33 +131,99 @@ function Comment() {
 
   const toggleLike = async (commentID) => {
     try {
-      await axios.post(
-        `${process.env.REACT_APP_API_ADDRESS}/comment/like`,
-        {
-          commentID,
-          userID: user._id,
-        },
-      );
-      setComments((prevComments) =>
-        prevComments.map((comment) =>
-          comment._id === commentID ? { ...comment, likes: comment.likes + 1 } : comment
-        )
-      );
+      const comment = comments.find((c) => c._id === commentID);
+      if (comment.users_like.includes(user._id)) {
+        // L'utilisateur a déjà liké le commentaire, on retire le like
+        await axios.post(
+          `${process.env.REACT_APP_API_ADDRESS}/comment/like`,
+          {
+            commentID,
+            userID: user._id,
+          }
+        );
+        setComments((prevComments) =>
+          prevComments.map((c) =>
+            c._id === commentID
+              ? {
+                  ...c,
+                  like: c.like - 1,
+                  users_like: c.users_like.filter((id) => id !== user._id),
+                }
+              : c
+          )
+        );
+      } else {
+        // L'utilisateur n'a pas encore liké le commentaire, on ajoute le like
+        await axios.post(
+          `${process.env.REACT_APP_API_ADDRESS}/comment/like`,
+          {
+            commentID,
+            userID: user._id,
+          }
+        );
+        setComments((prevComments) =>
+          prevComments.map((c) =>
+            c._id === commentID
+              ? {
+                  ...c,
+                  like: c.like + 1,
+                  users_like: [...c.users_like, user._id],
+                  users_dislike: c.users_dislike.filter((id) => id !== user._id),
+                }
+              : c
+          )
+        );
+      }
     } catch (error) {
       console.error(error);
     }
   };
-
+  
   const toggleDislike = async (commentID) => {
     try {
-      await axios.post(
-        `${process.env.REACT_APP_API_ADDRESS}/comment/dislike`,
-        {
-          commentID,
-          userID: user._id,
-        },
-      );
-      fetchComments();
+      const comment = comments.find((c) => c._id === commentID);
+      if (comment.users_dislike.includes(user._id)) {
+        // L'utilisateur a déjà disliké le commentaire, on retire le dislike
+        await axios.post(
+          `${process.env.REACT_APP_API_ADDRESS}/comment/dislike`,
+          {
+            commentID,
+            userID: user._id,
+          }
+        );
+        setComments((prevComments) =>
+          prevComments.map((c) =>
+            c._id === commentID
+              ? {
+                  ...c,
+                  dislike: c.dislike - 1,
+                  users_dislike: c.users_dislike.filter((id) => id !== user._id),
+                }
+              : c
+          )
+        );
+      } else {
+        // L'utilisateur n'a pas encore disliké le commentaire, on ajoute le dislike
+        await axios.post(
+          `${process.env.REACT_APP_API_ADDRESS}/comment/dislike`,
+          {
+            commentID,
+            userID: user._id,
+          }
+        );
+        setComments((prevComments) =>
+          prevComments.map((c) =>
+            c._id === commentID
+              ? {
+                  ...c,
+                  dislike: c.dislike + 1,
+                  users_dislike: [...c.users_dislike, user._id],
+                  users_like: c.users_like.filter((id) => id !== user._id),
+                }
+              : c
+          )
+        );
+      }
     } catch (error) {
       console.error(error);
     }
