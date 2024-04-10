@@ -640,9 +640,12 @@ function PlayerPage() {
             </div>
           </div>
         </div>
-        <div className="player-content" style={{
-          paddingRight: isComingSoon ? "70px" : "0px",
-        }}>
+        <div
+          className="player-content"
+          style={{
+            paddingRight: isComingSoon ? "70px" : "0px",
+          }}
+        >
           <div className="container-watch">
             <h1 className="anime-episode-title">
               {anime.title +
@@ -845,7 +848,9 @@ function PlayerPage() {
           </svg>
         </div>
       </div>
-      <Comment />
+      <div className="player-comment">
+        <Comment />
+      </div>
     </>
   );
 }
