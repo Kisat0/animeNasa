@@ -52,11 +52,12 @@ function Comment() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("hrebfjherbhjebhjerbhbr")
     try {
-      if (videoID && localStorage.getItem('username') && text.text) {
+      if (videoID && user.username && text.text) {
         if (isReply) {
           await axios.post(`${process.env.REACT_APP_API_ADDRESS}/comment/reply`, {
-            author: localStorage.getItem('username'),
+            author: user.username,
             text: text.text,
             videoID: videoID,
             reply_to: commentIDToReply,
@@ -78,7 +79,7 @@ function Comment() {
         } else {
           await axios.post(`${process.env.REACT_APP_API_ADDRESS}/comment/`, {
             videoID: videoID,
-            author: localStorage.getItem('username'),
+            author: user.username,
             text: text.text,
           })
           .then((response) => {
