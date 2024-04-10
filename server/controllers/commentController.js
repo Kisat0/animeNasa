@@ -81,7 +81,6 @@ const createReplyToComment = async (req, res) => {
 
 const toggleLike = async (req, res) => {
   const { userID, commentID } = req.body;
-  console.log(req.body)
   try {
     const comment = await Comment.findById(commentID);
     if (!comment) {
@@ -110,7 +109,6 @@ const toggleLike = async (req, res) => {
 
 const toggleDislike = async (req, res) => {
   const { userID, commentID } = req.body;
-  console.log(req.body)
   try {
     const comment = await Comment.findById(commentID);
     if (!comment) {

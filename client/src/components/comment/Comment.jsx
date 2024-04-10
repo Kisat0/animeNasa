@@ -19,8 +19,6 @@ function Comment() {
 
   const { user } = useUser();
 
-  console.log(user);
-
   comments.sort((a, b) => new Date(b.date) - new Date(a.date));
 
   const url = window.location.href;
@@ -52,7 +50,6 @@ function Comment() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("hrebfjherbhjebhjerbhbr")
     try {
       if (videoID && user.username && text.text) {
         if (isReply) {
