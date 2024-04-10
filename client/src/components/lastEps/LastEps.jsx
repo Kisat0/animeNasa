@@ -1,35 +1,12 @@
 import { MegaphoneIcon } from "../../utils/Icons";
-import { useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useTheme } from "@mui/material";
+import { colorDarker } from "../../utils/Color";
 import "./LastEps.scss";
-import Loader from "../loader/loader";
 
-const LastEps = () => {
-  const [lastEps, setLastEps] = useState([]);
-
+const LastEps = ({ data, color }) => {
   const theme = useTheme().palette;
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchLastEps = async () => {
-      try {
-        const res = await fetch(
-          `${process.env.REACT_APP_API_ADDRESS}/episodes/latest/${0}`
-        );
-        const data = await res.json();
-        setLastEps(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchLastEps();
-  }, []);
-
-  if (!lastEps) {
-    return <Loader />;
-  }
 
   return (
     <section>
@@ -38,10 +15,16 @@ const LastEps = () => {
           <MegaphoneIcon />
           <h1>Derniers épisodes:</h1>
         </div>
-        <span></span>
+        <span
+          style={{
+            background: `linear-gradient(-270deg, ${color} 0%, ${colorDarker(
+              color
+            )} 50.52%, transparent 100%)`,
+          }}
+        ></span>
       </div>
       <div className="last-eps-container">
-        {lastEps.map((episode) => (
+        {data.map((episode) => (
           <div
             key={episode._id}
             onClick={() => navigate(`/watch/${episode._id}`)}
@@ -52,7 +35,7 @@ const LastEps = () => {
                 Saison {episode.season}
               </p>
               <p style={{ backgroundColor: theme.tags.vf }}>
-                        {episode.lang.toUpperCase()}
+                {episode.lang.toUpperCase()}
               </p>
             </div>
             <p

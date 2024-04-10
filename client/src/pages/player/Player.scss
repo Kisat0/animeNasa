@@ -10,9 +10,9 @@
   --See-btn: #49446b;
   --See-btn-Hover: #575371;
 
-  --Menu-Hover-Background: #009be3;
+  --Menu-Hover-Background: rgba(105, 105, 105, 0.29);
   --Background-Menu-Button-Hover: #454545;
-  --Background-Menu-Season: #eb8416;
+  --Background-Menu-Season: rgba(105, 105, 105, 0.29);
 
   --Background-Light: #ffffff;
   --Text-Light: black;
@@ -88,7 +88,7 @@
     height: 100%;
     overflow-y: scroll;
     position: fixed;
-    top: 64px;
+    top: 75px;
     width: 400px;
     transition: all 200ms ease-in;
     z-index: 100;
@@ -133,6 +133,10 @@
           }
         }
 
+        li:hover {
+          background-color: var(--Menu-Hover-Background);
+        }
+
         .season-short-menu {
           border-top: 4px solid var(--Text-Dark);
           border-bottom: 4px solid var(--Text-Dark);
@@ -151,15 +155,16 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      transition: all 500ms ease-in-out;
 
       .open-icon {
         width: 40px;
         height: 40px;
       }
+    }
 
-      .open-icon:hover {
-        background-color: var(--Background-Menu-Button-Hover);
-      }
+    .short-menu-header:hover {
+      background-color: var(--Background-Menu-Button-Hover);
     }
 
     .header-menu {

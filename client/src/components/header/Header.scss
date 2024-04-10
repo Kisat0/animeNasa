@@ -3,7 +3,7 @@ header {
   overflow: hidden;
   position: relative;
 
-  & > div {
+  .header-content {
     height: 100%;
     width: 100%;
     display: flex;
@@ -75,6 +75,7 @@ header {
     justify-content: space-between;
     align-items: center;
     margin-top: 20px;
+    gap: 20px;
     width: 100%;
 
     button {
@@ -93,12 +94,34 @@ header {
       flex-flow: row nowrap;
       justify-content: center;
       align-items: center;
-      color:white;
-     
-      svg{
+      color: white;
+
+      svg {
         margin-right: 10px;
-        padding:5px;
+        padding: 5px;
       }
+    }
+  }
+
+  .header-dots {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 15px;
+    z-index: 900;
+    width: 100%;
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #9494946b;
+      margin: 0 5px;
+    }
+
+    .active {
+      background-color: #ffffff;
     }
   }
 }
