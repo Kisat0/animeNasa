@@ -12,6 +12,7 @@ const HomePage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [lastEps, setLastEps] = useState([]);
   const [dataHeader, setDataHeader] = useState();
+  const [color, setColor] = useState();
 
   useEffect(() => {
     const fetchLastEps = async () => {
@@ -59,17 +60,21 @@ const HomePage = () => {
     setIsLoading(false);
   }, []);
 
+  const handleColor = (color) => {
+    setColor(color);
+  };
+
   if (isLoading || !lastEps || !dataHeader) {
     return <Loader />;
   }
 
   return (
     <div>
-      <Navbar />
-      <Header data={dataHeader} />
-      <LastEps data={lastEps} />
-      <Trends />
-      <NewsSeasons />
+      <Navbar color={color} />
+      <Header data={dataHeader} handleColor={handleColor} />
+      <LastEps data={lastEps} color={color}/>
+          <Trends color={color} />
+          <NewsSeasons color={color} />
       <Footer />
     </div>
   );

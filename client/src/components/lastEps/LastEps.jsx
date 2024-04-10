@@ -1,9 +1,10 @@
 import { MegaphoneIcon } from "../../utils/Icons";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material";
+import { colorDarker } from "../../utils/Color";
 import "./LastEps.scss";
 
-const LastEps = ({ data }) => {
+const LastEps = ({ data, color }) => {
   const theme = useTheme().palette;
   const navigate = useNavigate();
 
@@ -14,7 +15,13 @@ const LastEps = ({ data }) => {
           <MegaphoneIcon />
           <h1>Derniers épisodes:</h1>
         </div>
-        <span></span>
+        <span
+          style={{
+            background: `linear-gradient(-270deg, ${color} 0%, ${colorDarker(
+              color
+            )} 50.52%, transparent 100%)`,
+          }}
+        ></span>
       </div>
       <div className="last-eps-container">
         {data.map((episode) => (

@@ -1,3 +1,14 @@
+export const colorDarker = (color) => {
+  const colorArray = color?.split(",");
+  const newColor = colorArray?.map((c) => {
+    const color = c.split(" ");
+    color[1] = "50%";
+    return color?.join(" ");
+  });
+  return newColor?.join(",");
+};
+
+//! ne pas delete
 /* function getDominantColor(imagePath) {
   encodeImageToBase64(imagePath).then((base64Image) => {
     if (base64Image) {

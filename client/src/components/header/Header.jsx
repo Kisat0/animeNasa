@@ -2,8 +2,9 @@ import { useTheme } from "@mui/material";
 import "./Header.scss";
 import { PlayIcon } from "../../utils/Icons";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const Header = ({ data }) => {
+const Header = ({ data, handleColor }) => {
   const theme = useTheme().palette;
   const [index, setIndex] = useState(0);
   const [currentTitle, setCurrentTitle] = useState(data[0]?.anime.title);
@@ -16,6 +17,9 @@ const Header = ({ data }) => {
   const [currentDesc, setCurrentDesc] = useState(
     data[index]?.anime.description
   );
+  const [currentColor, setCurrentColor] = useState(data[0]?.anime.color);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -32,6 +36,8 @@ const Header = ({ data }) => {
     setCurrentNumber(data[index]?.number);
     setCurrentPoster(data[index]?.anime.poster);
     setCurrentDesc(data[index]?.anime.description);
+    setCurrentColor(data[index]?.anime.color);
+    handleColor(data[index]?.anime.color);
   }, [index, data]);
 
   return (
@@ -58,7 +64,8 @@ const Header = ({ data }) => {
           <div className="header-buttons">
             <button
               style={{
-                backgroundColor: data[index]?.anime.color || theme.buttons.primary,
+                backgroundColor:
+                  data[index]?.anime.color || theme.buttons.primary,
               }}
             >
               {" "}
@@ -67,6 +74,9 @@ const Header = ({ data }) => {
             <button
               style={{
                 backgroundColor: theme.buttons.secondary,
+              }}
+              onClick={() => {
+                navigate(`/summary/${data[index].anime._id}`);
               }}
             >
               Détails
