@@ -1,20 +1,19 @@
 .comment-content {
-  padding: 1.5% 0;
-  margin: 2.5% 5%;
+  margin: 4.5% 5%;
 }
 
 .comment-infos-top {
   display: flex;
   flex-direction: row;
-  gap: 3rem;
   font-weight: bold;
+  justify-content: space-between;
 }
 
 .comment-infos-bottom {
   display: flex;
   flex-direction: row;
-  gap: 3rem;
   font-weight: bold;
+  justify-content: space-between;
 }
 .comment-date {
   font-weight: lighter;

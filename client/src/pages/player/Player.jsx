@@ -564,7 +564,7 @@ function PlayerPage() {
     <>
       <div className="player-container">
         <img src={anime.thumbnail} alt="" className="background innershadow" />
-        <Navbar />
+        <Navbar color={anime.color}/>
         <div className="menu-content">
           <div
             className="menu close"
