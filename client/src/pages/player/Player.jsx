@@ -13,10 +13,10 @@ import Navbar from "../../components/navbar/Navbar";
 import axios from "axios";
 import { useTheme } from "@mui/material";
 import PreviewChat from "../../components/preview-chat/PreviewChat";
+import Comment from "../../components/comment/Comment";
 import { useUser } from "../../utils/useUser";
 
 import "./Player.scss";
-import Comment from "../../components/comment/Comment";
 
 var json = require("../../utils/fr.json");
 
