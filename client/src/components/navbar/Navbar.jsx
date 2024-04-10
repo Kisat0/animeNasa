@@ -42,6 +42,9 @@ const Navbar = () => {
         <li>
           <StyledLink to="">Discord</StyledLink>
         </li>
+        <li>
+          <StyledLink to="/profil">Profil</StyledLink>
+        </li>
         {!isLoggedIn && (
           <li>
             <StyledLink to="/login">Connexion</StyledLink>

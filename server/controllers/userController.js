@@ -315,6 +315,74 @@ const resetPasswordUser = async (req, res) => {
   }
 };
 
+const changeAvatar = async (req, res) => {
+
+  try {
+    const { id } = req.params;
+    const { newAvatar } = req.body;
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { avatar: newAvatar },
+      { new: true }
+    );
+    if (updatedUser) {
+      res.json(updatedUser);
+    } else {
+      res.status(404).send("User not found");
+    }
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+}
+
+const updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { action, identifier, newEmail, newPassword } = req.body;
+    let updateFields = {};
+
+    switch (action) {
+      case 'pseudo':
+        updateFields = { username: identifier };
+        break;
+      case 'email':
+        const existingUser = await User.findOne({ email: newEmail });
+        if (existingUser) {
+          return res
+            .status(400)
+            .send({ message: "L'adresse e-mail est déjà utilisée." });
+        }
+        updateFields = { email: newEmail };
+        break;
+      case 'mdp':
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        updateFields = { password: hashedPassword };
+        break;
+      default:
+        return res.status(400).send("Action non prise en charge");
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      updateFields,
+      { new: true }
+    );
+
+    if (updatedUser) {
+      res.json(updatedUser);
+    } else {
+      res.status(404).send("User not found");
+    }
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+}
+
+
 module.exports = {
   signup,
   login,
@@ -322,4 +390,6 @@ module.exports = {
   refreshToken,
   resetPasswordEmail,
   resetPasswordUser,
+  changeAvatar,
+  updateUser,
 };

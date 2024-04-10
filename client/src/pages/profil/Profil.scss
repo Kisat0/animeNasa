@@ -1,0 +1,112 @@
+.profile-container {
+    width: 200px;
+    background-color: #1a1a27;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-right: auto;
+    margin-left: auto;
+    width: 30%;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    border-radius: 12px;
+    opacity: 0.9;
+}
+
+.flex-container {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+
+    .profile-title {
+        padding-top: 100px;
+    }
+
+    .buttons-change {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 10px;
+        &>button {
+            background-color: #1a1a27;
+            color: white;
+            opacity: 0.9;
+            width: 120px;
+            height: 40px;
+            border-radius: 5px;
+        }
+        &>button:hover {
+            cursor: pointer;
+            background-color: #09090d;
+        }
+
+    }
+
+    .user-form {
+        margin-top: 20px;
+      
+        form {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+          
+      
+          input {
+            background-color: #575778;
+            color: white;
+            opacity: 0.9;
+            width: 300px;
+            height: 40px;
+            border-radius: 5px;
+          }
+      
+          button {
+            background-color: #1a1a27;
+            color: white;
+            opacity: 0.9;
+            width: 120px;
+            height: 40px;
+            border-radius: 5px;
+          }
+
+          button:hover {
+            cursor: pointer;
+            background-color: #09090d;
+        }
+        }
+      }
+      
+
+    .profile-image {
+        position: relative;
+
+        .img-profile {
+            object-fit: cover;
+            width: 150px;
+            height: 150px;
+            border-radius: 5px;
+        }
+    }
+
+    svg {
+        border: 1px solid black;
+        border-radius: 5px;
+        position: "absolute";
+        bottom: 5;
+        right: 0;
+    }
+
+    svg:hover {
+        border-color: white;
+    }
+
+    svg:hover path {
+        fill: white;
+    }
+
+}
