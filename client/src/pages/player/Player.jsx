@@ -451,7 +451,7 @@ function PlayerPage() {
       const video = document.getElementById("video");
       if (!video) return;
 
-      if (document.activeElement.tagName === "INPUT") return;
+      if (document.activeElement.tagName === "INPUT" || document.activeElement.tagName === "TEXTAREA") return;
 
       const { key } = event;
       switch (key) {
