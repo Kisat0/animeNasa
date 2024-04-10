@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTheme } from '@mui/material';
 import './Seasons.scss';
 
-const Seasons = ({ season, onClick }) => {
+const Seasons = ({ season, onClick, activeSeason }) => {
     const theme = useTheme().palette;
     const [clicked, setClicked] = useState(false);
 
@@ -15,8 +15,8 @@ const Seasons = ({ season, onClick }) => {
         <h1
             className="textSeason"
             style={{
-                background: clicked ? 'white' : theme.background.episodeWatched,
-                color: clicked ? 'black' : 'white',
+                background: season === activeSeason ? 'white' : theme.background.episodeWatched,
+                color: season === activeSeason ? 'black' : 'white',
                 
             }}
             onClick={handleOnClick}

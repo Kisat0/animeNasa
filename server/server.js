@@ -8,12 +8,16 @@ import userRoutes from "./routes/userRoutes";
 import animeRoutes from "./routes/animeRoutes";
 import episodeRoutes from "./routes/episodeRoutes";
 import messageRoutes from "./routes/messageRoutes";
+import connectionRoutes from "./routes/connection";
+import commentRoutes from "./routes/commentRoutes";
 
 const WebSocket = require("websocket").server;
 
 mongoose.connect(mongoString);
 
 const database = mongoose.connection;
+
+const app = express();
 
 database.on("error", (error) => {
   console.log(error);
@@ -23,14 +27,15 @@ database.once("open", () => {
   console.log("Database Connected");
 });
 
-const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use("/connection", connectionRoutes )
 app.use("/users", userRoutes);
 app.use("/animes", animeRoutes);
 app.use("/episodes", episodeRoutes);
 app.use("/messages", messageRoutes);
+app.use("/comment", commentRoutes);
 
 const server = app.listen(5001, () => {
   console.log("Server is running on port 5001");

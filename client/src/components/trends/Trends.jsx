@@ -6,11 +6,14 @@ import {
 } from "../../utils/Icons";
 import "./Trends.scss";
 import { useTheme } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import TrendsComponent from "../trendsComponent/TrendsComponent";
+import Loader from "../loader/loader";
 import { colorDarker } from "../../utils/Color";
-import { useState } from "react";
 
-const Trends = ({ color }) => {
+const Trends = ({color}) => {
   const [carouselIndex, setCarouselIndex] = useState(0);
+  const [dataTrends, setDataTrends] = useState([]);
 
   const theme = useTheme().palette;
 
@@ -61,6 +64,26 @@ const Trends = ({ color }) => {
     }
   };
 
+  const getAnimeTrends = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_API_ADDRESS}/animes/trends`
+      );
+      const data = await res.json();
+      setDataTrends(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getAnimeTrends();
+  }, []);
+
+  if (!dataTrends) {
+    return <Loader />;
+  }
+
   return (
     <section>
       <div>
@@ -92,310 +115,9 @@ const Trends = ({ color }) => {
           </span>
         </div>
         <div className="trend-carousel-items">
-          <div>
-            <img
-              src="https://fr.web.img5.acsta.net/c_310_420/pictures/19/09/18/13/46/0198270.jpg"
-              alt="trend"
-            />
-            <p
-              className="trend-season-info"
-              style={{ backgroundColor: theme.tags.season }}
-            >
-              S17
-            </p>
-            <div>
-              <p style={{ backgroundColor: theme.tags.season }}>
-                <StarIcon />
-                7.7
-              </p>
-              <p style={{ backgroundColor: theme.tags.season }}>407 EP</p>
-            </div>
-          </div>
-          <div>
-            <img
-              src="https://fr.web.img5.acsta.net/c_310_420/pictures/19/09/18/13/46/0198270.jpg"
-              alt="trend"
-            />
-            <p
-              className="trend-season-info"
-              style={{ backgroundColor: theme.tags.season }}
-            >
-              S17
-            </p>
-            <div>
-              <p style={{ backgroundColor: theme.tags.season }}>
-                <StarIcon />
-                7.7
-              </p>
-              <p style={{ backgroundColor: theme.tags.season }}>407 EP</p>
-            </div>
-          </div>
-          <div>
-            <img
-              src="https://www.melty.fr/wp-content/uploads/meltyfr/2022/03/747354-black-clover-annule-la-fin-de-l-anime-opengraph_1200-1.jpg"
-              alt="trend"
-            />
-            <p
-              className="trend-season-info"
-              style={{ backgroundColor: theme.tags.season }}
-            >
-              S17
-            </p>
-            <div>
-              <p style={{ backgroundColor: theme.tags.season }}>
-                <StarIcon />
-                7.7
-              </p>
-              <p style={{ backgroundColor: theme.tags.season }}>407 EP</p>
-            </div>
-          </div>
-          <div>
-            <img
-              src="https://fr.web.img5.acsta.net/c_310_420/pictures/19/09/18/13/46/0198270.jpg"
-              alt="trend"
-            />
-            <p
-              className="trend-season-info"
-              style={{ backgroundColor: theme.tags.season }}
-            >
-              S17
-            </p>
-            <div>
-              <p style={{ backgroundColor: theme.tags.season }}>
-                <StarIcon />
-                7.7
-              </p>
-              <p style={{ backgroundColor: theme.tags.season }}>407 EP</p>
-            </div>
-          </div>
-          <div>
-            <img
-              src="https://fr.web.img5.acsta.net/c_310_420/pictures/19/09/18/13/46/0198270.jpg"
-              alt="trend"
-            />
-            <p
-              className="trend-season-info"
-              style={{ backgroundColor: theme.tags.season }}
-            >
-              S17
-            </p>
-            <div>
-              <p style={{ backgroundColor: theme.tags.season }}>
-                <StarIcon />
-                7.7
-              </p>
-              <p style={{ backgroundColor: theme.tags.season }}>407 EP</p>
-            </div>
-          </div>
-          <div>
-            <img
-              src="https://fr.web.img5.acsta.net/c_310_420/pictures/19/09/18/13/46/0198270.jpg"
-              alt="trend"
-            />
-            <p
-              className="trend-season-info"
-              style={{ backgroundColor: theme.tags.season }}
-            >
-              S17
-            </p>
-            <div>
-              <p style={{ backgroundColor: theme.tags.season }}>
-                <StarIcon />
-                7.7
-              </p>
-              <p style={{ backgroundColor: theme.tags.season }}>407 EP</p>
-            </div>
-          </div>
-          <div>
-            <img
-              src="https://fr.web.img5.acsta.net/c_310_420/pictures/19/09/18/13/46/0198270.jpg"
-              alt="trend"
-            />
-            <p
-              className="trend-season-info"
-              style={{ backgroundColor: theme.tags.season }}
-            >
-              S17
-            </p>
-            <div>
-              <p style={{ backgroundColor: theme.tags.season }}>
-                <StarIcon />
-                7.7
-              </p>
-              <p style={{ backgroundColor: theme.tags.season }}>407 EP</p>
-            </div>
-          </div>
-          <div>
-            <img
-              src="https://media.senscritique.com/media/000017303103/1200/black_clover.jpg"
-              alt="trend"
-            />
-            <p
-              className="trend-season-info"
-              style={{ backgroundColor: theme.tags.season }}
-            >
-              S17
-            </p>
-            <div>
-              <p style={{ backgroundColor: theme.tags.season }}>
-                <StarIcon />
-                7.7
-              </p>
-              <p style={{ backgroundColor: theme.tags.season }}>407 EP</p>
-            </div>
-          </div>
-          <div>
-            <img
-              src="https://fr.web.img5.acsta.net/c_310_420/pictures/19/09/18/13/46/0198270.jpg"
-              alt="trend"
-            />
-            <p
-              className="trend-season-info"
-              style={{ backgroundColor: theme.tags.season }}
-            >
-              S17
-            </p>
-            <div>
-              <p style={{ backgroundColor: theme.tags.season }}>
-                <StarIcon />
-                7.7
-              </p>
-              <p style={{ backgroundColor: theme.tags.season }}>407 EP</p>
-            </div>
-          </div>
-          <div>
-            <img
-              src="https://furansujapon.com/wp-content/uploads/2021/12/black-clover-une.jpg"
-              alt="trend"
-            />
-            <p
-              className="trend-season-info"
-              style={{ backgroundColor: theme.tags.season }}
-            >
-              S17
-            </p>
-            <div>
-              <p style={{ backgroundColor: theme.tags.season }}>
-                <StarIcon />
-                7.7
-              </p>
-              <p style={{ backgroundColor: theme.tags.season }}>407 EP</p>
-            </div>
-          </div>
-          <div>
-            <img
-              src="https://images.alphacoders.com/605/605592.png"
-              alt="trend"
-            />
-            <p
-              className="trend-season-info"
-              style={{ backgroundColor: theme.tags.season }}
-            >
-              S17
-            </p>
-            <div>
-              <p style={{ backgroundColor: theme.tags.season }}>
-                <StarIcon />
-                7.7
-              </p>
-              <p style={{ backgroundColor: theme.tags.season }}>407 EP</p>
-            </div>
-          </div>
-          <div>
-            <img
-              src="https://fr.web.img5.acsta.net/c_310_420/pictures/19/09/18/13/46/0198270.jpg"
-              alt="trend"
-            />
-            <p
-              className="trend-season-info"
-              style={{ backgroundColor: theme.tags.season }}
-            >
-              S17
-            </p>
-            <div>
-              <p style={{ backgroundColor: theme.tags.season }}>
-                <StarIcon />
-                7.7
-              </p>
-              <p style={{ backgroundColor: theme.tags.season }}>407 EP</p>
-            </div>
-          </div>
-          <div>
-            <img
-              src="https://static.wikia.nocookie.net/naruto/images/1/1b/Mode_Baryon.png/revision/latest?cb=20210926143548&path-prefix=fr"
-              alt="trend"
-            />
-            <p
-              className="trend-season-info"
-              style={{ backgroundColor: theme.tags.season }}
-            >
-              S17
-            </p>
-            <div>
-              <p style={{ backgroundColor: theme.tags.season }}>
-                <StarIcon />
-                7.7
-              </p>
-              <p style={{ backgroundColor: theme.tags.season }}>407 EP</p>
-            </div>
-          </div>
-          <div>
-            <img
-              src="https://fr.web.img5.acsta.net/c_310_420/pictures/19/09/18/13/46/0198270.jpg"
-              alt="trend"
-            />
-            <p
-              className="trend-season-info"
-              style={{ backgroundColor: theme.tags.season }}
-            >
-              S17
-            </p>
-            <div>
-              <p style={{ backgroundColor: theme.tags.season }}>
-                <StarIcon />
-                7.7
-              </p>
-              <p style={{ backgroundColor: theme.tags.season }}>407 EP</p>
-            </div>
-          </div>
-          <div>
-            <img
-              src="https://fr.web.img5.acsta.net/c_310_420/pictures/19/09/18/13/46/0198270.jpg"
-              alt="trend"
-            />
-            <p
-              className="trend-season-info"
-              style={{ backgroundColor: theme.tags.season }}
-            >
-              S17
-            </p>
-            <div>
-              <p style={{ backgroundColor: theme.tags.season }}>
-                <StarIcon />
-                7.7
-              </p>
-              <p style={{ backgroundColor: theme.tags.season }}>407 EP</p>
-            </div>
-          </div>
-          <div>
-            <img
-              src="https://fr.web.img5.acsta.net/c_310_420/pictures/19/09/18/13/46/0198270.jpg"
-              alt="trend"
-            />
-            <p
-              className="trend-season-info"
-              style={{ backgroundColor: theme.tags.season }}
-            >
-              S17
-            </p>
-            <div>
-              <p style={{ backgroundColor: theme.tags.season }}>
-                <StarIcon />
-                7.7
-              </p>
-              <p style={{ backgroundColor: theme.tags.season }}>407 EP</p>
-            </div>
-          </div>
+          {dataTrends.map((anime) => (
+            <TrendsComponent key={anime} anime={anime} />
+          ))}
         </div>
       </div>
     </section>
