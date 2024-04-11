@@ -745,6 +745,17 @@
       margin-right: 10px;
       align-items: center;
 
+      input {
+        color: white;
+        flex: 1 1;
+        border: none;
+        background-color: transparent;
+        font-size: 14px;
+        padding: 8px 12px;
+        resize: none;
+        overflow-y: auto;
+      }
+
       button {
         width: 60px;
         background-color: rgb(207, 40, 40);
