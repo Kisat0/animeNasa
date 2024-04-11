@@ -6,8 +6,6 @@ import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useEffect, useState } from "react";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Loader from "../../components/loader/loader";
 import Navbar from "../../components/navbar/Navbar";
 import axios from "axios";
@@ -823,7 +821,7 @@ function PlayerPage() {
           </div>
 
           <div className="player-comment">
-            <Comment />
+            <Comment animeColor={anime.color} />
           </div>
 
           <svg style={{ display: "none" }}>

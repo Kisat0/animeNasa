@@ -21,6 +21,21 @@
   flex-direction: row;
   font-weight: bold;
   justify-content: space-between;
+  align-items: center;
+
+  p {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+  }
+
+  & > div {
+    display: flex;
+    gap: 10px;
+    flex-direction: row;
+    align-items: center;
+  }
 }
 .comment-date {
   font-weight: lighter;
@@ -34,6 +49,3 @@
   margin-top: 2.5rem;
 }
 
-.clicked {
-  color: blue;
-}

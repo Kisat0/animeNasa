@@ -7,8 +7,9 @@ import { useUser } from "../../utils/useUser";
 import CommentInput from "../commentInput/CommentInput";
 
 import "./Comment.scss";
+import { DislikeIcon, LikeIcon } from "../../utils/Icons";
 
-function Comment() {
+function Comment({animeColor}) {
   const [comments, setComments] = useState([]);
   const [replies, setReplies] = useState([]);
   const [showReplies, setShowReplies] = useState({});
@@ -269,28 +270,44 @@ function Comment() {
                   </div>
                   <p className="comment-text">{comment.text}</p>
                   <div className="comment-infos-bottom">
-                    <p
-                      className={
-                        "comment-like" +
-                        (comment.users_like.includes(user._id)
-                          ? " clicked"
-                          : "")
-                      }
-                      onClick={() => toggleLike(comment._id)}
-                    >
-                      Likes: {comment.like}
-                    </p>
-                    <p
-                      className={
-                        "comment-dislike" +
-                        (comment.users_dislike.includes(user._id)
-                          ? " clicked"
-                          : "")
-                      }
-                      onClick={() => toggleDislike(comment._id)}
-                    >
-                      Dislikes: {comment.dislike}
-                    </p>
+                    <div>
+                      <p
+                        className={"comment-like"}
+                        style={{
+                          color: comment.users_like.includes(user._id)
+                            ? animeColor
+                            : "white",
+                        }}
+                        onClick={() => toggleLike(comment._id)}
+                      >
+                        <LikeIcon
+                          color={
+                            comment.users_like.includes(user._id)
+                              ? animeColor
+                              : "white"
+                          }
+                        />{" "}
+                        {comment.like}
+                      </p>
+                      <p
+                        className={
+                          "comment-dislike" +
+                          (comment.users_dislike.includes(user._id)
+                            ? " clicked"
+                            : "")
+                        }
+                        onClick={() => toggleDislike(comment._id)}
+                      >
+                        <DislikeIcon
+                          color={
+                            comment.users_dislike.includes(user._id)
+                              ? animeColor
+                              : "white"
+                          }
+                        />{" "}
+                        {comment.dislike}
+                      </p>
+                    </div>
                     {comment.reply.length > 0 && (
                       <p
                         className="comment-reply"
