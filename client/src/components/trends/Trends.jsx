@@ -116,8 +116,8 @@ const Trends = ({color}) => {
           </span>
         </div>
         <div className="trend-carousel-items">
-          {dataTrends.map((anime) => (
-            <TrendsComponent key={anime} anime={anime} />
+          {dataTrends.map((anime,index) => (
+            <TrendsComponent key={index} anime={anime} />
           ))}
         </div>
       </div>

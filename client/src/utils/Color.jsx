@@ -10,12 +10,9 @@ export const colorDarker = (color) => {
 
 //! ne pas delete
 /* function getDominantColor(imagePath) {
-  encodeImageToBase64(imagePath).then((base64Image) => {
-    if (base64Image) {
       return new Promise((resolve, reject) => {
         const img = new Image();
         img.crossOrigin = "Anonymous";
-        img.src = base64Image;
 
         // execute when image is loaded
         img.onload = function () {
@@ -114,32 +111,6 @@ export const colorDarker = (color) => {
     }
   });
 }
-
-const encodeImageToBase64 = async (imageUrl) => {
-  return fetch(imageUrl)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(
-          `Error fetching image from URL: ${response.status} ${response.statusText}`
-        );
-      }
-      console.log("meh");
-      return response.arrayBuffer();
-    })
-    .then((buffer) => {
-      const base64String = btoa(
-        new Uint8Array(buffer).reduce(
-          (data, byte) => data + String.fromCharCode(byte),
-          ""
-        )
-      );
-      return `data:image/jpeg;base64,${base64String}`;
-    })
-    .catch((error) => {
-      console.error(`Error: ${error.message}`);
-      return null;
-    });
-};
 
 export default getDominantColor;
  */

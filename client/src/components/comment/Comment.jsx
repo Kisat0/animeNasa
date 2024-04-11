@@ -48,13 +48,13 @@ function Comment({animeColor,episodeID}) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (videoID && user.username && text.text) {
+      if (episodeID && user.username && text.text) {
         if (isReply) {
           await axios
             .post(`${process.env.REACT_APP_API_ADDRESS}/comment/reply`, {
               author: user.username,
               text: text.text,
-              videoID: videoID,
+              videoID: episodeID,
               reply_to: commentIDToReply,
             })
             .then((response) => {
@@ -74,7 +74,7 @@ function Comment({animeColor,episodeID}) {
         } else {
           await axios
             .post(`${process.env.REACT_APP_API_ADDRESS}/comment/`, {
-              videoID: videoID,
+              videoID: episodeID,
               author: user.username,
               text: text.text,
             })

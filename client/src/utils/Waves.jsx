@@ -77,7 +77,7 @@ export const Wave2 = ({ className, color }) => {
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
-      <g clip-path="url(#clip0_240_262)">
+      <g clipPath="url(#clip0_240_262)">
         <mask
           id="mask0_240_262"
           maskUnits="userSpaceOnUse"
