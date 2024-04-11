@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Message from "./Message";
 
 import "./PreviewChat.scss";
@@ -6,8 +6,8 @@ import { useUser } from "../../utils/useUser";
 
 const PreviewChat = ({ episode }) => {
   const [messages, setMessages] = useState([]);
-  const { user } = useUser();
   const [ws, setWs] = useState(null);
+  const { user } = useUser();
 
   useEffect(() => {
     const ws = new WebSocket("ws://localhost:5001");
@@ -15,6 +15,7 @@ const PreviewChat = ({ episode }) => {
     ws.onopen = () => {
       console.log("Connected to server");
       setWs(ws);
+
       ws.send(
         JSON.stringify({ type: "join", episode: episode._id, user: user._id })
       );
@@ -24,18 +25,10 @@ const PreviewChat = ({ episode }) => {
       setMessages(data.chat);
     };
 
-    document
-      .querySelector(".preview-chat-input input")
-      .addEventListener("keypress", (e) => {
-        if (e.key === "Enter") {
-          sendMessage();
-        }
-      });
-
     return () => {
       ws.close();
     };
-  }, []);
+  }, [episode._id, user._id]);
 
   const sendMessage = () => {
     const message = document.querySelector(".preview-chat-input input").value;
@@ -57,6 +50,7 @@ const PreviewChat = ({ episode }) => {
       document.querySelector(".preview-chat-input input").value = "";
     }
   };
+
   return (
     <div className="preview-chat-container">
       <div className="preview-chat-content">
@@ -73,7 +67,7 @@ const PreviewChat = ({ episode }) => {
           ))}
       </div>
       <div className="preview-chat-input">
-        <input type="text" placeholder="Envoyer un message" />
+        <input type="text" placeholder="Envoyer un message" onKeyDown={(e) => e.key === "Enter" && sendMessage()} />
         <button onClick={sendMessage}>Envoyer</button>
       </div>
     </div>
