@@ -57,14 +57,16 @@ const Navbar = ({ color }) => {
           <DiscordIcon color={color} />
         </li>
         {!isLoggedIn ? (
-          <li>
-            <StyledLink to="/login" color={color}>
-              Connexion
-            </StyledLink>
-          </li>
-             <li>
-          <StyledLink to="/profil">Profil</StyledLink>
-        </li>
+          <>
+            <li>
+              <StyledLink to="/login" color={color}>
+                Connexion
+              </StyledLink>
+            </li>
+            <li>
+              <StyledLink to="/profil">Profil</StyledLink>
+            </li>
+          </>
         ) : (
           <li
             onClick={() => logoutUser()}
