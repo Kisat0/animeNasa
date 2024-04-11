@@ -76,7 +76,6 @@ function PlayerPage() {
       console.error("Error:", error);
       setError("Une erreur s'est produite lors de l'envoi de l'e-mail.");
     }
-    // console.log("Description du problème :", customReportDescription);
     setIsMenuReportOpen(false);
   };
 
@@ -535,12 +534,6 @@ function PlayerPage() {
         const response = await axios.put(
           `${process.env.REACT_APP_API_ADDRESS}/animes/views/${animeId}`
         );
-
-        if (response.status === 200) {
-          console.log("Le nombre de vues a été mis à jour avec succès !");
-        } else {
-          console.log("La requête a échoué avec le code :", response.status);
-        }
       } catch (error) {
         console.error(
           "Une erreur s'est produite lors de la mise à jour du nombre de vues :",
@@ -844,7 +837,7 @@ function PlayerPage() {
           </div>
 
           <div className="player-comment">
-            <Comment animeColor={anime.color} />
+            <Comment animeColor={anime.color} episodeID={episode._id}/>
           </div>
 
           <svg style={{ display: "none" }}>

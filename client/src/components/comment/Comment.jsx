@@ -9,7 +9,7 @@ import CommentInput from "../commentInput/CommentInput";
 import "./Comment.scss";
 import { DislikeIcon, LikeIcon } from "../../utils/Icons";
 
-function Comment({animeColor}) {
+function Comment({animeColor,episodeID}) {
   const [comments, setComments] = useState([]);
   const [replies, setReplies] = useState([]);
   const [showReplies, setShowReplies] = useState({});
@@ -22,14 +22,11 @@ function Comment({animeColor}) {
 
   comments.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  const url = window.location.href;
-  const videoID = url.substring(url.lastIndexOf("/") + 1);
-
   useEffect(() => {
     const fetchComments = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_ADDRESS}/comment/${videoID}`
+          `${process.env.REACT_APP_API_ADDRESS}/comment/${episodeID}`
         );
         const commentsWithReplyInput = response.data.map((comment) => ({
           ...comment,
@@ -38,7 +35,6 @@ function Comment({animeColor}) {
           reply: comment.reply || [],
         }));
         setComments(commentsWithReplyInput);
-        console.log(commentsWithReplyInput);
         setOpen(false);
       } catch (error) {
         console.error(error);
@@ -47,7 +43,7 @@ function Comment({animeColor}) {
     };
 
     fetchComments();
-  }, []);
+  }, [episodeID]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
