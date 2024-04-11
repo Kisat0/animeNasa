@@ -17,6 +17,7 @@ import Admin from "./pages/admin/Admin";
 import Search from "./pages/search/Search";
 import { useAuth } from "./utils/AuthContext";
 import ContactPage from "./pages/contact/Contact";
+import Profil from "./pages/profil/Profil";
 
 const PublicRoute = () => {
   const { isLoggedIn } = useAuth();
@@ -48,6 +49,7 @@ const Router = () => {
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/watch/:id" element={<Player />} />
             <Route path="/summary/:id" element={<Summary />} />
+            <Route path="/profil" element={<Profil />} />
           </Route>
           <Route path="*" element={<h1>Not Found</h1>} />
         </Routes>

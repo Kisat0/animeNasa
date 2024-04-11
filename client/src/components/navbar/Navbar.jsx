@@ -55,6 +55,9 @@ const Navbar = ({ color }) => {
         <li>
           <DiscordIcon color={color} />
         </li>
+        <li>
+          <StyledLink to="/profil">Profil</StyledLink>
+        </li>
         {!isLoggedIn && (
           <li>
             <StyledLink to="/login" color={color}>
