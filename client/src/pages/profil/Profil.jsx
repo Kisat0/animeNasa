@@ -141,7 +141,7 @@ const Profil = () => {
                         </div>
                     
                     <div className='profile-email'>
-                        <p className='txt-data-profile'>mail :‎ ‎ </p>
+                        <p className='txt-data-profile'>Mail :‎ ‎ </p>
                         {editingEmail ? (
                             <form className='form-profile' onSubmit={FormSubmit}>
                                 <input
@@ -162,7 +162,7 @@ const Profil = () => {
                         )}
                     </div>
                     <div className='profile-mdp'>
-                        <p>mdp :‎ ‎</p>
+                        <p>Mot de passe :‎ ‎</p>
                         {editingMdp ? (
                             <form onSubmit={FormSubmit}>
                                 <input
