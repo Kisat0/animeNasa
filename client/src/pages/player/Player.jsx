@@ -13,9 +13,10 @@ import { useTheme } from "@mui/material";
 import PreviewChat from "../../components/preview-chat/PreviewChat";
 import Comment from "../../components/comment/Comment";
 import { useUser } from "../../utils/useUser";
+import { useNavigate } from "react-router-dom";
+import { AnimeInfos, LeftArrow, RightArrow } from "../../utils/Icons";
 
 import "./Player.scss";
-import { AnimeInfos, LeftArrow, RightArrow } from "../../utils/Icons";
 
 var json = require("../../utils/fr.json");
 
@@ -34,6 +35,14 @@ function PlayerPage() {
 
   const { id } = useParams();
   const pageLink = window.location.href;
+  const navigate = useNavigate();
+
+  const ChangeEpisode = (episodeNumber) => {
+    const episodeId = anime.episodes[episodeNumber - 1]?._id;
+    if (episodeId) {
+      navigate(`/watch/${episodeId}`);
+    }
+  };
 
   const updateDataReport = (e) => {
     setDataReport({
@@ -449,7 +458,11 @@ function PlayerPage() {
       const video = document.getElementById("video");
       if (!video) return;
 
-      if (document.activeElement.tagName === "INPUT" || document.activeElement.tagName === "TEXTAREA") return;
+      if (
+        document.activeElement.tagName === "INPUT" ||
+        document.activeElement.tagName === "TEXTAREA"
+      )
+        return;
 
       const { key } = event;
       switch (key) {
@@ -562,7 +575,7 @@ function PlayerPage() {
     <>
       <div className="player-container">
         <img src={anime.thumbnail} alt="" className="background innershadow" />
-        <Navbar color={anime.color}/>
+        <Navbar color={anime.color} />
         <div className="menu-content">
           <div
             className="menu close"
@@ -663,10 +676,15 @@ function PlayerPage() {
                   <option>Lecteur 2</option>
                 </select>
               </div>
-              <button className="top-video-button">
-                <LeftArrow className="arrow-icons" />
-                {json.play.Previous}
-              </button>
+              {episode.number > 1 ? (
+                <button
+                  className="top-video-button"
+                  onClick={() => ChangeEpisode(episode.number - 1)}
+                >
+                  <LeftArrow className="arrow-icons" />
+                  {json.play.Previous}
+                </button>
+              ) : null}
               <button
                 className="top-video-button"
                 style={{
@@ -676,10 +694,15 @@ function PlayerPage() {
                 {json.play.Infos}
                 <AnimeInfos />
               </button>
-              <button className="top-video-button">
-                {json.play.Next}
-                <RightArrow className="arrow-icons" />
-              </button>
+              {anime.episodes.length >= episode.number + 1 ? (
+                <button
+                  className="top-video-button"
+                  onClick={() => ChangeEpisode(episode.number + 1)}
+                >
+                  {json.play.Next}
+                  <RightArrow className="arrow-icons" />
+                </button>
+              ) : null}
             </div>
             <div className="video-container" id="video-container">
               <div className="playback-animation" id="playback-animation">
@@ -710,7 +733,7 @@ function PlayerPage() {
                   </div>
                 </div>
               )}
-              
+
               <div
                 className="video-controls hidden"
                 id="video-controls"
