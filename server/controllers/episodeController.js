@@ -32,6 +32,19 @@ const getLatestEpisodes = async (req, res) => {
   res.json(episodes);
 };
 
+const getNewsEpisodes = async (req, res) => {
+  try {
+    const episodes = await Episode.find()
+      .sort({ releaseDate: -1 })
+      .limit(20);
+
+    res.json(episodes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+}
+
 const getEpisodesByAnime = async (req, res) => {
   const { animeId } = req.params;
   const episodes = await Episode.find({ animeId });
@@ -88,6 +101,38 @@ const deleteEpisode = async (req, res) => {
   }
 };
 
+const getNumberSeasons = async (req, res) => {
+  try {
+    const seasonList = [];
+    const { animeId } = req.params;
+    const episodes = await Episode.find({ anime: { $eq: animeId } })
+    for (const episode of episodes) {
+      const season = episode.season;
+      if (!seasonList.includes(season)) {
+        seasonList.push(season);
+      }
+    }
+
+    res.json(seasonList);
+  } catch (error) {
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+const getEpisodesBySeason = async (req, res) => {
+  try {
+    const { animeId } = req.params;
+    const season = parseInt(req.params.season);
+    const episodes = await Episode.find({ anime: { $eq: animeId }, season: { $eq: season } })
+    res.json(episodes);
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+}
+
+
 module.exports = {
   getEpisodes,
   getEpisode,
@@ -96,4 +141,7 @@ module.exports = {
   updateEpisode,
   deleteEpisode,
   getLatestEpisodes,
+  getNewsEpisodes,
+  getNumberSeasons,
+  getEpisodesBySeason
 };

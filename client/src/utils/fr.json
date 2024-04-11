@@ -5,15 +5,17 @@
     "Previous": "Episode Précédent",
     "Reported-button": "Signaler",
     "Menu": "Menu Episode",
-    "SeeMore": "Voir plus"
+    "Infos": "Infos sur l'anime",
+    "SeeMore": "Voir plus",
+    "Season": "Saison",
+    "Episode": "Episode",
+    "ComingSoon": "Prochainement"
   },
-  "calendar":{
-
-  },
-  "summary":{
+  "calendar": {},
+  "summary": {
     "Episode": "Episode",
     "Duration": "Durée :",
-    "Description" : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure ab ut optio culpa blanditiis maxime ratione, coêrrupti qui impedit repellendus deleniti accusantium, cum quas fugiat ea similique quaerat illo nisi."
-    
-  }
+    "Description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure ab ut optio culpa blanditiis maxime ratione, coêrrupti qui impedit repellendus deleniti accusantium, cum quas fugiat ea similique quaerat illo nisi."
+  },
+  "search": "Rechercher un anime..."
 }

@@ -1,0 +1,51 @@
+.comment-content {
+  margin: 4.5% 5%;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+
+  & > div:last-child {
+    width: 100%;
+  }
+}
+
+.comment-infos-top {
+  display: flex;
+  flex-direction: row;
+  font-weight: bold;
+  justify-content: space-between;
+}
+
+.comment-infos-bottom {
+  display: flex;
+  flex-direction: row;
+  font-weight: bold;
+  justify-content: space-between;
+  align-items: center;
+
+  p {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+  }
+
+  & > div {
+    display: flex;
+    gap: 10px;
+    flex-direction: row;
+    align-items: center;
+  }
+}
+.comment-date {
+  font-weight: lighter;
+}
+
+.comment-text {
+  margin: 0.75rem 0;
+}
+
+.comment-list {
+  margin-top: 2.5rem;
+}
+

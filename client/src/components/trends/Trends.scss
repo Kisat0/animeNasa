@@ -1,100 +1,100 @@
 .trend-carousel {
-    margin-top: 30px;
-    max-width: 100%;
+  margin-top: 30px;
+  max-width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  transition: all 0.5s ease-in-out;
+  overflow: hidden;
+
+  .trend-carousel-items {
     display: flex;
     flex-flow: row nowrap;
-    align-items: center;
-    position: relative;
-    width: 100%;
     transition: all 0.5s ease-in-out;
-    overflow: hidden;
+    padding-left: 60px;
 
-    .trend-carousel-items {
+    & > div {
+      position: relative;
+      overflow: hidden;
+      width: 200px;
+      height: 300px;
+      border-radius: 20px;
+      display: flex;
+      flex-flow: column nowrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin: 0 10px;
+      cursor: pointer;
+
+      img {
+        position: absolute;
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+        transition: all 0.3s ease;
+      }
+
+      img:hover {
+        transform: scale(1.2);
+      }
+
+      .trend-season-info {
+        margin-top: 10px;
+        margin-left: 5px;
+      }
+
+      p {
+        position: relative;
+        z-index: 1;
+        font-family: "Inter";
+        font-size: 1.2rem;
+        border-radius: 10px;
+        padding: 4px;
         display: flex;
         flex-flow: row nowrap;
-        transition: all 0.5s ease-in-out;
-        padding-left: 60px;
+        align-items: center;
 
-        &>div {
-            position: relative;
-            overflow: hidden;
-            width: 200px;
-            height: 300px;
-            border-radius: 20px;
-            display: flex;
-            flex-flow: column nowrap;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin: 0 10px;
-            cursor: pointer;
-
-            img {
-                position: absolute;
-                object-fit: cover;
-                width: 100%;
-                height: 100%;
-
-            }
-
-            .trend-season-info {
-                margin-top: 10px;
-                margin-left: 5px;
-            }
-
-            p {
-                position: relative;
-                z-index: 1;
-                font-family: "Inter";
-                font-size: 1.2rem;
-                border-radius: 10px;
-                padding: 4px;
-                display: flex;
-                flex-flow: row nowrap;
-                align-items: center;
-
-                svg {
-                    margin-right: 5px;
-                }
-            }
-
-            div {
-                display: flex;
-                flex-flow: row nowrap;
-                justify-content: space-between;
-                width: 100%;
-                padding: 10px;
-
-            }
-
-
+        svg {
+          margin-right: 5px;
         }
-    }
+      }
 
-    .trend-carousel-arrows {
-        width: 100%;
-        position: absolute;
+      div {
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-between;
-        height: 100%;
-        align-items: center;
-
-        .trend-carousel-arrow {
-            z-index: 10;
-            background: black;
-            height: 100%;
-            display: flex;
-            flex-flow: row nowrap;
-            justify-content: center;
-            align-items: center;
-            width: 60px;
-            cursor: pointer;
-            margin-top: 0;
-
-            svg{
-                padding:10px;
-            }
-        }
+        width: 100%;
+        padding: 10px;
+      }
     }
+  }
 
+  .trend-carousel-arrows {
+    width: 100%;
+    position: absolute;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    height: 100%;
+    align-items: center;
+
+    .trend-carousel-arrow {
+      z-index: 10;
+      background: black;
+      height: 100%;
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: center;
+      align-items: center;
+      width: 60px;
+      cursor: pointer;
+      margin-top: 0;
+
+      svg {
+        padding: 10px;
+      }
+    }
+  }
 }

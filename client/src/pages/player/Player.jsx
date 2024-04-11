@@ -1,19 +1,18 @@
 import React, { useCallback } from "react";
 import { useParams } from "react-router";
-import backDrStone from "../../assets/images/1027254.jpg";
-import affiche from "../../assets/images/981906.jpg";
 import CloseIcon from "@mui/icons-material/Close";
 import { Link } from "react-router-dom";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import LogoutIcon from "@mui/icons-material/Logout";
-import { useEffect, useState } from "react";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import MenuIcon from "@mui/icons-material/Menu";import { useEffect, useState } from "react";
 import Loader from "../../components/loader/loader";
 import Navbar from "../../components/navbar/Navbar";
 import axios from "axios";
 import { useTheme } from "@mui/material";
+import PreviewChat from "../../components/preview-chat/PreviewChat";
+import Comment from "../../components/comment/Comment";
+import { useUser } from "../../utils/useUser";
+import { useNavigate } from "react-router-dom";
+import { AnimeInfos, LeftArrow, RightArrow } from "../../utils/Icons";
 
 import "./Player.scss";
 
@@ -24,11 +23,60 @@ function PlayerPage() {
   const [volumeValue, setVolumeValue] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [episode, setEpisode] = useState(null);
-  const [source, setSource] = useState("");
   const [anime, setAnime] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [isComingSoon, setIsComingSoon] = useState(false);
+  const [isMenuReportOpen, setIsMenuReportOpen] = useState(false);
+  const [dataReport, setDataReport] = useState({});
+  const { user } = useUser();
+  const [episodeBySeason, setEpisodeBySeason] = useState([]);
+  const [error, setError] = useState('');
 
   const { id } = useParams();
+  const pageLink = window.location.href;
+  const navigate = useNavigate();
+
+  const ChangeEpisode = (episodeNumber) => {
+    const episodeId = anime.episodes[episodeNumber - 1]?._id;
+    if (episodeId) {
+      navigate(`/watch/${episodeId}`);
+    }
+  };
+
+  const updateDataReport = (e) => {
+    setDataReport({
+      user,
+      ...dataReport,
+      pageLink,
+      [e.target.name]: `${e.target.value}`,
+    });
+  };
+
+  const CustomReportValidation = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_ADDRESS}/connection/reportEpisode`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataReport),
+        }
+      );
+      if (response.ok) {
+        const responseData = await response.json();
+        setSuccessMessage(`L'email a été envoyé`);
+      } else {
+        const responseData = await response.json();
+        setError(responseData.message);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setError("Une erreur s'est produite lors de l'envoi de l'e-mail.");
+    }
+    setIsMenuReportOpen(false);
+  };
 
   const closeMenu = () => {
     const menu = document.querySelector(".menu");
@@ -208,8 +256,10 @@ function PlayerPage() {
 
     if (!isPlaying) {
       video.play();
+      setVideoWorks(true);
     } else {
       video.pause();
+      setVideoWorks(false);
     }
     updatePlayButton();
     animatePlayback();
@@ -381,9 +431,20 @@ function PlayerPage() {
   }
 
   useEffect(() => {
+    //? Temporary fix for the coming soon feature associate with the calendar
+    if (window.location.href.includes("isComingSoon=true")) {
+      setIsComingSoon(true);
+    }
+    else setIsComingSoon(false);
+
     window.addEventListener(
       "keydown",
       function (e) {
+        if (
+          ["input", "textarea"].indexOf(e.target.tagName.toLowerCase()) > -1
+        ) {
+          return;
+        }
         if (
           ["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].indexOf(
             e.code
@@ -400,6 +461,12 @@ function PlayerPage() {
     function keyboardShortcuts(event) {
       const video = document.getElementById("video");
       if (!video) return;
+
+      if (
+        document.activeElement.tagName === "INPUT" ||
+        document.activeElement.tagName === "TEXTAREA"
+      )
+        return;
 
       const { key } = event;
       switch (key) {
@@ -447,7 +514,7 @@ function PlayerPage() {
     return () => {
       document.removeEventListener("keyup", keyboardShortcuts);
     };
-  }, [decreaseVol, increaseVol, togglePlay]);
+  }, [decreaseVol, increaseVol, togglePlay, window.location.href]);
 
   useEffect(() => {
     const fetchEpisode = async () => {
@@ -457,14 +524,42 @@ function PlayerPage() {
         );
         setEpisode(response.data);
         fetchAnime(response.data.anime);
+        addView(response.data.anime);
         const videoElement = document.getElementById("video");
         if (videoElement) {
           initializeVideo(response.data.source);
-          setSource(response.data.source);
         }
       } catch (error) {
         console.error(error);
       }
+    };
+
+    const addView = async (animeId) => {
+      try {
+        await axios.put(
+          `${process.env.REACT_APP_API_ADDRESS}/animes/views/${animeId}`
+        );
+      } catch (error) {
+        console.error(
+          "Une erreur s'est produite lors de la mise à jour du nombre de vues :",
+          error
+        );
+      }
+    };
+
+    const organiseEpisodesBySeason = (animes) => {
+      const episodes = animes.episodes;
+      const episodesBySeason = [];
+
+      episodes.forEach((episode) => {
+        const season = episode.season - 1;
+        if (!episodesBySeason[season]) {
+          episodesBySeason[season] = [];
+        }
+        episodesBySeason[season].push(episode);
+      });
+
+      setEpisodeBySeason(episodesBySeason);
     };
 
     const fetchAnime = async (animeId) => {
@@ -474,6 +569,7 @@ function PlayerPage() {
         );
 
         setAnime(response.data);
+        organiseEpisodesBySeason(response.data);
       } catch (error) {
         console.error(error);
       }
@@ -491,280 +587,381 @@ function PlayerPage() {
 
   return (
     <>
-      <img src={anime.thumbnail} alt="" className="background" />
-      <Navbar />
-      <div className="menu-content">
-        <div
-          className="menu close"
-          style={{
-            backgroundColor: isOpen
-              ? theme.background.default
-              : theme.nav.primary,
-          }}
-        >
-          <div className="close-cross">
-            <CloseIcon className="close-icon" onClick={closeMenu} />
-          </div>
-          <div className="short-menu">
-            <div className="short-menu-header">
-              <LogoutIcon className="open-icon" onClick={openMenu} />
+      <div className="player-container">
+        <img src={anime.thumbnail} alt="" className="background innershadow" />
+        <Navbar color={anime.color} />
+        <div className="menu-content">
+          <div
+            className="menu close"
+            style={{
+              backgroundColor: isOpen
+                ? theme.background.default
+                : theme.nav.primary,
+            }}
+          >
+            <div className="close-cross">
+              <CloseIcon className="close-icon" onClick={closeMenu} />
             </div>
-            <ul>
-              {anime.episodes.map((episode, index) => (
-                <li key={index}>
-                  <Link to={`/watch/${episode._id}`} key={index}>
-                    EP. {index + 1}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="header-menu">
-            <img
-              src={anime.thumbnail}
-              alt="background anime"
-              className="back-img"
-            />
-            <div className="header-back-layout">
-              <div className="anime-infos">
-                <img src={anime.poster} alt="poster" />
-                <div className="anime-infos-text">
-                  <span>{anime.title}</span>
-                  <p>
-                    {anime.description}
-                    <Link to="/summary">{json.play.SeeMore}</Link>
-                  </p>
-                </div>
+            <div className="short-menu">
+              <div className="short-menu-header">
+                <MenuIcon className="open-icon" onClick={openMenu} />
               </div>
-              <div className="others-informations">
-                <div className="tags">
-                  <span className="genre-tag">
-                    {" "}
-                    <LocalOfferIcon />
-                    Genres:
-                    {anime?.categories?.map((genre) => (
-                      <span key={genre}>{genre}</span>
-                    ))}
-                  </span>
-                  <span className="date-tag">
-                    <CalendarMonthIcon /> Date: {anime.releaseDate}
-                  </span>
-                </div>
-                <span className="lang-tag">{episode.lang.toUpperCase()}</span>
-              </div>
-            </div>
-          </div>
-          <div className="body-menu">
-            <div className="season-content">
-              <p className="season-number">SAISON 1</p>
               <ul>
-                {anime.episodes.map((episode, index) => (
+                {episodeBySeason.map((season, index) => (
                   <li key={index}>
-                    <Link to={`/watch/${episode._id}`} key={index}>
-                      {episode.title}
-                    </Link>
+                    <span>S{index + 1}</span>
+                    <ul>
+                      {season.map((episode, index) => (
+                        <li
+                          key={index}
+                          onClick={() => navigate(`/watch/${episode._id}`)}
+                        >
+                          <Link to={`/watch/${episode._id}`} key={index}>
+                            EP. {episode.number}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
                   </li>
                 ))}
               </ul>
             </div>
+
+            <div className="header-menu">
+              <img
+                src={anime.thumbnail}
+                alt="background anime"
+                className="back-img"
+              />
+              <div className="header-back-layout">
+                <div className="anime-infos">
+                  {/*                   <img src={anime.poster} alt="poster" />
+                   */}{" "}
+                  <div className="anime-infos-text">
+                    <span>{anime.title}</span>
+                    <p>
+                      {anime.description.length > 300
+                        ? anime.description.substring(0, 300) + "... "
+                        : anime.description}
+                      <Link to={`/summary/${anime._id}`}>
+                        {json.play.SeeMore}
+                      </Link>
+                    </p>
+
+                    <div className="others-informations">
+                      <div className="tags">
+                        <span className="genre-tag">
+                          {anime?.categories
+                            ?.slice(0, 4)
+                            .map((category, index) => (
+                              <span
+                                key={index}
+                                style={{
+                                  backgroundColor: theme.tags.primary,
+                                }}
+                              >
+                                {category}
+                              </span>
+                            ))}
+                        </span>
+                        <span className="date-tag">
+                          <CalendarMonthIcon />{" "}
+                          {new Date(anime.releaseDate).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <span className="lang-tag">
+                        {episode.lang.toUpperCase()}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="body-menu">
+              <div className="season-content">
+                {episodeBySeason.map((season, index) => (
+                  <div key={index} className="season">
+                    <p>Saison {index + 1}</p>
+                    <ul>
+                      {season.map((episode, index) => (
+                        <li
+                          key={index}
+                          onClick={() => navigate(`/watch/${episode._id}`)}
+                        >
+                          <Link to={`/watch/${episode._id}`} key={index}>
+                            {episode.title}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="player-content">
-        <div className="container-watch">
-          <h1 className="anime-episode-title">{anime.title + " EPISODE " + " " + episode.number + " " + episode.lang}</h1>
-          <div className="player-buttons">
-            <div className="player-button">
-              <p>{json.play.Player}</p>
-              <select className="top-video-button">
-                <option>Lecteur 1</option>
-                <option>Lecteur 2</option>
-              </select>
+        <div
+          className="player-content"
+          style={{
+            paddingRight: isComingSoon ? "0px" : "170px",
+            display: isComingSoon ? "flex" : "block",
+          }}
+        >
+          <div className="container-watch">
+            <h1 className="anime-episode-title">
+              {anime.title +
+                " EPISODE " +
+                " " +
+                episode.number +
+                " " +
+                episode.lang}
+            </h1>
+            <div className="player-buttons">
+              <div className="player-button">
+                {!isComingSoon ? (
+                  <select className="top-video-button">
+                    <option>Lecteur 1</option>
+                    <option>Lecteur 2</option>
+                  </select>
+                ) : null}
+              </div>
+              {episode.number > 1 ? (
+                <button
+                  className="top-video-button"
+                  onClick={() => ChangeEpisode(episode.number - 1)}
+                >
+                  <LeftArrow className="arrow-icons" />
+                  {json.play.Previous}
+                </button>
+              ) : null}
+              <button
+                className="top-video-button"
+                style={{
+                  backgroundColor: anime.color ? anime.color : "#000",
+                }}
+                onClick={() => navigate(`/summary/${anime._id}`)}
+              >
+                {json.play.Infos}
+                <AnimeInfos />
+              </button>
+              {anime.episodes.length >= episode.number + 1 ? (
+                <button
+                  className="top-video-button"
+                  onClick={() => ChangeEpisode(episode.number + 1)}
+                >
+                  {json.play.Next}
+                  <RightArrow className="arrow-icons" />
+                </button>
+              ) : null}
             </div>
-            <button className="top-video-button">
-              <ArrowBackIosIcon className="arrow-icons" />
-              {json.play.Previous}
-            </button>
-            <button className="top-video-button">
-              {json.play.Next}
-              <ArrowForwardIosIcon className="arrow-icons" />
-            </button>
-          </div>
-          <div className="video-container" id="video-container">
-            <div className="playback-animation" id="playback-animation">
-              <svg className="playback-icons">
-                <use href="#play-icon"></use>
-                <use className="hidden" href="#pause"></use>
-              </svg>
-            </div>
-            {!isLoading ? (
-              <video
-                className="video"
-                id="video"
-                poster={anime.poster}
-                preload="metadata"
-                onTimeUpdate={updateProgress}
-                onVolumeChange={updateVolumeIcon}
-                onClick={togglePlay}
+
+            <div
+              className="video-container"
+              id="video-container"
+              style={{
+                height: isComingSoon ? "600px" : "100%",
+                backgroundImage: `url(${anime.poster})`,
+                boxShadow: isComingSoon
+                  ? "inset 0px 0px 1000px 1000px rgba(86, 86, 86, 0.48)"
+                  : "none",
+              }}
+            >
+              {!isComingSoon ? (
+                <div className="playback-animation" id="playback-animation">
+                  <svg className="playback-icons">
+                    <use href="#play-icon"></use>
+                    <use className="hidden" href="#pause"></use>
+                  </svg>
+                </div>
+              ) : (
+                <p className="coming-soon-player">{json.play.ComingSoon}</p>
+              )}
+
+              {!isLoading && !isComingSoon ? (
+                <video
+                  className="video"
+                  id="video"
+                  poster={anime.poster}
+                  preload="metadata"
+                  onTimeUpdate={updateProgress}
+                  onVolumeChange={updateVolumeIcon}
+                  onClick={togglePlay}
+                  onMouseEnter={showControls}
+                  onMouseLeave={hideControls}
+                  onLoadedMetadata={initDuration}
+                >
+                  <source src={episode.source} type="video/mp4"></source>
+                </video>
+              ) : null}
+
+              <div
+                className="video-controls hidden"
+                id="video-controls"
                 onMouseEnter={showControls}
                 onMouseLeave={hideControls}
-                onLoadedMetadata={initDuration}
               >
-                <source src={episode.source} type="video/mp4"></source>
-              </video>
-            ) : (
-              <div className="loader-container">
-                <div className="loader">
-                  <Loader size={400} color="#a3a3a3" />
+                <div className="video-progress">
+                  <progress id="progress-bar" value={0} min={0}></progress>
+                  <input
+                    className="seek"
+                    id="seek"
+                    value={0}
+                    min={0}
+                    type="range"
+                    step={1}
+                    onMouseMove={updateSeekTooltip}
+                    onInput={skipAhead}
+                  ></input>
+                  <div className="seek-tooltip" id="seek-tooltip">
+                    00:00
+                  </div>
                 </div>
-              </div>
-            )}
-            ;
-            <div
-              className="video-controls hidden"
-              id="video-controls"
-              onMouseEnter={showControls}
-              onMouseLeave={hideControls}
-            >
-              <div className="video-progress">
-                <progress id="progress-bar" value={0} min={0}></progress>
-                <input
-                  className="seek"
-                  id="seek"
-                  value={0}
-                  min={0}
-                  type="range"
-                  step={1}
-                  onMouseMove={updateSeekTooltip}
-                  onInput={skipAhead}
-                ></input>
-                <div className="seek-tooltip" id="seek-tooltip">
-                  00:00
-                </div>
-              </div>
 
-              <div className="bottom-controls">
-                <div className="left-controls">
-                  <button
-                    className="lectorbutton"
-                    data-title="Play"
-                    id="play"
-                    onClick={togglePlay}
-                  >
-                    <svg className="playback-icons lectorsvg">
-                      <use href="#play-icon"></use>
-                      <use className="hidden" href="#pause"></use>
-                    </svg>
-                  </button>
-
-                  <div className="volume-controls">
+                <div className="bottom-controls">
+                  <div className="left-controls">
                     <button
-                      data-title="Mute (m)"
-                      className="volume-button lectorbutton"
-                      id="volume-button"
-                      onClick={toggleMute}
+                      className="lectorbutton"
+                      data-title="Play"
+                      id="play"
+                      onClick={togglePlay}
                     >
-                      <svg className="lectorsvg">
-                        <use className="hidden" href="#volume-mute"></use>
-                        <use className="hidden" href="#volume-low"></use>
-                        <use href="#volume-high"></use>
+                      <svg className="playback-icons lectorsvg">
+                        <use href="#play-icon"></use>
+                        <use className="hidden" href="#pause"></use>
                       </svg>
                     </button>
 
-                    <input
-                      className="volume"
-                      id="volume"
-                      onInput={updateVolume}
-                      value={volumeValue}
-                      data-mute={0.5}
-                      type="range"
-                      max={1}
-                      min={0}
-                      step={0.01}
-                    ></input>
+                    <div className="volume-controls">
+                      <button
+                        data-title="Mute (m)"
+                        className="volume-button lectorbutton"
+                        id="volume-button"
+                        onClick={toggleMute}
+                      >
+                        <svg className="lectorsvg">
+                          <use className="hidden" href="#volume-mute"></use>
+                          <use className="hidden" href="#volume-low"></use>
+                          <use href="#volume-high"></use>
+                        </svg>
+                      </button>
+
+                      <input
+                        className="volume"
+                        id="volume"
+                        onInput={updateVolume}
+                        value={volumeValue}
+                        data-mute={0.5}
+                        type="range"
+                        max={1}
+                        min={0}
+                        step={0.01}
+                      ></input>
+                    </div>
+
+                    <div className="time">
+                      <time id="time-elapsed">00:00</time>
+                      <span> / </span>
+                      <time id="duration">00:00</time>
+                    </div>
                   </div>
 
-                  <div className="time">
-                    <time id="time-elapsed">00:00</time>
-                    <span> / </span>
-                    <time id="duration">00:00</time>
+                  <div className="right-controls">
+                    <button
+                      data-title="Loop (l)"
+                      className="loop-button lectorbutton"
+                      id="loop-button"
+                    ></button>
+                    <button
+                      data-title="PIP (p)"
+                      className="pip-button lectorbutton"
+                      id="pip-button"
+                      onClick={togglePip}
+                    >
+                      <svg>
+                        <use href="#pip"></use>
+                      </svg>
+                    </button>
+                    <button
+                      data-title="Full screen (f)"
+                      className="fullscreen-button lectorbutton"
+                      id="fullscreen-button"
+                      onClick={toggleFullScreen}
+                    >
+                      <svg>
+                        <use href="#fullscreen"></use>
+                        <use href="#fullscreen-exit" className="hidden"></use>
+                      </svg>
+                    </button>
                   </div>
-                </div>
-
-                <div className="right-controls">
-                  <button
-                    data-title="Loop (l)"
-                    className="loop-button lectorbutton"
-                    id="loop-button"
-                  ></button>
-                  <button
-                    data-title="PIP (p)"
-                    className="pip-button lectorbutton"
-                    id="pip-button"
-                    onClick={togglePip}
-                  >
-                    <svg>
-                      <use href="#pip"></use>
-                    </svg>
-                  </button>
-                  <button
-                    data-title="Full screen (f)"
-                    className="fullscreen-button lectorbutton"
-                    id="fullscreen-button"
-                    onClick={toggleFullScreen}
-                  >
-                    <svg>
-                      <use href="#fullscreen"></use>
-                      <use href="#fullscreen-exit" className="hidden"></use>
-                    </svg>
-                  </button>
                 </div>
               </div>
             </div>
+            {!isComingSoon ? (
+                    <div className="bottom-buttons">
+              {isMenuReportOpen && (
+                <div className="menu-report">
+                  <input
+                    type="identifier"
+                    placeholder="Décrire le problème..."
+                    name="customReportDescription"
+                    required
+                    variant="outlined"
+                    onChange={updateDataReport}
+                  />
+                  <button onClick={CustomReportValidation}>Valider</button>
+                </div>
+              )}
+              <button className="reported-button" onClick={() => setIsMenuReportOpen(!isMenuReportOpen)}>
+                {json.play["Reported-button"]}
+              </button>
+            </div>
+            ) : null}
           </div>
-          <div className="bottom-buttons">
-            <button className="reported-button">
-              {json.play["Reported-button"]}
-            </button>
-          </div>
+
+          {!isComingSoon ? (
+            <div className="player-comment">
+              <Comment animeColor={anime.color} episodeID={episode._id} />
+            </div>
+          ) : (
+            <PreviewChat episode={episode} />
+          )}
+
+          <svg style={{ display: "none" }}>
+            <defs>
+              <symbol id="pause" viewBox="0 0 24 24">
+                <path d="M14.016 5.016h3.984v13.969h-3.984v-13.969zM6 18.984v-13.969h3.984v13.969h-3.984z"></path>
+              </symbol>
+
+              <symbol id="play-icon" viewBox="0 0 24 24">
+                <path d="M8.016 5.016l10.969 6.984-10.969 6.984v-13.969z"></path>
+              </symbol>
+
+              <symbol id="volume-high" viewBox="0 0 24 24">
+                <path d="M14.016 3.234q3.047 0.656 5.016 3.117t1.969 5.648-1.969 5.648-5.016 3.117v-2.063q2.203-0.656 3.586-2.484t1.383-4.219-1.383-4.219-3.586-2.484v-2.063zM16.5 12q0 2.813-2.484 4.031v-8.063q1.031 0.516 1.758 1.688t0.727 2.344zM3 9h3.984l5.016-5.016v16.031l-5.016-5.016h-3.984v-6z"></path>
+              </symbol>
+
+              <symbol id="volume-low" viewBox="0 0 24 24">
+                <path d="M5.016 9h3.984l5.016-5.016v16.031l-5.016-5.016h-3.984v-6zM18.516 12q0 2.766-2.531 4.031v-8.063q1.031 0.516 1.781 1.711t0.75 2.32z"></path>
+              </symbol>
+
+              <symbol id="volume-mute" viewBox="0 0 24 24">
+                <path d="M12 3.984v4.219l-2.109-2.109zM4.266 3l16.734 16.734-1.266 1.266-2.063-2.063q-1.547 1.313-3.656 1.828v-2.063q1.172-0.328 2.25-1.172l-4.266-4.266v6.75l-5.016-5.016h-3.984v-6h4.734l-4.734-4.734zM18.984 12q0-2.391-1.383-4.219t-3.586-2.484v-2.063q3.047 0.656 5.016 3.117t1.969 5.648q0 2.203-1.031 4.172l-1.5-1.547q0.516-1.266 0.516-2.625zM16.5 12q0 0.422-0.047 0.609l-2.438-2.438v-2.203q1.031 0.516 1.758 1.688t0.727 2.344z"></path>
+              </symbol>
+
+              <symbol id="fullscreen" viewBox="0 0 24 24">
+                <path d="M14.016 5.016h4.969v4.969h-1.969v-3h-3v-1.969zM17.016 17.016v-3h1.969v4.969h-4.969v-1.969h3zM5.016 9.984v-4.969h4.969v1.969h-3v3h-1.969zM6.984 14.016v3h3v1.969h-4.969v-4.969h1.969z"></path>
+              </symbol>
+
+              <symbol id="fullscreen-exit" viewBox="0 0 24 24">
+                <path d="M15.984 8.016h3v1.969h-4.969v-4.969h1.969v3zM14.016 18.984v-4.969h4.969v1.969h-3v3h-1.969zM8.016 8.016v-3h1.969v4.969h-4.969v-1.969h3zM5.016 15.984v-1.969h4.969v4.969h-1.969v-3h-3z"></path>
+              </symbol>
+
+              <symbol id="pip" viewBox="0 0 24 24">
+                <path d="M21 19.031v-14.063h-18v14.063h18zM23.016 18.984q0 0.797-0.609 1.406t-1.406 0.609h-18q-0.797 0-1.406-0.609t-0.609-1.406v-14.016q0-0.797 0.609-1.383t1.406-0.586h18q0.797 0 1.406 0.586t0.609 1.383v14.016zM18.984 11.016v6h-7.969v-6h7.969z"></path>
+              </symbol>
+            </defs>
+          </svg>
         </div>
-
-        <svg style={{ display: "none" }}>
-          <defs>
-            <symbol id="pause" viewBox="0 0 24 24">
-              <path d="M14.016 5.016h3.984v13.969h-3.984v-13.969zM6 18.984v-13.969h3.984v13.969h-3.984z"></path>
-            </symbol>
-
-            <symbol id="play-icon" viewBox="0 0 24 24">
-              <path d="M8.016 5.016l10.969 6.984-10.969 6.984v-13.969z"></path>
-            </symbol>
-
-            <symbol id="volume-high" viewBox="0 0 24 24">
-              <path d="M14.016 3.234q3.047 0.656 5.016 3.117t1.969 5.648-1.969 5.648-5.016 3.117v-2.063q2.203-0.656 3.586-2.484t1.383-4.219-1.383-4.219-3.586-2.484v-2.063zM16.5 12q0 2.813-2.484 4.031v-8.063q1.031 0.516 1.758 1.688t0.727 2.344zM3 9h3.984l5.016-5.016v16.031l-5.016-5.016h-3.984v-6z"></path>
-            </symbol>
-
-            <symbol id="volume-low" viewBox="0 0 24 24">
-              <path d="M5.016 9h3.984l5.016-5.016v16.031l-5.016-5.016h-3.984v-6zM18.516 12q0 2.766-2.531 4.031v-8.063q1.031 0.516 1.781 1.711t0.75 2.32z"></path>
-            </symbol>
-
-            <symbol id="volume-mute" viewBox="0 0 24 24">
-              <path d="M12 3.984v4.219l-2.109-2.109zM4.266 3l16.734 16.734-1.266 1.266-2.063-2.063q-1.547 1.313-3.656 1.828v-2.063q1.172-0.328 2.25-1.172l-4.266-4.266v6.75l-5.016-5.016h-3.984v-6h4.734l-4.734-4.734zM18.984 12q0-2.391-1.383-4.219t-3.586-2.484v-2.063q3.047 0.656 5.016 3.117t1.969 5.648q0 2.203-1.031 4.172l-1.5-1.547q0.516-1.266 0.516-2.625zM16.5 12q0 0.422-0.047 0.609l-2.438-2.438v-2.203q1.031 0.516 1.758 1.688t0.727 2.344z"></path>
-            </symbol>
-
-            <symbol id="fullscreen" viewBox="0 0 24 24">
-              <path d="M14.016 5.016h4.969v4.969h-1.969v-3h-3v-1.969zM17.016 17.016v-3h1.969v4.969h-4.969v-1.969h3zM5.016 9.984v-4.969h4.969v1.969h-3v3h-1.969zM6.984 14.016v3h3v1.969h-4.969v-4.969h1.969z"></path>
-            </symbol>
-
-            <symbol id="fullscreen-exit" viewBox="0 0 24 24">
-              <path d="M15.984 8.016h3v1.969h-4.969v-4.969h1.969v3zM14.016 18.984v-4.969h4.969v1.969h-3v3h-1.969zM8.016 8.016v-3h1.969v4.969h-4.969v-1.969h3zM5.016 15.984v-1.969h4.969v4.969h-1.969v-3h-3z"></path>
-            </symbol>
-
-            <symbol id="pip" viewBox="0 0 24 24">
-              <path d="M21 19.031v-14.063h-18v14.063h18zM23.016 18.984q0 0.797-0.609 1.406t-1.406 0.609h-18q-0.797 0-1.406-0.609t-0.609-1.406v-14.016q0-0.797 0.609-1.383t1.406-0.586h18q0.797 0 1.406 0.586t0.609 1.383v14.016zM18.984 11.016v6h-7.969v-6h7.969z"></path>
-            </symbol>
-          </defs>
-        </svg>
       </div>
     </>
   );

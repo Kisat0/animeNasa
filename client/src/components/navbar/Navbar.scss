@@ -4,20 +4,36 @@ nav {
   justify-content: space-between;
   width: 100%;
   align-items: center;
-  padding: 20px 50px;
+  padding: 15px 40px;
   position: fixed;
   z-index: 300;
 
   .logo {
     font-family: "KeroKero";
+    font-size: 30px;
+    color: #ffffff;
+  }
+
+  .logo:hover {
+    color: #ffffff;
   }
 
   ul {
     display: flex;
     flex-flow: row nowrap;
+    align-items: center;
     li {
       margin: 0 10px;
       list-style-type: none;
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+
+      a {
+        transition: all 0.3s ease;
+      }
     }
   }
 

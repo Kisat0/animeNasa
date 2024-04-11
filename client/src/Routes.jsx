@@ -1,4 +1,10 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  Outlet,
+} from "react-router-dom";
 import Home from "./pages/home/Home";
 import Player from "./pages/player/Player";
 import Summary from "./pages/summary/Summary";
@@ -9,25 +15,42 @@ import Login from "./pages/login/Login";
 import Signup from "./pages/signup/Signup";
 import Admin from "./pages/admin/Admin";
 import Search from "./pages/search/Search";
+import { useAuth } from "./utils/AuthContext";
+import ContactPage from "./pages/contact/Contact";
+import Profil from "./pages/profil/Profil";
+
+const PublicRoute = () => {
+  const { isLoggedIn } = useAuth();
+  return isLoggedIn ? <Navigate to="/" /> : <Outlet />;
+};
+
+const PrivateRoute = () => {
+  const { isLoggedIn } = useAuth();
+  return isLoggedIn ? <Outlet /> : <Navigate to="/login" />;
+};
 
 const Router = () => {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/calendar" element={<Calendar />} />
-          <Route path="/search" element={<Search />} />
-          <Route path="/news" element={<News />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          
-          <Route path="/admin" element={<Admin />} />
+          <Route element={<PublicRoute />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+          </Route>
 
-          <Route path="/watch/:id" element={<Player />} />
-          <Route path="/summary/:id" element={<Summary />} />
-
+          <Route element={<PrivateRoute />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/calendar" element={<Calendar />} />
+            <Route path="/search" element={<Search />} />
+            <Route path="/news" element={<News />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/watch/:id" element={<Player />} />
+            <Route path="/summary/:id" element={<Summary />} />
+            <Route path="/profil" element={<Profil />} />
+          </Route>
           <Route path="*" element={<h1>Not Found</h1>} />
         </Routes>
       </BrowserRouter>
@@ -35,4 +58,5 @@ const Router = () => {
     </>
   );
 };
+
 export default Router;

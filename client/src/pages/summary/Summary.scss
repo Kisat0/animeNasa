@@ -1,67 +1,85 @@
 .SummaryGlobal {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 30px;
 
+  .backgroundGrayscale {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    z-index: -1;
+    filter: blur(7px) grayscale(20%);
+  }
+
+  .AnimeInfos {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    width: 60%;
+    padding-left: 100px;
+    padding-top: 100px;
+    overflow-y: hidden;
+    height: 100vh;
 
-
-    .AnimeInfos {
-        
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        width: 60%;
-        padding-left: 100px;
-        padding-top: 50px;
-        
-        
-
-        &>img {
-            object-fit: cover;
-            width: 90%;
-            height: 40%;
-            border-radius: 15px;
-            
-        }
-
-        &>h1 {
-            font-size: 70px;
-            font-weight: bold;
-            text-shadow: 30%;
-        }
-
-        .genres {
-
-            display: flex;
-            flex-flow: row nowrap;
-            gap: 10px;
-            
-            &>h3 {
-                padding: 3px 10px;
-                border-radius: 10px;
-                font-size: 25px;
-            }
-        }
-        &>h3 {
-            width: 80%;
-            padding-top: 30px;
-        }
-    }
-
-    .SerieComponent {
-        width: 43%;
+    .imgSummary {
+      width: 100%;
+      height: clamp(300px, 30%, 400px);
+      & > img {
+        object-fit: cover;
+        width: 100%;
         height: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        padding-top: 100px;
+        border-radius: 30px;
+      }
     }
 
-    .SeasonList {
-        display: flex;
-        flex-flow: column nowrap;
-        gap: 10px;
-        padding-left: 15px;
-        padding-top: 100px;
+    & > h1 {
+      font-size: 70px;
+      font-weight: bold;
+      text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.71);
     }
 
+    .genres {
+      display: flex;
+      flex-flow: row nowrap;
+      gap: 10px;
+
+      & > h3 {
+        padding: 3px 10px;
+        border-radius: 10px;
+        font-size: 25px;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+    & > h3 {
+      padding-top: 30px;
+      font-size: 15px;
+      text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.71);
+    }
+  }
+
+  .SerieComponent {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-top: 100px;
+    padding-bottom: 50px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .SeasonList {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 100px;
+    overflow-y: hidden;
+    padding-bottom: 100px;
+  }
 }

@@ -58,6 +58,15 @@ const animeSchema = new Schema({
     required: false,
     default: [],
   },
+  // temporary fix for the frontend because of the cors issue
+  color: {
+    type: String,
+    required: true,
+  },
+  views: {
+    type: Number,
+    default: 0,
+  },
 });
 
 module.exports = mongoose.model("anime", animeSchema);

@@ -1,34 +1,53 @@
 .NewsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  border: 0.5px gray solid;
+  box-shadow: 0px 0px 10px 1px gray;
+  width: 100%;
+  min-height: 130px;
+  border-radius: 10px;
+  transition: all 0.2s 500ms;
+  cursor: pointer;
+
+  &:hover {
+    height: 140px;
+    background-color: white;
+    color: black;
+    box-shadow: none;
+    transform: scale(1.05);
+  }
+
+  .ImgNewsCompo {
+    width: 200px;
+    height: 100%;
+
+    .imgNewsComponent {
+      object-fit: cover;
+      width: 170px;
+      height: 100%;
+      border-radius: 10px 0 0 10px;
+    }
+  }
+}
+
+.NewsInfos {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  & > h1 {
+    font-size: 22px;
+  }
+
+  .EpisodeData {
     display: flex;
-    flex-direction: row;
-    gap: 40px;
-    border: 1px gray solid;
-    box-shadow: 1px gray ;
-    width: 500px;
-    height: 130px;
-    border-radius: 10px;
-    
-    
+    flex-flow: row nowrap;
+    gap: 5px;
 
-    &>img {
-        object-fit: cover;
-        width: 40%;
-        height: 100%;
+    & > p {
+      font-size: 20px;
     }
-
-    .NewsInfos {
-        display: flex;
-        flex-direction: column;
-        padding-top: 20px;
-
-        &>h1 {
-            padding-top: 10px;
-            font-size: 22px;
-        }
-
-        &>p {
-            padding-top: 12px;
-            font-size: 15px;
-        }
-    }
+  }
 }

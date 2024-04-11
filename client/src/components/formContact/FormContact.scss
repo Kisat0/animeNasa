@@ -1,0 +1,25 @@
+.div-form-contact {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: 2rem;
+    width: 100%;
+    padding: 2.5rem 0;
+    background-color: #1a1a27;
+    border-radius: 12px;
+    opacity: 0.9;
+  
+    .form-contact {
+      display: flex;
+      flex-direction: column;
+      gap: 20px; 
+    }
+  
+    .form-field {
+      width: 100%;
+    }
+  
+  }
+  

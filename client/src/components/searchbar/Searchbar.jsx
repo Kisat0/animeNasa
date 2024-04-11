@@ -4,6 +4,7 @@ import "./Searchbar.scss";
 import Results from "../results/Results";
 
 function Searchbar() {
+  var json = require("../../utils/fr.json");
   const [data, setData] = useState({});
   const [animes, setAnimes] = useState([]);
 
@@ -27,7 +28,7 @@ function Searchbar() {
     };
 
     fetchAnimes();
-  }, []); 
+  }, []);
 
   return (
     <div className="searchbar-container">
@@ -35,7 +36,7 @@ function Searchbar() {
         className="input"
         type="text"
         name="search"
-        placeholder="Search for an anime"
+        placeholder={json.search}
         onChange={updateData}
       />
       <Results data={data} animes={animes} />

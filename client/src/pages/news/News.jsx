@@ -1,37 +1,87 @@
-import "./News.scss"
-import { useTheme } from "@mui/material"
+import React, { useState, useEffect } from "react";
+import Navbar from "../../components/navbar/Navbar";
 import NewsPageAnimes from "../../components/newsPageAnimes/NewsPageAnimes";
-var json = require("../../utils/fr.json");
+import json from "../../utils/fr.json";
+import "./News.scss";
+import Loader from "../../components/loader/loader";
+import { useNavigate } from "react-router-dom";
 
 const News = () => {
+  const [data, setData] = useState([]);
+  const [anime, setAnime] = useState("6604985745954d85e7d15b00");
+  const [dataA, setDataA] = useState([]);
 
-    const theme = useTheme().palette;
+  const navigate = useNavigate();
 
-    return (
-        <div className="NewsPage">
-            <img className="backgroundNews" src="https://static.bandainamcoent.eu/high/jujutsu-kaisen/jujutsu-kaisen-cursed-clash/00-page-setup/JJK-header-mobile2.jpg" alt="jujutsu kaisen" />
+  const getNewsEpisodes = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_ADDRESS}/episodes/news`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch episodes");
+      }
+      const data = await response.json();
+      setData(data);
+      setAnime(data[0].anime);
+    } catch (error) {
+      console.error("Error fetching episodes:", error);
+    }
+  };
 
-            <div className="NewsTitleDesc">
-                <h1>Jujutsu Kaisen</h1>
-                <p>{json.summary.Description}</p>
-            </div >
-            <div className="black-gradiant">
-            </div>
-            <div className="NewComponantBlock">
-                <NewsPageAnimes />
-                <NewsPageAnimes />
-                <NewsPageAnimes />
-                <NewsPageAnimes />
-                <NewsPageAnimes />
-                <NewsPageAnimes />
-            </div>
+  const handleNewsPageAnimesClick = async (anime) => {
+    try {
+      setAnime(anime);
+      const response = await fetch(
+        `${process.env.REACT_APP_API_ADDRESS}/animes/${anime}`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch anime");
+      }
+      const dataA = await response.json();
+      setDataA(dataA);
+    } catch (error) {
+      console.error("Error fetching anime:", error);
+    }
+  };
 
-        </div>
+  useEffect(() => {
+    getNewsEpisodes();
+  }, []);
 
-    );
-}
+  useEffect(() => {
+    handleNewsPageAnimesClick(anime);
+  }, [anime]);
+
+  if (!anime || !dataA || !data) return <Loader />;
+
+  return (
+    <div className="NewsPage">
+      <Navbar color={dataA.color} />
+
+      <div
+        className="NewsTitleDesc"
+        style={{ backgroundImage: `url(${dataA.thumbnail})` }}
+      >
+        <h1>{dataA.title}</h1>
+        <p>
+          {dataA.description?.length > 500
+            ? dataA.description.substring(0, 500) + "..."
+            : dataA.description}
+        </p>
+      </div>
+      <div className="NewComponentBlock">
+        {data.map((item, index) => (
+          <NewsPageAnimes
+            key={index}
+            {...item}
+            onClick={() => navigate(`/watch/${item._id}`)}
+            onMouseEnter={() => handleNewsPageAnimesClick(item.anime)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
 export default News;
-
-
-
-
