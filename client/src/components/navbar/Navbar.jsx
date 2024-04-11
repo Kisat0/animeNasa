@@ -9,7 +9,7 @@ const StyledLink = styled(Link)(({ theme, color }) => ({
   color: theme.palette.text.primary,
 
   "&:hover": {
-    color: color ? color : theme.palette.primary.main,
+    color: color ? color : "white",
   },
 }));
 
@@ -54,7 +54,7 @@ const Navbar = ({ color }) => {
           </StyledLink>
         </li>
         <li>
-          <DiscordIcon color={color} />
+          <DiscordIcon color={color ? color : "white"} />
         </li>
         {!isLoggedIn ? (
           <li>
