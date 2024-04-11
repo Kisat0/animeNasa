@@ -29,8 +29,8 @@ function PlayerPage() {
   const [isMenuReportOpen, setIsMenuReportOpen] = useState(false);
   const [dataReport, setDataReport] = useState({});
   const { user } = useUser();
-  const [error, setError] = useState("");
   const [episodeBySeason, setEpisodeBySeason] = useState([]);
+  const [error, setError] = useState('');
 
   const { id } = useParams();
   const pageLink = window.location.href;
@@ -897,11 +897,24 @@ function PlayerPage() {
               </div>
             </div>
             {!isComingSoon ? (
-              <div className="bottom-buttons">
-                <button className="reported-button">
-                  {json.play["Reported-button"]}
-                </button>
-              </div>
+                    <div className="bottom-buttons">
+              {isMenuReportOpen && (
+                <div className="menu-report">
+                  <input
+                    type="identifier"
+                    placeholder="Décrire le problème..."
+                    name="customReportDescription"
+                    required
+                    variant="outlined"
+                    onChange={updateDataReport}
+                  />
+                  <button onClick={CustomReportValidation}>Valider</button>
+                </div>
+              )}
+              <button className="reported-button" onClick={() => setIsMenuReportOpen(!isMenuReportOpen)}>
+                {json.play["Reported-button"]}
+              </button>
+            </div>
             ) : null}
           </div>
 

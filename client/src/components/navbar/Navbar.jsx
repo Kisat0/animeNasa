@@ -62,6 +62,9 @@ const Navbar = ({ color }) => {
               Connexion
             </StyledLink>
           </li>
+             <li>
+          <StyledLink to="/profil">Profil</StyledLink>
+        </li>
         ) : (
           <li
             onClick={() => logoutUser()}
