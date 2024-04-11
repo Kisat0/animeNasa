@@ -805,7 +805,7 @@ function PlayerPage() {
               </div>
             </div>
             <div className="bottom-buttons">
-              <button className="reported-button">
+            <button className="reported-button" onClick={() => setIsMenuReportOpen(!isMenuReportOpen)}>
                 {json.play["Reported-button"]}
               </button>
             </div>
