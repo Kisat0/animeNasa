@@ -57,31 +57,31 @@ const Navbar = ({ color }) => {
           <DiscordIcon color={color} />
         </li>
         {!isLoggedIn ? (
+          <li>
+            <StyledLink to="/login" color={color}>
+              Connexion
+            </StyledLink>
+          </li>
+        ) : (
           <>
-            <li>
-              <StyledLink to="/login" color={color}>
-                Connexion
-              </StyledLink>
-            </li>
             <li>
               <StyledLink to="/profil">Profil</StyledLink>
             </li>
+            <li
+              onClick={() => logoutUser()}
+              style={{
+                padding: "5px",
+                cursor: "pointer",
+                color: "white",
+                borderRadius: "5px",
+                height: "30px",
+                width: "30px",
+                backgroundColor: color ? color : theme.primary.main,
+              }}
+            >
+              <LogoutIcon />
+            </li>
           </>
-        ) : (
-          <li
-            onClick={() => logoutUser()}
-            style={{
-              padding: "5px",
-              cursor: "pointer",
-              color: "white",
-              borderRadius: "5px",
-              height: "30px",
-              width: "30px",
-              backgroundColor: color ? color : theme.primary.main,
-            }}
-          >
-            <LogoutIcon />
-          </li>
         )}
       </ul>
     </nav>
