@@ -57,7 +57,7 @@ const News = () => {
 
   return (
     <div className="NewsPage">
-      <Navbar />
+      <Navbar color={dataA.color} />
 
       <div
         className="NewsTitleDesc"
