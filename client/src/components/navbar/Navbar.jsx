@@ -66,7 +66,13 @@ const Navbar = ({ color }) => {
           <li
             onClick={() => logoutUser()}
             style={{
-              padding: "0 10px",
+              padding: "5px",
+              cursor: "pointer",
+              color: "white",
+              borderRadius: "5px",
+              height: "30px",
+              width: "30px",
+              backgroundColor: color ? color : theme.primary.main,
             }}
           >
             <LogoutIcon />
