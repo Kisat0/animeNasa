@@ -100,7 +100,7 @@ const SummaryPage = () => {
 
     return (
         <div>
-            <Navbar />
+            <Navbar color={data.color} />
             {open && (
                 <Backdrop
                     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -113,7 +113,7 @@ const SummaryPage = () => {
                 <div className="SummaryGlobal">
                     <div className="AnimeInfos">
                         <div className='imgSummary'>
-                            <img src={data.poster} alt="jujutsu kaisen" />
+                            <img src={data.poster} alt={data.title} />
                         </div>
                         <h1>{data.title}</h1>
                         <div className="genres">

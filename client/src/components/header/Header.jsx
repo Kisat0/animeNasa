@@ -67,6 +67,9 @@ const Header = ({ data, handleColor }) => {
                 backgroundColor:
                   data[index]?.anime.color || theme.buttons.primary,
               }}
+              onClick={() => {
+                navigate(`/watch/${data[index]._id}`);
+              }}
             >
               {" "}
               <PlayIcon /> Regarder

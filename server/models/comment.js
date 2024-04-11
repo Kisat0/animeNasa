@@ -41,6 +41,10 @@ const commentSchema = new Schema({
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: "comment" }],
     default: [],
   },
+  avatar: {
+    type: String,
+    default: "",
+  },
 });
 
 module.exports = mongoose.model("comment", commentSchema)

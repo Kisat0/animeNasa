@@ -9,19 +9,24 @@
 .input {
   width: 80%;
   height: 2.5rem;
-  border-radius: 5px;
   color: white;
-  border: 1px solid #ccc;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  border-bottom: 1px solid white;
   padding: 0 10px;
   font-size: 1.2rem;
-  background-color: #020617;
+  background-color: transparent;
+  outline: none;
 }
 
 ::placeholder {
   color: white;
   opacity: 1; /* Firefox */
+  font-family: "Inter";
 }
 
-::-ms-input-placeholder { /* Edge 12 -18 */
+::-ms-input-placeholder {
+  /* Edge 12 -18 */
   color: white;
 }

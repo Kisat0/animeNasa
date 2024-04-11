@@ -1,24 +1,41 @@
-.comment-title {
-  margin-left: 7.5%;
-}
-
 .comment-content {
-  padding: 1.5% 0;
-  margin: 2.5% 5%;
+  margin: 4.5% 5%;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+
+  & > div:last-child {
+    width: 100%;
+  }
 }
 
 .comment-infos-top {
   display: flex;
   flex-direction: row;
-  gap: 3rem;
   font-weight: bold;
+  justify-content: space-between;
 }
 
 .comment-infos-bottom {
   display: flex;
   flex-direction: row;
-  gap: 3rem;
   font-weight: bold;
+  justify-content: space-between;
+  align-items: center;
+
+  p {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+  }
+
+  & > div {
+    display: flex;
+    gap: 10px;
+    flex-direction: row;
+    align-items: center;
+  }
 }
 .comment-date {
   font-weight: lighter;
@@ -32,6 +49,3 @@
   margin-top: 2.5rem;
 }
 
-.clicked {
-  color: blue;
-}

@@ -1,12 +1,14 @@
 .youtube-comment-input {
   margin: 2.5% 5%;
-  width: 80%;
   display: flex;
   align-items: center;
   // background-color: #f0f0f0;
   border-bottom: white 1px solid;
   padding: 10px;
   color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .youtube-comment-input textarea {
@@ -15,7 +17,6 @@
   border: none;
   background-color: transparent;
   font-size: 14px;
-  padding: 8px 12px;
   resize: none;
   overflow-y: auto;
 }

@@ -7,6 +7,9 @@ import NewsSeasons from "../../components/newsSeasons/NewsSeasons";
 import Trends from "../../components/trends/Trends";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Wave1, Wave2 } from "../../utils/Waves";
+
+import "./Home.scss";
 
 const HomePage = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -69,14 +72,16 @@ const HomePage = () => {
   }
 
   return (
-    <div>
+    <>
+      <Wave1 className={"wave w1"} color={color}/>
+      <Wave2 className={"wave w2"} color={color} />
       <Navbar color={color} />
       <Header data={dataHeader} handleColor={handleColor} />
-      <LastEps data={lastEps} color={color}/>
-          <Trends color={color} />
-          <NewsSeasons color={color} />
+      <LastEps data={lastEps} color={color} />
+      <Trends color={color} />
+      <NewsSeasons color={color} />
       <Footer />
-    </div>
+    </>
   );
 };
 export default HomePage;

@@ -2,12 +2,8 @@ import React, { useCallback } from "react";
 import { useParams } from "react-router";
 import CloseIcon from "@mui/icons-material/Close";
 import { Link } from "react-router-dom";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import LogoutIcon from "@mui/icons-material/Logout";
-import { useEffect, useState } from "react";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import MenuIcon from "@mui/icons-material/Menu";import { useEffect, useState } from "react";
 import Loader from "../../components/loader/loader";
 import Navbar from "../../components/navbar/Navbar";
 import axios from "axios";
@@ -15,6 +11,8 @@ import { useTheme } from "@mui/material";
 import PreviewChat from "../../components/preview-chat/PreviewChat";
 import Comment from "../../components/comment/Comment";
 import { useUser } from "../../utils/useUser";
+import { useNavigate } from "react-router-dom";
+import { AnimeInfos, LeftArrow, RightArrow } from "../../utils/Icons";
 
 import "./Player.scss";
 
@@ -27,19 +25,26 @@ function PlayerPage() {
   const [episode, setEpisode] = useState(null);
   const [anime, setAnime] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [isComingSoon, setIsComingSoon] = useState(true);
+  const [isComingSoon, setIsComingSoon] = useState(false);
   const [isMenuReportOpen, setIsMenuReportOpen] = useState(false);
   const [dataReport, setDataReport] = useState({});
   const { user } = useUser();
+  const [episodeBySeason, setEpisodeBySeason] = useState([]);
   const [error, setError] = useState('');
-
 
   const { id } = useParams();
   const pageLink = window.location.href;
+  const navigate = useNavigate();
+
+  const ChangeEpisode = (episodeNumber) => {
+    const episodeId = anime.episodes[episodeNumber - 1]?._id;
+    if (episodeId) {
+      navigate(`/watch/${episodeId}`);
+    }
+  };
 
   const updateDataReport = (e) => {
     setDataReport({
-
       user,
       ...dataReport,
       pageLink,
@@ -49,14 +54,16 @@ function PlayerPage() {
 
   const CustomReportValidation = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_ADDRESS}/connection/reportEpisode`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dataReport),
-
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_ADDRESS}/connection/reportEpisode`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataReport),
+        }
+      );
       if (response.ok) {
         const responseData = await response.json();
         setSuccessMessage(`L'email a été envoyé`);
@@ -65,11 +72,10 @@ function PlayerPage() {
         setError(responseData.message);
       }
     } catch (error) {
-      console.error('Error:', error);
-      setError('Une erreur s\'est produite lors de l\'envoi de l\'e-mail.');
+      console.error("Error:", error);
+      setError("Une erreur s'est produite lors de l'envoi de l'e-mail.");
     }
-    // console.log("Description du problème :", customReportDescription);
-    setIsMenuReportOpen(false)
+    setIsMenuReportOpen(false);
   };
 
   const closeMenu = () => {
@@ -214,7 +220,7 @@ function PlayerPage() {
 
     const skipTo = Math.round(
       (event.clientX / event.target.clientWidth) *
-      parseInt(event.target.getAttribute("max"), 10)
+        parseInt(event.target.getAttribute("max"), 10)
     );
     seek.setAttribute("data-seek", skipTo);
     const t = formatTime(skipTo);
@@ -425,6 +431,12 @@ function PlayerPage() {
   }
 
   useEffect(() => {
+    //? Temporary fix for the coming soon feature associate with the calendar
+    if (window.location.href.includes("isComingSoon=true")) {
+      setIsComingSoon(true);
+    }
+    else setIsComingSoon(false);
+
     window.addEventListener(
       "keydown",
       function (e) {
@@ -450,7 +462,11 @@ function PlayerPage() {
       const video = document.getElementById("video");
       if (!video) return;
 
-      if (document.activeElement.tagName === "INPUT") return;
+      if (
+        document.activeElement.tagName === "INPUT" ||
+        document.activeElement.tagName === "TEXTAREA"
+      )
+        return;
 
       const { key } = event;
       switch (key) {
@@ -498,7 +514,7 @@ function PlayerPage() {
     return () => {
       document.removeEventListener("keyup", keyboardShortcuts);
     };
-  }, [decreaseVol, increaseVol, togglePlay]);
+  }, [decreaseVol, increaseVol, togglePlay, window.location.href]);
 
   useEffect(() => {
     const fetchEpisode = async () => {
@@ -520,20 +536,31 @@ function PlayerPage() {
 
     const addView = async (animeId) => {
       try {
-        const response = await axios.put(
+        await axios.put(
           `${process.env.REACT_APP_API_ADDRESS}/animes/views/${animeId}`
         );
-
-        if (response.status === 200) {
-          console.log("Le nombre de vues a été mis à jour avec succès !");
-        } else {
-          console.log("La requête a échoué avec le code :", response.status);
-        }
       } catch (error) {
-        console.error("Une erreur s'est produite lors de la mise à jour du nombre de vues :", error);
+        console.error(
+          "Une erreur s'est produite lors de la mise à jour du nombre de vues :",
+          error
+        );
       }
-    }
+    };
 
+    const organiseEpisodesBySeason = (animes) => {
+      const episodes = animes.episodes;
+      const episodesBySeason = [];
+
+      episodes.forEach((episode) => {
+        const season = episode.season - 1;
+        if (!episodesBySeason[season]) {
+          episodesBySeason[season] = [];
+        }
+        episodesBySeason[season].push(episode);
+      });
+
+      setEpisodeBySeason(episodesBySeason);
+    };
 
     const fetchAnime = async (animeId) => {
       try {
@@ -542,6 +569,7 @@ function PlayerPage() {
         );
 
         setAnime(response.data);
+        organiseEpisodesBySeason(response.data);
       } catch (error) {
         console.error(error);
       }
@@ -561,7 +589,7 @@ function PlayerPage() {
     <>
       <div className="player-container">
         <img src={anime.thumbnail} alt="" className="background innershadow" />
-        <Navbar />
+        <Navbar color={anime.color} />
         <div className="menu-content">
           <div
             className="menu close"
@@ -576,14 +604,24 @@ function PlayerPage() {
             </div>
             <div className="short-menu">
               <div className="short-menu-header">
-                <LogoutIcon className="open-icon" onClick={openMenu} />
+                <MenuIcon className="open-icon" onClick={openMenu} />
               </div>
               <ul>
-                {anime.episodes.map((episode, index) => (
+                {episodeBySeason.map((season, index) => (
                   <li key={index}>
-                    <Link to={`/watch/${episode._id}`} key={index}>
-                      EP. {index + 1}
-                    </Link>
+                    <span>S{index + 1}</span>
+                    <ul>
+                      {season.map((episode, index) => (
+                        <li
+                          key={index}
+                          onClick={() => navigate(`/watch/${episode._id}`)}
+                        >
+                          <Link to={`/watch/${episode._id}`} key={index}>
+                            EP. {episode.number}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
                   </li>
                 ))}
               </ul>
@@ -597,45 +635,67 @@ function PlayerPage() {
               />
               <div className="header-back-layout">
                 <div className="anime-infos">
-                  <img src={anime.poster} alt="poster" />
+                  {/*                   <img src={anime.poster} alt="poster" />
+                   */}{" "}
                   <div className="anime-infos-text">
                     <span>{anime.title}</span>
                     <p>
-                      {anime.description}
-                      <Link to="/summary">{json.play.SeeMore}</Link>
+                      {anime.description.length > 300
+                        ? anime.description.substring(0, 300) + "... "
+                        : anime.description}
+                      <Link to={`/summary/${anime._id}`}>
+                        {json.play.SeeMore}
+                      </Link>
                     </p>
+
+                    <div className="others-informations">
+                      <div className="tags">
+                        <span className="genre-tag">
+                          {anime?.categories
+                            ?.slice(0, 4)
+                            .map((category, index) => (
+                              <span
+                                key={index}
+                                style={{
+                                  backgroundColor: theme.tags.primary,
+                                }}
+                              >
+                                {category}
+                              </span>
+                            ))}
+                        </span>
+                        <span className="date-tag">
+                          <CalendarMonthIcon />{" "}
+                          {new Date(anime.releaseDate).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <span className="lang-tag">
+                        {episode.lang.toUpperCase()}
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <div className="others-informations">
-                  <div className="tags">
-                    <span className="genre-tag">
-                      {" "}
-                      <LocalOfferIcon />
-                      Genres:
-                      {anime?.categories?.map((genre) => (
-                        <span key={genre}>{genre}</span>
-                      ))}
-                    </span>
-                    <span className="date-tag">
-                      <CalendarMonthIcon /> Date: {anime.releaseDate}
-                    </span>
-                  </div>
-                  <span className="lang-tag">{episode.lang.toUpperCase()}</span>
                 </div>
               </div>
             </div>
             <div className="body-menu">
               <div className="season-content">
-                <p className="season-number">SAISON 1</p>
-                <ul>
-                  {anime.episodes.map((episode, index) => (
-                    <li key={index}>
-                      <Link to={`/watch/${episode._id}`} key={index}>
-                        {episode.title}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+                {episodeBySeason.map((season, index) => (
+                  <div key={index} className="season">
+                    <p>Saison {index + 1}</p>
+                    <ul>
+                      {season.map((episode, index) => (
+                        <li
+                          key={index}
+                          onClick={() => navigate(`/watch/${episode._id}`)}
+                        >
+                          <Link to={`/watch/${episode._id}`} key={index}>
+                            {episode.title}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -643,7 +703,8 @@ function PlayerPage() {
         <div
           className="player-content"
           style={{
-            paddingRight: isComingSoon ? "70px" : "0px",
+            paddingRight: isComingSoon ? "0px" : "170px",
+            display: isComingSoon ? "flex" : "block",
           }}
         >
           <div className="container-watch">
@@ -657,29 +718,66 @@ function PlayerPage() {
             </h1>
             <div className="player-buttons">
               <div className="player-button">
-                <p>{json.play.Player}</p>
-                <select className="top-video-button">
-                  <option>Lecteur 1</option>
-                  <option>Lecteur 2</option>
-                </select>
+                {!isComingSoon ? (
+                  <select className="top-video-button">
+                    <option>Lecteur 1</option>
+                    <option>Lecteur 2</option>
+                  </select>
+                ) : null}
               </div>
-              <button className="top-video-button">
-                <ArrowBackIosIcon className="arrow-icons" />
-                {json.play.Previous}
+              {episode.number > 1 ? (
+                <button
+                  className="top-video-button"
+                  onClick={() => ChangeEpisode(episode.number - 1)}
+                >
+                  <LeftArrow className="arrow-icons" />
+                  {json.play.Previous}
+                </button>
+              ) : null}
+              <button
+                className="top-video-button"
+                style={{
+                  backgroundColor: anime.color ? anime.color : "#000",
+                }}
+                onClick={() => navigate(`/summary/${anime._id}`)}
+              >
+                {json.play.Infos}
+                <AnimeInfos />
               </button>
-              <button className="top-video-button">
-                {json.play.Next}
-                <ArrowForwardIosIcon className="arrow-icons" />
-              </button>
+              {anime.episodes.length >= episode.number + 1 ? (
+                <button
+                  className="top-video-button"
+                  onClick={() => ChangeEpisode(episode.number + 1)}
+                >
+                  {json.play.Next}
+                  <RightArrow className="arrow-icons" />
+                </button>
+              ) : null}
             </div>
-            <div className="video-container" id="video-container">
-              <div className="playback-animation" id="playback-animation">
-                <svg className="playback-icons">
-                  <use href="#play-icon"></use>
-                  <use className="hidden" href="#pause"></use>
-                </svg>
-              </div>
-              {!isLoading ? (
+
+            <div
+              className="video-container"
+              id="video-container"
+              style={{
+                height: isComingSoon ? "600px" : "100%",
+                backgroundImage: `url(${anime.poster})`,
+                boxShadow: isComingSoon
+                  ? "inset 0px 0px 1000px 1000px rgba(86, 86, 86, 0.48)"
+                  : "none",
+              }}
+            >
+              {!isComingSoon ? (
+                <div className="playback-animation" id="playback-animation">
+                  <svg className="playback-icons">
+                    <use href="#play-icon"></use>
+                    <use className="hidden" href="#pause"></use>
+                  </svg>
+                </div>
+              ) : (
+                <p className="coming-soon-player">{json.play.ComingSoon}</p>
+              )}
+
+              {!isLoading && !isComingSoon ? (
                 <video
                   className="video"
                   id="video"
@@ -694,14 +792,8 @@ function PlayerPage() {
                 >
                   <source src={episode.source} type="video/mp4"></source>
                 </video>
-              ) : (
-                <div className="loader-container">
-                  <div className="loader">
-                    <Loader size={400} color="#a3a3a3" />
-                  </div>
-                </div>
-              )}
-              ;
+              ) : null}
+
               <div
                 className="video-controls hidden"
                 id="video-controls"
@@ -804,7 +896,8 @@ function PlayerPage() {
                 </div>
               </div>
             </div>
-            <div className="bottom-buttons">
+            {!isComingSoon ? (
+                    <div className="bottom-buttons">
               {isMenuReportOpen && (
                 <div className="menu-report">
                   <input
@@ -822,7 +915,16 @@ function PlayerPage() {
                 {json.play["Reported-button"]}
               </button>
             </div>
+            ) : null}
           </div>
+
+          {!isComingSoon ? (
+            <div className="player-comment">
+              <Comment animeColor={anime.color} episodeID={episode._id} />
+            </div>
+          ) : (
+            <PreviewChat episode={episode} />
+          )}
 
           <svg style={{ display: "none" }}>
             <defs>
@@ -860,9 +962,6 @@ function PlayerPage() {
             </defs>
           </svg>
         </div>
-      </div>
-      <div className="player-comment">
-        <Comment />
       </div>
     </>
   );

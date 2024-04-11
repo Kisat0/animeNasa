@@ -2,9 +2,10 @@ import { Link } from "react-router-dom";
 import { styled, useTheme } from "@mui/material";
 import "./Navbar.scss";
 import { useAuth } from "../../utils/AuthContext";
-import { DiscordIcon } from "../../utils/DiscordIcon";
+import { DiscordIcon } from "../../utils/Icons";
+import LogoutIcon from "@mui/icons-material/Logout";
 
-const StyledLink = styled(Link)(({ theme,color }) => ({
+const StyledLink = styled(Link)(({ theme, color }) => ({
   color: theme.palette.text.primary,
 
   "&:hover": {
@@ -14,7 +15,7 @@ const StyledLink = styled(Link)(({ theme,color }) => ({
 
 const Navbar = ({ color }) => {
   const theme = useTheme().palette;
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, logoutUser } = useAuth();
 
   return (
     <nav
@@ -55,14 +56,31 @@ const Navbar = ({ color }) => {
         <li>
           <DiscordIcon color={color} />
         </li>
-        <li>
-          <StyledLink to="/profil">Profil</StyledLink>
-        </li>
-        {!isLoggedIn && (
-          <li>
-            <StyledLink to="/login" color={color}>
-              Connexion
-            </StyledLink>
+        {!isLoggedIn ? (
+          <>
+            <li>
+              <StyledLink to="/login" color={color}>
+                Connexion
+              </StyledLink>
+            </li>
+            <li>
+              <StyledLink to="/profil">Profil</StyledLink>
+            </li>
+          </>
+        ) : (
+          <li
+            onClick={() => logoutUser()}
+            style={{
+              padding: "5px",
+              cursor: "pointer",
+              color: "white",
+              borderRadius: "5px",
+              height: "30px",
+              width: "30px",
+              backgroundColor: color ? color : theme.primary.main,
+            }}
+          >
+            <LogoutIcon />
           </li>
         )}
       </ul>

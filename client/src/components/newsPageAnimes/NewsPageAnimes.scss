@@ -1,54 +1,53 @@
 .NewsContainer {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    border: 1px gray solid;
-    box-shadow: 5px 5px 5px gray;
-    width: 500px;
-    height: 130px;
-    border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  border: 0.5px gray solid;
+  box-shadow: 0px 0px 10px 1px gray;
+  width: 100%;
+  min-height: 130px;
+  border-radius: 10px;
+  transition: all 0.2s 500ms;
+  cursor: pointer;
 
-    &:hover {
+  &:hover {
+    height: 140px;
+    background-color: white;
+    color: black;
+    box-shadow: none;
+    transform: scale(1.05);
+  }
 
-        height: 140px;
-        background-color: white;
-        color: black;
-        box-shadow: 5px 5px 5px white;
+  .ImgNewsCompo {
+    width: 200px;
+    height: 100%;
+
+    .imgNewsComponent {
+      object-fit: cover;
+      width: 170px;
+      height: 100%;
+      border-radius: 10px 0 0 10px;
     }
-
-    .ImgNewsCompo {
-
-        width: 200px;
-        height: 100%;
-
-        .imgNewsComponent {
-            object-fit: cover;
-            width: 170px;
-            height: 100%;
-            border-radius: 10px 0 0 10px;
-        }
-    }
+  }
 }
 
 .NewsInfos {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  & > h1 {
+    font-size: 22px;
+  }
+
+  .EpisodeData {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    flex-flow: row nowrap;
+    gap: 5px;
 
-
-    &>h1 {
-        padding-top: 13px;
-        font-size: 22px;
+    & > p {
+      font-size: 20px;
     }
-
-    .EpisodeData {
-        display: flex;
-        flex-flow: row nowrap;
-        gap: 5px;
-
-        &>p {
-            font-size: 20px;
-            
-        }
-    }
+  }
 }

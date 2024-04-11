@@ -4,13 +4,11 @@ import reportWebVitals from "./reportWebVitals";
 import Theme from "./Theme";
 import "./Global.scss";
 import { AuthProvider } from "./utils/AuthContext";
-import { ToastContainer } from "react-toastify";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <AuthProvider>
     <Theme />
-    <ToastContainer />
   </AuthProvider>
 );
 

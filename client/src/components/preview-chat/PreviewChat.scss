@@ -2,10 +2,10 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100%;
+  height: 80%;
   padding: 0px 20px;
   min-width: 450px;
-  margin-top: 100px;
+  margin-top: 115px;
 
   .preview-chat-content {
     display: flex;
@@ -13,9 +13,7 @@
     height: 100%;
     padding: 20px;
     width: 100%;
-    border-radius: 10px;
     overflow-y: auto;
-    background-color: #333333;
 
     .preview-chat-message {
       display: flex;
@@ -46,26 +44,26 @@
     flex-direction: row;
     gap: 10px;
     padding: 10px;
-    border-radius: 10px;
-    background-color: #4d4d4d;
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
 
-    .preview-chat-input-text {
+    input {
       width: 100%;
       padding: 10px;
-      border-radius: 10px;
-      background-color: #333333;
+      background-color: transparent;
       color: white;
+      border-bottom: 1px solid white;
       font-size: 16px;
-      border: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
       outline: none;
     }
 
-    .preview-chat-input-button {
+    button {
       padding: 10px;
       border-radius: 10px;
-      background-color: #333333;
       color: white;
+      background-color: rgb(55, 55, 55);
       font-size: 16px;
       border: none;
       outline: none;
