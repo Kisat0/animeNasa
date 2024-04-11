@@ -9,9 +9,9 @@ import { useNavigate } from "react-router-dom";
 const News = () => {
   const [data, setData] = useState([]);
   const [anime, setAnime] = useState("6604985745954d85e7d15b00");
-    const [dataA, setDataA] = useState([]);
-    
-    const navigate = useNavigate();
+  const [dataA, setDataA] = useState([]);
+
+  const navigate = useNavigate();
 
   const getNewsEpisodes = async () => {
     try {
@@ -23,6 +23,7 @@ const News = () => {
       }
       const data = await response.json();
       setData(data);
+      setAnime(data[0].anime);
     } catch (error) {
       console.error("Error fetching episodes:", error);
     }
@@ -46,8 +47,11 @@ const News = () => {
 
   useEffect(() => {
     getNewsEpisodes();
-    handleNewsPageAnimesClick(anime);
   }, []);
+
+  useEffect(() => {
+    handleNewsPageAnimesClick(anime);
+  }, [anime]);
 
   if (!anime || !dataA || !data) return <Loader />;
 
@@ -71,8 +75,8 @@ const News = () => {
           <NewsPageAnimes
             key={index}
             {...item}
-                onClick={() => navigate(`/watch/${item._id}`)}
-                onMouseEnter={() => handleNewsPageAnimesClick(item.anime)}
+            onClick={() => navigate(`/watch/${item._id}`)}
+            onMouseEnter={() => handleNewsPageAnimesClick(item.anime)}
           />
         ))}
       </div>
