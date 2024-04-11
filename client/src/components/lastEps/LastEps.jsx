@@ -20,6 +20,7 @@ const LastEps = ({ data, color }) => {
             background: `linear-gradient(-270deg, ${color} 0%, ${colorDarker(
               color
             )} 50.52%, transparent 100%)`,
+            marginBottom: "40px",
           }}
         ></span>
       </div>
