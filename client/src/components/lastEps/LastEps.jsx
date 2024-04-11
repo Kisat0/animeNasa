@@ -24,28 +24,34 @@ const LastEps = ({ data, color }) => {
         ></span>
       </div>
       <div className="last-eps-container">
-        {data.map((episode) => (
+        {data.map((episode, index) => (
           <div
             key={episode._id}
-            onClick={() => navigate(`/watch/${episode._id}`)}
+            onClick={() => navigate(`/watch/${episode._id}?isComingSoon=true`)}
           >
             <img src={episode.thumbnail} alt={episode.title} />
-            <div>
-              <p style={{ backgroundColor: theme.tags.season }}>
-                Saison {episode.season}
-              </p>
-              <p style={{ backgroundColor: theme.tags.vf }}>
-                {episode.lang.toUpperCase()}
-              </p>
-            </div>
-            <p
-              style={{
-                backgroundColor: theme.tags.episode,
-                marginBottom: "5px",
-              }}
-            >
-              Episode {episode.number}
-            </p>
+            {index === 0 ? (
+              <p className="coming-soon">Prochainement</p>
+            ) : (
+              <>
+                <div>
+                  <p style={{ backgroundColor: theme.tags.season }}>
+                    Saison {episode.season}
+                  </p>
+                  <p style={{ backgroundColor: theme.tags.vf }}>
+                    {episode.lang.toUpperCase()}
+                  </p>
+                </div>
+                <p
+                  style={{
+                    backgroundColor: theme.tags.episode,
+                    marginBottom: "5px",
+                  }}
+                >
+                  Episode {episode.number}
+                </p>
+              </>
+            )}
           </div>
         ))}
       </div>

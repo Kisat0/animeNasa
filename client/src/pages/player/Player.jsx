@@ -27,7 +27,7 @@ function PlayerPage() {
   const [episode, setEpisode] = useState(null);
   const [anime, setAnime] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [isComingSoon, setIsComingSoon] = useState(true);
+  const [isComingSoon, setIsComingSoon] = useState(false);
   const [isMenuReportOpen, setIsMenuReportOpen] = useState(false);
   const [dataReport, setDataReport] = useState({});
   const { user } = useUser();
@@ -433,6 +433,11 @@ function PlayerPage() {
   }
 
   useEffect(() => {
+    //? Temporary fix for the coming soon feature associate with the calendar
+    if (window.location.href.includes("isComingSoon=true")) {
+      setIsComingSoon(true);
+    }
+
     window.addEventListener(
       "keydown",
       function (e) {
@@ -699,7 +704,8 @@ function PlayerPage() {
         <div
           className="player-content"
           style={{
-            paddingRight: isComingSoon ? "70px" : "0px",
+            paddingRight: isComingSoon ? "0px" : "170px",
+            display: isComingSoon ? "flex" : "block",
           }}
         >
           <div className="container-watch">
@@ -886,9 +892,13 @@ function PlayerPage() {
             </div>
           </div>
 
-          <div className="player-comment">
-            <Comment animeColor={anime.color} episodeID={episode._id} />
-          </div>
+          {!isComingSoon ? (
+            <div className="player-comment">
+              <Comment animeColor={anime.color} episodeID={episode._id} />
+            </div>
+          ) : (
+            <PreviewChat episode={episode} />
+          )}
 
           <svg style={{ display: "none" }}>
             <defs>
