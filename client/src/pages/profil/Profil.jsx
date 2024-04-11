@@ -10,12 +10,15 @@ const Profil = () => {
     const [newAvatar, setNewAvatar] = useState(user.avatar);
     const [selectedButton, setSelectedButton] = useState('');
     const [formData, setFormData] = useState({
-        identifier: '',
-        newEmail: '',
+        identifier: user.username,
+        newEmail: user.email,
         newPassword: '',
     });
     const [successMessage, setSuccessMessage] = useState('');
     const [error, setError] = useState('');
+    const [editingUsername, setEditingUsername] = useState(false);
+    const [editingEmail, setEditingEmail] = useState(false);
+    const [editingMdp, setEditingMdp] = useState(false);
 
     const formChange = (e) => {
         const { name, value } = e.target;
@@ -46,79 +49,38 @@ const Profil = () => {
         }
     };
 
-    const renderForm = () => {
-        switch (selectedButton) {
-            case 'pseudo':
-                return (
-                    <form onSubmit={FormSubmit}>
-                        <input
-                            type="text"
-                            placeholder="Nouveau pseudo..."
-                            name="identifier"
-                            value={formData.identifier}
-                            onChange={formChange}
-                            required
-                        />
-                        <button type="submit">Valider</button>
-                    </form>
-                );
-            case 'email':
-                return (
-                    <form onSubmit={FormSubmit}>
-                        <input
-                            type="email"
-                            placeholder="Nouvel email..."
-                            name="newEmail"
-                            value={formData.newEmail}
-                            onChange={formChange}
-                            required
-                        />
-                        <button type="submit">Valider</button>
-                    </form>
-                );
-            case 'mdp':
-                return (
-                    <form onSubmit={FormSubmit}>
-                        <input
-                            type="password"
-                            placeholder="Nouveau mot de passe..."
-                            name="newPassword"
-                            value={formData.newPassword}
-                            onChange={formChange}
-                            required
-                        />
-                        <button type="submit">Valider</button>
-                    </form>
-                );
-            default:
-                return null;
-        }
-    };
-
 
     const ImageChange = async (e) => {
         const file = e.target.files[0];
-        const data = new FormData();
-        data.append('image', file);
+        const extension = file.name.split('.').pop().toLowerCase();
+        const imageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+        if (imageExtensions.includes(extension)) {
+            const data = new FormData();
+            data.append('image', file);
 
-        try {
-            const response = await fetch('https://api.imgbb.com/1/upload?key=3a53bbef9f1721eb182d5afca37ef84b', {
-                method: 'POST',
-                body: data,
-            });
+            try {
+                const response = await fetch('https://api.imgbb.com/1/upload?key=3a53bbef9f1721eb182d5afca37ef84b', {
+                    method: 'POST',
+                    body: data,
+                });
 
-            if (!response.ok) {
-                throw new Error('Failed to upload image');
+                if (!response.ok) {
+                    throw new Error('Failed to upload image');
+                }
+
+                const responseData = await response.json();
+                setNewAvatar(responseData.data.url);
+
+                await ChangeAvatar(responseData.data.url);
+            } catch (error) {
+                console.error("Une erreur s'est produite", error);
             }
-
-            const responseData = await response.json();
-            setNewAvatar(responseData.data.url);
-
-            await ChangeAvatar(responseData.data.url);
-        } catch (error) {
-            console.error("Une erreur s'est produite", error);
+        } else {
+            console.error("Le fichier n'est pas une image valide");
+            setError('Le format d\'image n\'est pas bon');
         }
     };
+
 
     const ChangeAvatar = async (newAvatarUrl) => {
         try {
@@ -150,7 +112,6 @@ const Profil = () => {
             </div>
             <div>
                 <div className='profile-container'>
-                    <div>
                         <div className='profile-image'>
                             <input type='file' id='Image' style={{ display: 'none' }} onChange={ImageChange} />
                             <img src={user.avatar} className='img-profile' alt='photo de profil' />
@@ -158,20 +119,70 @@ const Profil = () => {
                                 <EditPen />
                             </label>
                         </div>
-                        <h1>{user.username}</h1>
+                        <div className='profile-username'>
+                            {editingUsername ? (
+                                <form onSubmit={FormSubmit}>
+                                    <input
+                                        type="text"
+                                        
+                                        name="identifier"
+                                        value={formData.identifier}
+                                        onChange={formChange}
+                                        required
+                                    />
+                                    <button className="button-profile" type="submit">Valider</button>
+                                    <button className="button-profile" onClick={() => { setEditingUsername(false) }}>Annuler</button>
+                                </form>
+                            ) : (
+                                <div className='profile-username'>
+                                    <h1 onClick={() => { setSelectedButton('pseudo'); setEditingUsername(true); }}>{user.username}</h1>
+                                </div>
+                            )}
+                        </div>
+                    
+                    <div className='profile-email'>
+                        <p className='txt-data-profile'>mail :‎ ‎ </p>
+                        {editingEmail ? (
+                            <form className='form-profile' onSubmit={FormSubmit}>
+                                <input
+                                    type="text"
+                                    
+                                    name="newEmail"
+                                    value={formData.newEmail}
+                                    onChange={formChange}
+                                    required
+                                />
+                                <button className="button-profile" type="submit">Valider</button>
+                                <button className="button-profile" onClick={() => { setEditingEmail(false) }}>Annuler</button>
+                            </form>
+                        ) : (
+                            <div className=''>
+                                <p onClick={() => { setSelectedButton('email'); setEditingEmail(true); }}>{user.email}</p>
+                            </div>
+                        )}
                     </div>
-                    <div>
-                        <p>mail : {user.email}</p>
+                    <div className='profile-mdp'>
+                        <p>mdp :‎ ‎</p>
+                        {editingMdp ? (
+                            <form onSubmit={FormSubmit}>
+                                <input
+                                    type="password"
+                                    
+                                    name="newPassword"
+                                    value={formData.newPassword}
+                                    onChange={formChange}
+                                    required
+                                />
+                                <button className="button-profile" type="submit">Valider</button>
+                                <button className="button-profile" onClick={() => { setEditingMdp(false) }}>Annuler</button>
+                            </form>
+                        ) : (
+                            <div className=''>
+                                <p onClick={() => { setSelectedButton('mdp'); setEditingMdp(true); }}>********</p>
+                            </div>
+                        )}
                     </div>
                 </div>
-            </div>
-            <div className='buttons-change'>
-                <button onClick={() => setSelectedButton('pseudo')}>Changer Pseudo</button>
-                <button onClick={() => setSelectedButton('email')}>Changer Email</button>
-                <button onClick={() => setSelectedButton('mdp')}>Changer Mdp</button>
-            </div>
-            <div className='user-form'>
-                {renderForm()}
             </div>
             {successMessage && <p>{successMessage}</p>}
             {error && <p>{error}</p>}
