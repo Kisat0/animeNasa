@@ -719,10 +719,12 @@ function PlayerPage() {
             </h1>
             <div className="player-buttons">
               <div className="player-button">
-                <select className="top-video-button">
-                  <option>Lecteur 1</option>
-                  <option>Lecteur 2</option>
-                </select>
+                {!isComingSoon ? (
+                  <select className="top-video-button">
+                    <option>Lecteur 1</option>
+                    <option>Lecteur 2</option>
+                  </select>
+                ) : null}
               </div>
               {episode.number > 1 ? (
                 <button
@@ -753,14 +755,30 @@ function PlayerPage() {
                 </button>
               ) : null}
             </div>
-            <div className="video-container" id="video-container">
-              <div className="playback-animation" id="playback-animation">
-                <svg className="playback-icons">
-                  <use href="#play-icon"></use>
-                  <use className="hidden" href="#pause"></use>
-                </svg>
-              </div>
-              {!isLoading ? (
+
+            <div
+              className="video-container"
+              id="video-container"
+              style={{
+                height: isComingSoon ? "600px" : "100%",
+                backgroundImage: `url(${anime.poster})`,
+                boxShadow: isComingSoon
+                  ? "inset 0px 0px 1000px 1000px rgba(86, 86, 86, 0.48)"
+                  : "none",
+              }}
+            >
+              {!isComingSoon ? (
+                <div className="playback-animation" id="playback-animation">
+                  <svg className="playback-icons">
+                    <use href="#play-icon"></use>
+                    <use className="hidden" href="#pause"></use>
+                  </svg>
+                </div>
+              ) : (
+                <p className="coming-soon-player">{json.play.ComingSoon}</p>
+              )}
+
+              {!isLoading && !isComingSoon ? (
                 <video
                   className="video"
                   id="video"
@@ -775,13 +793,7 @@ function PlayerPage() {
                 >
                   <source src={episode.source} type="video/mp4"></source>
                 </video>
-              ) : (
-                <div className="loader-container">
-                  <div className="loader">
-                    <Loader size={400} color="#a3a3a3" />
-                  </div>
-                </div>
-              )}
+              ) : null}
 
               <div
                 className="video-controls hidden"
@@ -885,11 +897,13 @@ function PlayerPage() {
                 </div>
               </div>
             </div>
-            <div className="bottom-buttons">
-              <button className="reported-button">
-                {json.play["Reported-button"]}
-              </button>
-            </div>
+            {!isComingSoon ? (
+              <div className="bottom-buttons">
+                <button className="reported-button">
+                  {json.play["Reported-button"]}
+                </button>
+              </div>
+            ) : null}
           </div>
 
           {!isComingSoon ? (

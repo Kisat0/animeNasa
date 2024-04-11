@@ -465,6 +465,22 @@
     flex-direction: column;
     justify-content: center;
     background-color: var(--Background-Dark);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    .coming-soon-player {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      width: 100%;
+      font-size: 70px;
+      color: white;
+      font-weight: bold;
+      -webkit-text-stroke: 1px black;
+      stroke: 1px black;  
+    }
 
     video {
       width: 100%;
