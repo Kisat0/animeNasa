@@ -4,11 +4,14 @@ import NewsPageAnimes from "../../components/newsPageAnimes/NewsPageAnimes";
 import json from "../../utils/fr.json";
 import "./News.scss";
 import Loader from "../../components/loader/loader";
+import { useNavigate } from "react-router-dom";
 
 const News = () => {
   const [data, setData] = useState([]);
   const [anime, setAnime] = useState("6604985745954d85e7d15b00");
-  const [dataA, setDataA] = useState([]);
+    const [dataA, setDataA] = useState([]);
+    
+    const navigate = useNavigate();
 
   const getNewsEpisodes = async () => {
     try {
@@ -68,7 +71,7 @@ const News = () => {
           <NewsPageAnimes
             key={index}
             {...item}
-                onClick={() => handleNewsPageAnimesClick(item.anime)}
+                onClick={() => navigate(`/watch/${item._id}`)}
                 onMouseEnter={() => handleNewsPageAnimesClick(item.anime)}
           />
         ))}
