@@ -32,6 +32,7 @@ function PlayerPage() {
   const [dataReport, setDataReport] = useState({});
   const { user } = useUser();
   const [error, setError] = useState("");
+  const [episodeBySeason, setEpisodeBySeason] = useState([]);
 
   const { id } = useParams();
   const pageLink = window.location.href;
@@ -531,7 +532,7 @@ function PlayerPage() {
 
     const addView = async (animeId) => {
       try {
-        const response = await axios.put(
+        await axios.put(
           `${process.env.REACT_APP_API_ADDRESS}/animes/views/${animeId}`
         );
       } catch (error) {
@@ -542,6 +543,21 @@ function PlayerPage() {
       }
     };
 
+    const organiseEpisodesBySeason = (animes) => {
+      const episodes = animes.episodes;
+      const episodesBySeason = [];
+
+      episodes.forEach((episode) => {
+        const season = episode.season - 1;
+        if (!episodesBySeason[season]) {
+          episodesBySeason[season] = [];
+        }
+        episodesBySeason[season].push(episode);
+      });
+
+      setEpisodeBySeason(episodesBySeason);
+    };
+
     const fetchAnime = async (animeId) => {
       try {
         const response = await axios.get(
@@ -549,6 +565,7 @@ function PlayerPage() {
         );
 
         setAnime(response.data);
+        organiseEpisodesBySeason(response.data);
       } catch (error) {
         console.error(error);
       }
@@ -586,11 +603,21 @@ function PlayerPage() {
                 <LogoutIcon className="open-icon" onClick={openMenu} />
               </div>
               <ul>
-                {anime.episodes.map((episode, index) => (
+                {episodeBySeason.map((season, index) => (
                   <li key={index}>
-                    <Link to={`/watch/${episode._id}`} key={index}>
-                      EP. {index + 1}
-                    </Link>
+                    <span>S{index + 1}</span>
+                    <ul>
+                      {season.map((episode, index) => (
+                        <li
+                          key={index}
+                          onClick={() => navigate(`/watch/${episode._id}`)}
+                        >
+                          <Link to={`/watch/${episode._id}`} key={index}>
+                            EP. {episode.number}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
                   </li>
                 ))}
               </ul>
@@ -604,45 +631,67 @@ function PlayerPage() {
               />
               <div className="header-back-layout">
                 <div className="anime-infos">
-                  <img src={anime.poster} alt="poster" />
+                  {/*                   <img src={anime.poster} alt="poster" />
+                   */}{" "}
                   <div className="anime-infos-text">
                     <span>{anime.title}</span>
                     <p>
-                      {anime.description}
-                      <Link to="/summary">{json.play.SeeMore}</Link>
+                      {anime.description.length > 300
+                        ? anime.description.substring(0, 300) + "... "
+                        : anime.description}
+                      <Link to={`/summary/${anime._id}`}>
+                        {json.play.SeeMore}
+                      </Link>
                     </p>
+
+                    <div className="others-informations">
+                      <div className="tags">
+                        <span className="genre-tag">
+                          {anime?.categories
+                            ?.slice(0, 4)
+                            .map((category, index) => (
+                              <span
+                                key={index}
+                                style={{
+                                  backgroundColor: theme.tags.primary,
+                                }}
+                              >
+                                {category}
+                              </span>
+                            ))}
+                        </span>
+                        <span className="date-tag">
+                          <CalendarMonthIcon />{" "}
+                          {new Date(anime.releaseDate).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <span className="lang-tag">
+                        {episode.lang.toUpperCase()}
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <div className="others-informations">
-                  <div className="tags">
-                    <span className="genre-tag">
-                      {" "}
-                      <LocalOfferIcon />
-                      Genres:
-                      {anime?.categories?.map((genre) => (
-                        <span key={genre}>{genre}</span>
-                      ))}
-                    </span>
-                    <span className="date-tag">
-                      <CalendarMonthIcon /> Date: {anime.releaseDate}
-                    </span>
-                  </div>
-                  <span className="lang-tag">{episode.lang.toUpperCase()}</span>
                 </div>
               </div>
             </div>
             <div className="body-menu">
               <div className="season-content">
-                <p className="season-number">SAISON 1</p>
-                <ul>
-                  {anime.episodes.map((episode, index) => (
-                    <li key={index}>
-                      <Link to={`/watch/${episode._id}`} key={index}>
-                        {episode.title}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+                {episodeBySeason.map((season, index) => (
+                  <div key={index} className="season">
+                    <p>Saison {index + 1}</p>
+                    <ul>
+                      {season.map((episode, index) => (
+                        <li
+                          key={index}
+                          onClick={() => navigate(`/watch/${episode._id}`)}
+                        >
+                          <Link to={`/watch/${episode._id}`} key={index}>
+                            {episode.title}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -683,6 +732,7 @@ function PlayerPage() {
                 style={{
                   backgroundColor: anime.color ? anime.color : "#000",
                 }}
+                onClick={() => navigate(`/summary/${anime._id}`)}
               >
                 {json.play.Infos}
                 <AnimeInfos />
@@ -837,7 +887,7 @@ function PlayerPage() {
           </div>
 
           <div className="player-comment">
-            <Comment animeColor={anime.color} episodeID={episode._id}/>
+            <Comment animeColor={anime.color} episodeID={episode._id} />
           </div>
 
           <svg style={{ display: "none" }}>
