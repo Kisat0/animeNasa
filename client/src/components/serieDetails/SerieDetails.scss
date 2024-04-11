@@ -27,7 +27,8 @@
     background: rgba(66, 66, 66, 0.7);
     padding: 10px;
     width: 100%;
-
+    max-width: 500px;
+    min-width: 400px;
     .episode-infos {
       display: flex;
       flex-flow: column nowrap;
