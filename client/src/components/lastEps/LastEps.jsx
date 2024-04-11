@@ -27,7 +27,13 @@ const LastEps = ({ data, color }) => {
         {data.map((episode, index) => (
           <div
             key={episode._id}
-            onClick={() => navigate(`/watch/${episode._id}?isComingSoon=true`)}
+            onClick={() => {
+              if (index === 0) {
+                navigate(`/watch/${episode._id}?isComingSoon=true`);
+              } else {
+                navigate(`/watch/${episode._id}`);
+              }
+            }}
           >
             <img src={episode.thumbnail} alt={episode.title} />
             {index === 0 ? (

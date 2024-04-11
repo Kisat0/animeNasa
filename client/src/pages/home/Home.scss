@@ -1,16 +1,12 @@
 @keyframes wave {
   0% {
     transform: translateY(0);
-    // make a mask for the wave to only see a part
-    opacity: 0;
   }
   50% {
     transform: translateY(-50px);
-    opacity: 1;
   }
   100% {
     transform: translateY(0);
-    opacity: 0;
   }
 }
 
@@ -26,7 +22,7 @@
 }
 
 .w1 {
-  top: 150px;
+  top: 250px;
 }
 
 .w2 {

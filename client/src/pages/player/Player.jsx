@@ -2,10 +2,8 @@ import React, { useCallback } from "react";
 import { useParams } from "react-router";
 import CloseIcon from "@mui/icons-material/Close";
 import { Link } from "react-router-dom";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import LogoutIcon from "@mui/icons-material/Logout";
-import { useEffect, useState } from "react";
+import MenuIcon from "@mui/icons-material/Menu";import { useEffect, useState } from "react";
 import Loader from "../../components/loader/loader";
 import Navbar from "../../components/navbar/Navbar";
 import axios from "axios";
@@ -606,7 +604,7 @@ function PlayerPage() {
             </div>
             <div className="short-menu">
               <div className="short-menu-header">
-                <LogoutIcon className="open-icon" onClick={openMenu} />
+                <MenuIcon className="open-icon" onClick={openMenu} />
               </div>
               <ul>
                 {episodeBySeason.map((season, index) => (
