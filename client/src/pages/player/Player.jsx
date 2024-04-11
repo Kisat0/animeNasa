@@ -437,6 +437,7 @@ function PlayerPage() {
     if (window.location.href.includes("isComingSoon=true")) {
       setIsComingSoon(true);
     }
+    else setIsComingSoon(false);
 
     window.addEventListener(
       "keydown",
@@ -515,7 +516,7 @@ function PlayerPage() {
     return () => {
       document.removeEventListener("keyup", keyboardShortcuts);
     };
-  }, [decreaseVol, increaseVol, togglePlay]);
+  }, [decreaseVol, increaseVol, togglePlay, window.location.href]);
 
   useEffect(() => {
     const fetchEpisode = async () => {
